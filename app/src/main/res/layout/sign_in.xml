@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:background="@color/white"
+    tools:context=".SignInPage">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingBottom="20dp">
+
+        <!-- Logo -->
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:src="@drawable/logo"
+            android:contentDescription="@string/logo_desc"
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Banner Image -->
+
+        <!-- Welcome Message -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="15dp"
+            android:contentDescription="@string/workout_image_desc"
+            android:scaleType="centerCrop"
+            android:src="@drawable/banner" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_back"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/dark_green"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_details"
+            android:textSize="16sp"
+            android:textColor="@color/dark_gray"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+        <!-- Login Form -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/rounded_border"
+            android:orientation="vertical">
+
+            <!-- Email Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/emailEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:autofillHints="emailAddress"
+                    android:padding="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- Password Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/passwordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="@string/password"
+                    android:autofillHints="password"
+                    android:inputType="textPassword"
+                    android:padding="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- Remember Me Checkbox -->
+            <CheckBox
+                android:id="@+id/rememberMeCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/remember_me"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/login_button"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/dark_green"
+            android:layout_marginTop="15dp" />
+
+        <!-- Forgot Password -->
+        <TextView
+            android:id="@+id/forgotPasswordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_pass"
+            android:textSize="14sp"
+            android:textColor="@color/dark_gray"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp" />
+
+        <!-- Google Sign-In Button -->
+        <Button
+            android:id="@+id/googleSignInButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/google_sign_in"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:background="@drawable/sign_with_google_button_border"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_marginTop="15dp" />
+
+        <!-- Register Link -->
+        <TextView
+            android:id="@+id/registerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"/>
+    </LinearLayout>
+</ScrollView>
