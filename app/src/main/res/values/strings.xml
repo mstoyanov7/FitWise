@@ -14,4 +14,18 @@
     <string name="register">Do not have an account? Register</string>
     <string name="workout_image_desc">Workout Image</string>
 
+    <!--CALENDAR ACTIVITY STRINGS-->
+
+    <string name="calendar">CALENDAR</string>
+    <string name="schedule_workouts">Schedule your workouts</string>
+    <string name="monday">MON</string>
+    <string name="tuesday">TUE</string>
+    <string name="wednesday">WED</string>
+    <string name="thursday">THU</string>
+    <string name="friday">FRI</string>
+    <string name="saturday">SAT</string>
+    <string name="sunday">SUN </string>
+    <string name="current_month_text">March 2025</string>
+
+
 </resources>
