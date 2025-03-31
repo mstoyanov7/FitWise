@@ -16,4 +16,13 @@
         android:text="@string/sign_up"
         android:textSize="18sp"
         android:padding="16dp" />
+
+    <Button
+        android:id="@+id/openLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_button"
+        android:textSize="18sp"
+        android:padding="16dp" />
+
 </LinearLayout>

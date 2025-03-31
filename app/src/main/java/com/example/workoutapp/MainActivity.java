@@ -13,8 +13,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
 
         Button openRegisterButton = findViewById(R.id.openRegisterButton);
+        Button openLoginButton = findViewById(R.id.openLoginButton);
+
         openRegisterButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RegisterForm.class);
+            startActivity(intent);
+        });
+
+        openLoginButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SignInPage.class);
             startActivity(intent);
         });
     }
