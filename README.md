@@ -8,9 +8,8 @@ Welcome to the Mobile Workout & Nutrition App – your all-in-one fitness compan
 
 ### 🏋️‍♂️ Workout Plans
 
-Personalized workout routines based on fitness level and goals.
-
-Video demonstrations and detailed instructions for exercises.
+- Personalized workout routines based on fitness level and goals.
+- Video demonstrations and detailed instructions for exercises.
 
 Track progress with workout logs and performance analytics.
 
