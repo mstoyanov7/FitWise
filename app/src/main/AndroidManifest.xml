@@ -23,6 +23,7 @@
         </activity>
 
         <activity android:name=".RegisterForm" />
+        <activity android:name=".SignInPage" />
     </application>
 
 </manifest>
