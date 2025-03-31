@@ -75,6 +75,7 @@
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:autofillHints="emailAddress"
+                    android:background="@color/light_green"
                     android:padding="10dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,14 +86,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                app:boxBackgroundMode="filled"
+                app:boxBackgroundColor="@color/light_green"
                 app:passwordToggleEnabled="true">
 
                 <EditText
                     android:id="@+id/passwordEditText"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:hint="@string/password"
                     android:autofillHints="password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:padding="10dp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -130,16 +133,22 @@
             android:layout_marginTop="10dp" />
 
         <!-- Google Sign-In Button -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/googleSignInButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="@string/google_sign_in"
             android:textSize="18sp"
             android:textColor="@color/black"
+            app:icon="@drawable/google"
+            app:iconGravity="start"
+            app:backgroundTint="@null"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:iconPadding="8dp"
+            app:iconTint="@null"
             android:background="@drawable/sign_with_google_button_border"
-            android:backgroundTint="@android:color/transparent"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"/>
 
         <!-- Register Link -->
         <TextView

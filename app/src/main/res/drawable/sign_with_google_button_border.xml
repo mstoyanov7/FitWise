@@ -6,5 +6,5 @@
         android:color="@color/black" />
 
     <!-- Optional: Background color -->
-    <solid android:color="@android:color/white" /> <!-- Button background color -->
+    <solid android:color="@color/white" /> <!-- Button background color -->
 </shape>
