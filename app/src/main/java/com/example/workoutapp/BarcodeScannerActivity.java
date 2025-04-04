@@ -8,7 +8,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONObject;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;d
+import okhttp3.Request;
 import okhttp3.Response;
 
 public class BarcodeScannerActivity extends AppCompatActivity {
