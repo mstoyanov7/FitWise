@@ -27,5 +27,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, RegisterForm.class);
             startActivity(intent);
         });
+
+        findViewById(R.id.btnScan).setOnClickListener(v -> {
+            startActivity(new Intent(this, BarcodeScannerActivity.class));
+        });
     }
 }
