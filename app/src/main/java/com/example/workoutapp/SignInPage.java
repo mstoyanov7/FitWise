@@ -22,7 +22,6 @@ public class SignInPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in);
 
-        // Initialize views
         TextInputLayout emailLayout = findViewById(R.id.emailLayout);
         TextInputLayout passwordLayout = findViewById(R.id.passwordLayout);
         emailEditText = emailLayout.getEditText();

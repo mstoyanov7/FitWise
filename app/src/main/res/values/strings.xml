@@ -1,17 +1,26 @@
 <resources>
     <string name="app_name">WorkoutApp</string>
+
+    <!--MAIN ACTIVITY PAGE STRINGS -->
+    <string name="quote">Your personal fitness journey starts here.
+        Get ready to transform your body and mind.</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up_main_activity_page"><u>Sign up</u></string>
+    <string name="new_user">New user?\u00A0</string>
+
+
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="sign_up">Sign up</string>
     <string name="logo_desc">Logo</string>
     <string name="name">Name</string>
+    <string name="sign_up">Sign up</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="enter_details">Please enter your details</string>
     <string name="login_button">Login</string>
     <string name="forgot_pass">Forgot password?</string>
     <string name="google_sign_in">Sign in with Google</string>
     <string name="remember_me">Remember me?</string>
-    <string name="register">Do not have an account? Register</string>
+    <string name="register">Do not have an account? <u>Register</u></string>
     <string name="workout_image_desc">Workout Image</string>
 
     <!--CALENDAR ACTIVITY STRINGS-->

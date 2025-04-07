@@ -2,26 +2,29 @@ package com.example.workoutapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        Button openRegisterButton = findViewById(R.id.openRegisterButton);
-        Button openLoginButton = findViewById(R.id.openLoginButton);
+        Button signInButton = findViewById(R.id.signInButton);
+        TextView signUpText = findViewById(R.id.signUpText);
 
-        openRegisterButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, RegisterForm.class);
+        signInButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SignInPage.class);
             startActivity(intent);
         });
 
-        openLoginButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SignInPage.class);
+        signUpText.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RegisterForm.class);
             startActivity(intent);
         });
     }
