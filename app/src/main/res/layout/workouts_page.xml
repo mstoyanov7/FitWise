@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Fullscreen background image -->
+    <ImageView
+        android:contentDescription="@string/background_image"
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:src="@drawable/workouts_background" />
+
+    <!-- Date + Title block -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="16dp">
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#DDDDDD"
+            android:textSize="17sp"
+            android:text="@string/placeholder_date" />
+
+        <TextView
+            android:text="@string/workouts"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textColor="#FFFFFF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+
+    <!-- Content overlay -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:layout_marginTop="240dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Filter buttons -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:id="@+id/search_button"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/rounded_button"
+                        android:padding="13dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/white"
+                        android:contentDescription="@string/search_button" />
+
+                    <!-- Filter chips -->
+                    <Button
+                        android:id="@+id/btn_calisthenics"
+                        android:text="@string/calisthenics_btn_menu"
+                        android:textColor="@color/white"
+                        android:backgroundTint="#7A7A7A"
+                        android:layout_marginEnd="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:id="@+id/btn_fitness"
+                        android:text="@string/fitness_btn_menu"
+                        android:textColor="@color/white"
+                        android:backgroundTint="#7A7A7A"
+                        android:layout_marginEnd="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:id="@+id/btn_running"
+                        android:text="@string/running_btn_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:backgroundTint="#7A7A7A"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/btn_yoga"
+                        android:text="@string/yoga_btn_menu"
+                        android:textColor="@color/white"
+                        android:backgroundTint="#7A7A7A"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <EditText
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_bar_text"
+                android:visibility="gone"
+                android:inputType="text"
+                android:padding="12dp"
+                android:background="@drawable/search_field_bg"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:layout_marginTop="8dp"
+                android:autofillHints="Search"/>
+
+            <!-- Cards Grid -->
+            <GridLayout
+                android:columnCount="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:useDefaultMargins="true">
+
+                <!-- Example Card: Pull-Ups -->
+                <FrameLayout
+                    android:id="@+id/card_pull_ups"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <!-- Background image -->
+                    <ImageView
+                        android:contentDescription="@string/pull_ups_background_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/workouts_background" />
+
+                    <!-- Text content -->
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:layout_gravity="bottom">
+
+                        <TextView
+                            android:text="@string/pull_ups_box_title"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:text="@string/pull_ups_box_quote"
+                            android:textColor="#CCCCCC"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/card_dips"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <!-- Background image -->
+                    <ImageView
+                        android:contentDescription="@string/dips_background_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/workouts_background" />
+
+                    <!-- Text content -->
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:layout_gravity="bottom">
+
+                        <TextView
+                            android:text="@string/dips_box_title"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:text="@string/dips_box_quote"
+                            android:textColor="#CCCCCC"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/card_muscle_ups"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <!-- Background image -->
+                    <ImageView
+                        android:contentDescription="@string/muscle_ups_background_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/workouts_background" />
+
+                    <!-- Text content -->
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:layout_gravity="bottom">
+
+                        <TextView
+                            android:text="@string/muscle_ups_box_title"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:text="@string/muscle_ups_box_quote"
+                            android:textColor="#CCCCCC"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/pistol_squats"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <!-- Background image -->
+                    <ImageView
+                        android:contentDescription="@string/pistol_squats_background_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/workouts_background" />
+
+                    <!-- Text content -->
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:layout_gravity="bottom">
+
+                        <TextView
+                            android:text="@string/pistol_squats_box_title"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:text="@string/pistol_squats_box_quote"
+                            android:textColor="#CCCCCC"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </FrameLayout>
+
+            </GridLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

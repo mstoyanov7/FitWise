@@ -22,8 +22,30 @@
     <string name="remember_me">Remember me?</string>
     <string name="register">Do not have an account? <u>Register</u></string>
     <string name="workout_image_desc">Workout Image</string>
-
-    <!--CALENDAR ACTIVITY STRINGS-->
+  
+    <!--WORKOUTS PAGE STRINGS-->
+    <string name="placeholder_date">Placeholder date</string>
+    <string name="workouts">Workouts</string>
+    <string name="search_bar_text">Search categories…</string>
+    <string name="calisthenics_btn_menu">Calisthenics</string>
+    <string name="fitness_btn_menu">Fitness</string>
+    <string name="running_btn_menu">Running</string>
+    <string name="yoga_btn_menu">Yoga</string>
+    <string name="pull_ups_box_title">Pull-Ups</string>
+    <string name="pull_ups_box_quote">Pull-ups build strength using bodyweight.</string>
+    <string name="dips_box_title">Dips</string>
+    <string name="dips_box_quote">Dips strengthen triceps using body weight.</string>
+    <string name="muscle_ups_box_title">Muscle-Ups</string>
+    <string name="muscle_ups_box_quote">Muscle-ups build upper body power.</string>
+    <string name="pistol_squats_box_title">Pistol Squats</string>
+    <string name="pistol_squats_box_quote">Pistol squats improve balance and strength.</string>
+    <string name="background_image">Background image</string>
+    <string name="search_button">Search categories</string>
+    <string name="pull_ups_background_box">Pull ups background</string>
+    <string name="dips_background_box">Dips background</string>
+    <string name="muscle_ups_background_box">Muscle-Ups background</string>
+    <string name="pistol_squats_background_box">Pistol Squats background</string>
+    <!--WORKOUTS PAGE STRINGS-->
 
     <string name="calendar">CALENDAR</string>
     <string name="schedule_workouts">Schedule your workouts</string>
@@ -79,5 +101,7 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
 
+    <!--PULL-UPS EXERCISES PAGE STRINGS-->
+    <string name="pull_ups_title">Pull-Ups</string>
 
 </resources>

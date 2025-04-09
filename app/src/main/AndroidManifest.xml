@@ -35,6 +35,7 @@
         </activity>
         <activity android:name=".RegisterForm" />
         <activity android:name=".SignInPage" />
+        <activity android:name=".Workouts"/>
         <activity
             android:name=".MyCaptureActivity"
             android:screenOrientation="portrait"

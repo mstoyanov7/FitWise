@@ -28,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button testWorkoutsButton = findViewById(R.id.testWorkoutsButton);
+
+        testWorkoutsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Workouts.class);
+            startActivity(intent);
         findViewById(R.id.btnScan).setOnClickListener(v -> {
             startActivity(new Intent(this, BarcodeScannerActivity.class));
         });
