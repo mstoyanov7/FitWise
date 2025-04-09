@@ -11,13 +11,21 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+
+
 public class Workouts extends AppCompatActivity {
+    private BottomNavigationView bottomNavigationView;
     Button btnCalisthenics, btnFitness, btnRunning, btnYoga;
 
     FrameLayout cardPullUps, cardDips, cardMuscleUps, cardPistolSquats;
@@ -88,6 +96,36 @@ public class Workouts extends AppCompatActivity {
 
         // Показване на първа категория по подразбиране
         showCategory("calisthenics");
+
+        // Setup bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        // Optionally set the default selected item
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Fragment selectedFragment = null;
+                if (id == R.id.nav_meals) {
+                    // TODO: Load Meals screen or fragment
+                    return true;
+                } else if (id == R.id.nav_workout) {
+                    // TODO: Load Workout screen or fragment
+                    return true;
+                } else if (id == R.id.nav_home) {
+                    // TODO: Load Home screen or fragment
+                    return true;
+                } else if (id == R.id.nav_calendar) {
+                    // TODO: Load Calendar screen or fragment
+                    return true;
+                } else if (id == R.id.nav_profile) {
+                    // TODO: Load Profile screen or fragment
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void showCategory(String category) {
