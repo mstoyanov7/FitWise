@@ -27,5 +27,12 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, RegisterForm.class);
             startActivity(intent);
         });
+
+        Button testWorkoutsButton = findViewById(R.id.testWorkoutsButton);
+
+        testWorkoutsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Workouts.class);
+            startActivity(intent);
+        });
     }
 }

@@ -40,6 +40,13 @@
             android:fontFamily="@font/open_sans_light" />
 
         <Button
+            android:id="@+id/testWorkoutsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test Workouts Page"
+            android:layout_marginTop="24dp"/>
+
+        <Button
             android:id="@+id/signInButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
