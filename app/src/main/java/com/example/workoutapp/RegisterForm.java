@@ -1,102 +1,67 @@
 package com.example.workoutapp;
 
-import android.graphics.Typeface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewGroup;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class RegisterForm extends AppCompatActivity {
+
+    private TextInputEditText nameEditText, emailEditText, passwordEditText;
+    private Button signUpButton;
+    private TextView haveAccountText;
+    private ImageButton googleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.register_form);
 
-        // Root layout
-        LinearLayout rootLayout = new LinearLayout(this);
-        rootLayout.setOrientation(LinearLayout.VERTICAL);
-        rootLayout.setPadding(30, 30, 30, 30);
-        rootLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        ));
+        // Initialize views
+        nameEditText = findViewById(R.id.nameEditText);
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        signUpButton = findViewById(R.id.sign_up_button);
+        haveAccountText = findViewById(R.id.haveAccountText);
+        googleButton = findViewById(R.id.google_button);
 
-        // Load custom font
-        Typeface customFont = ResourcesCompat.getFont(this, R.font.robotobold);
-
-        // Avatar image
-        ImageView imageView = new ImageView(this);
-        imageView.setImageResource(R.drawable.avatar);
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(200));
-        imageView.setPadding(30, 30, 30, 30);
-        imageView.setLayoutParams(imageParams);
-        rootLayout.addView(imageView);
-
-        // Name input
-        rootLayout.addView(createTextInputLayout(R.string.name, customFont, "text"));
-
-        // Email input
-        rootLayout.addView(createTextInputLayout(R.string.email, customFont, "text"));
-
-        // Password input
-        rootLayout.addView(createTextInputLayout(R.string.password, customFont, "textPassword"));
-
-        // Signup button
-        Button signupBtn = new Button(this);
-        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(75));
-        btnParams.topMargin = dpToPx(15);
-        signupBtn.setLayoutParams(btnParams);
-        signupBtn.setText(R.string.sign_up);
-        signupBtn.setTextSize(22);
-        signupBtn.setTextColor(getResources().getColor(android.R.color.white));
-        signupBtn.setOnClickListener(v -> btn_Signup_form(v));
-        rootLayout.addView(signupBtn);
-
-        setContentView(rootLayout);
-    }
-
-    private TextInputLayout createTextInputLayout(int hintResId, Typeface font, String inputType) {
-        TextInputLayout inputLayout = new TextInputLayout(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        params.topMargin = dpToPx(5);
-        inputLayout.setLayoutParams(params);
-
-        EditText editText = new EditText(this);
-        editText.setHint(hintResId);
-        editText.setTextSize(25);
-        editText.setTypeface(font);
-        editText.setEms(10);
-
-        if ("textPassword".equals(inputType)) {
-            editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        } else {
-            editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
+        // Set styled text for "Already have an account? Sign in"
+        if (haveAccountText != null) {
+            haveAccountText.setText(Html.fromHtml(getString(R.string.have_account), Html.FROM_HTML_MODE_LEGACY));
+            haveAccountText.setOnClickListener(v -> {
+                startActivity(new Intent(RegisterForm.this, SignInPage.class));
+            });
         }
 
-        inputLayout.addView(editText);
-        return inputLayout;
-    }
+        // Handle Sign Up button click
+        if (signUpButton != null) {
+            signUpButton.setOnClickListener(v -> {
+                String name = nameEditText.getText().toString().trim();
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
 
-    private int dpToPx(int dp) {
-        float scale = getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
-    }
+                // You can validate here
+                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+                    // Submit or proceed to next screen
+                    // e.g. startActivity(new Intent(this, HomeActivity.class));
+                } else {
+                    // Show error or Toast
+                }
+            });
+        }
 
-    // Replace this with your actual signup handler
-    public void btn_Signup_form(View view) {
-        // Handle signup logic
+        // Handle Google button click
+        googleButton.setOnClickListener(v -> {
+            // TODO: Add Google sign-in logic or just simulate for now
+            // Example:
+            // Toast.makeText(this, "Google Sign In Clicked", Toast.LENGTH_SHORT).show();
+        });
     }
 }

@@ -143,7 +143,7 @@
                 <FrameLayout
                     android:id="@+id/card_pull_ups"
                     android:layout_width="0dp"
-                    android:layout_height="200dp"
+                    android:layout_height="150dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:clickable="true"
@@ -156,19 +156,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/workouts_background" />
+                        android:src="@drawable/pull" />
 
                     <!-- Text content -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:layout_gravity="bottom">
 
                         <TextView
                             android:text="@string/pull_ups_box_title"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:layout_width="wrap_content"
@@ -176,7 +176,7 @@
 
                         <TextView
                             android:text="@string/pull_ups_box_quote"
-                            android:textColor="#CCCCCC"
+                            android:textColor="@color/white"
                             android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -186,7 +186,7 @@
                 <FrameLayout
                     android:id="@+id/card_dips"
                     android:layout_width="0dp"
-                    android:layout_height="200dp"
+                    android:layout_height="150dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:clickable="true"
@@ -199,19 +199,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/workouts_background" />
+                        android:src="@drawable/dips" />
 
                     <!-- Text content -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:layout_gravity="bottom">
 
                         <TextView
                             android:text="@string/dips_box_title"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:layout_width="wrap_content"
@@ -219,7 +219,7 @@
 
                         <TextView
                             android:text="@string/dips_box_quote"
-                            android:textColor="#CCCCCC"
+                            android:textColor="@color/white"
                             android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -229,7 +229,7 @@
                 <FrameLayout
                     android:id="@+id/card_muscle_ups"
                     android:layout_width="0dp"
-                    android:layout_height="200dp"
+                    android:layout_height="150dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:clickable="true"
@@ -242,19 +242,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/workouts_background" />
+                        android:src="@drawable/muscle_up" />
 
                     <!-- Text content -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:layout_gravity="bottom">
 
                         <TextView
                             android:text="@string/muscle_ups_box_title"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:layout_width="wrap_content"
@@ -262,7 +262,7 @@
 
                         <TextView
                             android:text="@string/muscle_ups_box_quote"
-                            android:textColor="#CCCCCC"
+                            android:textColor="@color/white"
                             android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -272,7 +272,7 @@
                 <FrameLayout
                     android:id="@+id/pistol_squats"
                     android:layout_width="0dp"
-                    android:layout_height="200dp"
+                    android:layout_height="150dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     android:clickable="true"
@@ -285,19 +285,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/workouts_background" />
+                        android:src="@drawable/pistol_squat" />
 
                     <!-- Text content -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:layout_gravity="bottom">
 
                         <TextView
                             android:text="@string/pistol_squats_box_title"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:layout_width="wrap_content"
@@ -305,12 +305,11 @@
 
                         <TextView
                             android:text="@string/pistol_squats_box_quote"
-                            android:textColor="#CCCCCC"
+                            android:textColor="@color/white"
                             android:textSize="12sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
-
                 </FrameLayout>
 
             </GridLayout>

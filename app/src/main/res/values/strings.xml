@@ -7,20 +7,45 @@
     <string name="sign_in">Sign in</string>
     <string name="sign_up_main_activity_page"><u>Sign up</u></string>
     <string name="new_user">New user?\u00A0</string>
+    <!--MAIN ACTIVITY PAGE STRINGS -->
 
-
+    <!--REGISTER PAGE STRINGS -->
+    <string name="sign_up">Sign up</string>
+    <string name="background_description">Background image</string>
+    <string name="register_page_quote">A Healthier You Starts Here!</string>
+    <string name="create_account">Create an account</string>
+    <string name="enter_name">Enter your name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="logo_desc">Logo</string>
-    <string name="name">Name</string>
-    <string name="sign_up">Sign up</string>
+    <string name="sign_up_register_page">Sign Up</string>
+    <string name="have_account">Already have an account?<u> Sign in</u>
+    </string>
+    <string name="google_sign_up">Sign up with Google</string>
+    <string name="google_description">Sign up with Google</string>
+    <!--REGISTER PAGE STRINGS -->
+
+    <!--SIGN IN (LOGIN) PAGE STRINGS -->
     <string name="welcome_back">Welcome back!</string>
-    <string name="enter_details">Please enter your details</string>
-    <string name="login_button">Login</string>
-    <string name="forgot_pass">Forgot password?</string>
+    <string name="log_into_account">Login into account</string>
+    <string name="do_not_have_account">Don\'t have an account?<u> Sign Up</u></string>
     <string name="google_sign_in">Sign in with Google</string>
     <string name="remember_me">Remember me?</string>
-    <string name="register">Do not have an account? <u>Register</u></string>
+    <string name="forgot_pass"><u>Forgot password?</u></string>
+    <string name="sign_in_button">Sign In</string>
+    <!--SIGN IN (LOGIN) PAGE STRINGS -->
+
+    <!--FORGOTTEN PASSWORD PAGE STRINGS -->
+    <string name="forgotten_pass">Forgot Your Password?</string>
+    <string name="enter_email">We will send you an email to reset</string>
+    <string name="submit_button">Submit</string>
+    <string name="back_to_login">Back to<u> Login</u></string>
+    <!--FORGOTTEN PASSWORD PAGE STRINGS -->
+
+
+
+
+    <string name="logo_desc">Logo</string>
+    <string name="login_button">Login</string>
     <string name="workout_image_desc">Workout Image</string>
   
     <!--WORKOUTS PAGE STRINGS-->

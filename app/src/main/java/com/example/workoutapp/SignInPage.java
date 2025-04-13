@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,16 +45,16 @@ public class SignInPage extends AppCompatActivity {
 
         Button loginButton = findViewById(R.id.loginButton);
         TextView forgotPasswordText = findViewById(R.id.forgotPasswordText);
-        Button googleSignInButton = findViewById(R.id.googleSignInButton);
         TextView registerText = findViewById(R.id.registerText);
+        ImageButton googleSignInButton = findViewById(R.id.googleSignInButton);
 
         // Handle Login Button Click
         loginButton.setOnClickListener(v -> handleLogin());
 
         // Handle Forgot Password Click
         forgotPasswordText.setOnClickListener(v -> {
-            Toast.makeText(SignInPage.this, "Forgot Password Clicked", Toast.LENGTH_SHORT).show();
-            // Implement Forgot Password Logic
+            Intent intent = new Intent(SignInPage.this, ForgotPasswordActivity.class);
+            startActivity(intent);
         });
 
 
