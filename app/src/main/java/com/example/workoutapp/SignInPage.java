@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+
+
 public class SignInPage extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText;
@@ -36,7 +38,7 @@ public class SignInPage extends AppCompatActivity {
         FullscreenUtil.hideSystemUI(this);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this,gso);
+        gsc = GoogleSignIn.getClient(this, gso);
 
         TextInputLayout emailLayout = findViewById(R.id.emailLayout);
         TextInputLayout passwordLayout = findViewById(R.id.passwordLayout);
@@ -73,10 +75,11 @@ public class SignInPage extends AppCompatActivity {
         });
 
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if(acct!=null){
+        if(acct != null) {
             navigateToWorkoutsPage();
         }
     }
+
 
     void signIn(){
         Intent signInIntent = gsc.getSignInIntent();
