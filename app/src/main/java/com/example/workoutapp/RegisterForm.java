@@ -23,6 +23,7 @@ public class RegisterForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_form);
+        FullscreenUtil.hideSystemUI(this);
 
         // Initialize views
         nameEditText = findViewById(R.id.nameEditText);

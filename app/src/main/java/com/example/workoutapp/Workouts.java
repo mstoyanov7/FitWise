@@ -37,6 +37,7 @@ public class Workouts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workouts_page);
+        FullscreenUtil.hideSystemUI(this);
 
         // current day
         TextView dateTextView = findViewById(R.id.dateTextView);
