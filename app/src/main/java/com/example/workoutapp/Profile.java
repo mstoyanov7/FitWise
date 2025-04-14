@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +37,8 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_page);
 
+        FullscreenUtil.hideSystemUI(this);
+
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -49,7 +52,19 @@ public class Profile extends AppCompatActivity {
             updateUserAfterSignIn(userName, userPhotoUri);
         }
 
-        FullscreenUtil.hideSystemUI(this);
+        Button buttonLogout = findViewById(R.id.buttonLogout);
+
+        buttonLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut();
+
+            Intent intent = new Intent(Profile.this, SignInPage.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+
+            Toast.makeText(Profile.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+        });
 
         radioGroupTabs = findViewById(R.id.radioGroupTabs);
         textViewHeader = findViewById(R.id.textViewHeader);
