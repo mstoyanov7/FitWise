@@ -47,7 +47,7 @@
     <string name="logo_desc">Logo</string>
     <string name="login_button">Login</string>
     <string name="workout_image_desc">Workout Image</string>
-  
+
     <!--WORKOUTS PAGE STRINGS-->
     <string name="placeholder_date">Placeholder date</string>
     <string name="workouts">Workouts</string>

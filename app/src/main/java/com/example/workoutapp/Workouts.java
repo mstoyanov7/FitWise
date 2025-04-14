@@ -120,7 +120,7 @@ public class Workouts extends AppCompatActivity {
                     // TODO: Load Calendar screen or fragment
                     return true;
                 } else if (id == R.id.nav_profile) {
-                    // TODO: Load Profile screen or fragment
+                    startActivity(new Intent(Workouts.this, Profile.class));
                     return true;
                 }
                 return false;
