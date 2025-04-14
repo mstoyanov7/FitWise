@@ -25,6 +25,7 @@ public class Profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_page);
+        FullscreenUtil.hideSystemUI(this);
 
         radioGroupTabs = findViewById(R.id.radioGroupTabs);
         textViewHeader = findViewById(R.id.textViewHeader);
