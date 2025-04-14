@@ -34,6 +34,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                 fetchProductData(barcode);
             } else {
                 Toast.makeText(this, "Scan cancelled", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(BarcodeScannerActivity.this, SignInPage.class));
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -86,13 +87,16 @@ public class BarcodeScannerActivity extends AppCompatActivity {
 
                     } else {
                         runOnUiThread(() -> Toast.makeText(this, "Product not found", Toast.LENGTH_SHORT).show());
+                        startActivity(new Intent(BarcodeScannerActivity.this, SignInPage.class));
                     }
                 } else {
                     runOnUiThread(() -> Toast.makeText(this, "HTTP error: " + response.code(), Toast.LENGTH_SHORT).show());
+                    startActivity(new Intent(BarcodeScannerActivity.this, SignInPage.class));
                 }
 
             } catch (Exception e) {
                 runOnUiThread(() -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                startActivity(new Intent(BarcodeScannerActivity.this, SignInPage.class));
             }
         }).start();
     }
