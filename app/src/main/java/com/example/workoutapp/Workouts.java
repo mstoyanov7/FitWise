@@ -39,6 +39,8 @@ public class Workouts extends AppCompatActivity {
         setContentView(R.layout.workouts_page);
         FullscreenUtil.hideSystemUI(this);
 
+        TextView noResultsText = findViewById(R.id.noResultsText);
+
         // current day
         TextView dateTextView = findViewById(R.id.dateTextView);
 
@@ -77,10 +79,33 @@ public class Workouts extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().toLowerCase();
 
-                btnCalisthenics.setVisibility(query.contains("cal") ? View.VISIBLE : View.GONE);
-                btnFitness.setVisibility(query.contains("fit") ? View.VISIBLE : View.GONE);
-                btnRunning.setVisibility(query.contains("run") ? View.VISIBLE : View.GONE);
-                btnYoga.setVisibility(query.contains("yo") ? View.VISIBLE : View.GONE);
+                // Скриваме всички карти по подразбиране
+                cardPullUps.setVisibility(View.GONE);
+                cardDips.setVisibility(View.GONE);
+                cardMuscleUps.setVisibility(View.GONE);
+                cardPistolSquats.setVisibility(View.GONE);
+
+                int found = 0;
+
+                if ("pull ups".contains(query) || "pullups".contains(query)) {
+                    cardPullUps.setVisibility(View.VISIBLE);
+                    found++;
+                }
+                if ("dips".contains(query)) {
+                    cardDips.setVisibility(View.VISIBLE);
+                    found++;
+                }
+                if ("muscle ups".contains(query) || "muscleups".contains(query)) {
+                    cardMuscleUps.setVisibility(View.VISIBLE);
+                    found++;
+                }
+                if ("pistol squats".contains(query) || "pistols".contains(query)) {
+                    cardPistolSquats.setVisibility(View.VISIBLE);
+                    found++;
+                }
+
+                // Показваме/скриваме текста при нужда
+                noResultsText.setVisibility(found == 0 ? View.VISIBLE : View.GONE);
             }
         });
 

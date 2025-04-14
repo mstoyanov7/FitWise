@@ -1,10 +1,13 @@
 package com.example.workoutapp;
 
 import android.content.Intent;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,18 +16,39 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Profile extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private RadioGroup radioGroupTabs;
     private TextView textViewHeader;
     private Button buttonViewAll;
+    private String userName;
+    private Uri userPhotoUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_page);
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(acct != null) {
+            userName = acct.getDisplayName();
+            userPhotoUri = acct.getPhotoUrl();
+            updateUserAfterSignIn(userName, userPhotoUri);
+        }
+        else if (firebaseUser != null) {
+            userName = firebaseUser.getDisplayName();
+            updateUserAfterSignIn(userName, userPhotoUri);
+        }
+
         FullscreenUtil.hideSystemUI(this);
 
         radioGroupTabs = findViewById(R.id.radioGroupTabs);
@@ -120,5 +144,22 @@ public class Profile extends AppCompatActivity {
                 .commit();
     }
 
+    public void updateUserAfterSignIn(String userName, Uri photoUri) {
+        TextView textViewName = findViewById(R.id.textViewName);
+        ImageView imageViewPhoto = findViewById(R.id.imageViewProfilePic);
 
+        if (userName != null) {
+            textViewName.setText(userName);
+        }
+
+        if (photoUri != null) {
+            Glide.with(this)
+                    .load(photoUri)
+                    .into(imageViewPhoto);
+        }
+        else {
+            imageViewPhoto.setImageResource(R.drawable.avatar);
+        }
+
+    }
 }
