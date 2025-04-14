@@ -22,7 +22,7 @@
     <string name="remember_me">Remember me?</string>
     <string name="register">Do not have an account? <u>Register</u></string>
     <string name="workout_image_desc">Workout Image</string>
-  
+
     <!--WORKOUTS PAGE STRINGS-->
     <string name="placeholder_date">Placeholder date</string>
     <string name="workouts">Workouts</string>
