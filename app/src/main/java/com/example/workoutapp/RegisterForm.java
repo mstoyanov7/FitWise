@@ -3,6 +3,7 @@ package com.example.workoutapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class RegisterForm extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -59,9 +61,27 @@ public class RegisterForm extends AppCompatActivity {
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(RegisterForm.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                                    // Optionally save display name or redirect to main screen
-                                    startActivity(new Intent(RegisterForm.this, SignInPage.class));
+
+                                    if (user != null) {
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                .setDisplayName(name)
+                                                .build();
+
+                                        user.updateProfile(profileUpdates)
+                                                .addOnCompleteListener(updateTask -> {
+                                                    if (updateTask.isSuccessful()) {
+                                                        FirebaseUser updatedUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                                                        Toast.makeText(RegisterForm.this, "Welcome, " + updatedUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+                                                        startActivity(new Intent(RegisterForm.this, SignInPage.class));
+                                                        finish();
+                                                    } else {
+                                                        Toast.makeText(RegisterForm.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    } else {
+                                        Toast.makeText(RegisterForm.this, "User is null", Toast.LENGTH_SHORT).show();
+                                    }
                                 } else {
                                     Toast.makeText(RegisterForm.this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }

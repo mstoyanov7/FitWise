@@ -20,6 +20,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Profile extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -35,10 +37,15 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.profile_page);
 
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if(acct != null) {
             userName = acct.getDisplayName();
             userPhotoUri = acct.getPhotoUrl();
+            updateUserAfterSignIn(userName, userPhotoUri);
+        }
+        else if (firebaseUser != null) {
+            userName = firebaseUser.getDisplayName();
             updateUserAfterSignIn(userName, userPhotoUri);
         }
 
@@ -134,12 +141,18 @@ public class Profile extends AppCompatActivity {
         TextView textViewName = findViewById(R.id.textViewName);
         ImageView imageViewPhoto = findViewById(R.id.imageViewProfilePic);
 
-        if (userName != null && photoUri != null) {
+        if (userName != null) {
             textViewName.setText(userName);
-            imageViewPhoto.setImageIcon(Icon.createWithContentUri(photoUri));
+        }
+
+        if (photoUri != null) {
             Glide.with(this)
                     .load(photoUri)
                     .into(imageViewPhoto);
         }
+        else {
+            imageViewPhoto.setImageResource(R.drawable.avatar);
+        }
+
     }
 }
