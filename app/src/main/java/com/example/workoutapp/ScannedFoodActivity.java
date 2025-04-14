@@ -92,8 +92,9 @@ public class ScannedFoodActivity extends AppCompatActivity {
             String input = etWeightInput.getText().toString().trim();
             // Ако е празно, показваме placeholders, но не променяме съдържанието на EditText
             if (input.isEmpty()) {
-                tvCalories.setText("– kcal");
-                tvProtein.setText("– g");
+                tvCalories.setText("0");
+                tvProtein.setText("0");
+                etWeightInput.setText(String.valueOf(0));
             } else {
                 float weight = parseFloatSafe(input);
                 float adjustedCalories = caloriesPer100g * weight / 100f;
@@ -106,42 +107,31 @@ public class ScannedFoodActivity extends AppCompatActivity {
         // Извикваме изчислението веднага при инициализация
         updateStats.run();
 
-        // Добави този TextWatcher към etWeightInput:
-        etWeightInput.addTextChangedListener(new TextWatcher() {
-            // Runnable, който ще актуализира калориите и протеина
-            private Runnable updateRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    String input = etWeightInput.getText().toString().trim();
-                    if (input.isEmpty()) {
-                        // Ако полето е празно – оставяме го празно и показваме placeholder стойности
-                        tvCalories.setText("– kcal");
-                        tvProtein.setText("– g");
-                    } else {
-                        float weight = parseFloatSafe(input);
-                        float adjustedCalories = caloriesPer100g * weight / 100f;
-                        float adjustedProtein = proteinPer100g * weight / 100f;
-                        tvCalories.setText(String.format("%.0f kcal", adjustedCalories));
-                        tvProtein.setText(String.format("%.1f g", adjustedProtein));
+        etWeightInput.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == android.view.KeyEvent.ACTION_DOWN) {
+                String currentText = etWeightInput.getText().toString();
+                // Ако полето съдържа само "0" и натиснатият клавиш е цифра, различна от '0'
+                if (currentText.equals("0")) {
+                    int unicodeChar = event.getUnicodeChar();
+                    if (Character.isDigit(unicodeChar) && unicodeChar != '0') {
+                        // Заместваме "0" с новия въведен символ
+                        String newText = String.valueOf((char)unicodeChar);
+                        etWeightInput.setText(newText);
+                        etWeightInput.setSelection(newText.length());
+                        return true; // Консумираме събитието
                     }
                 }
-            };
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Нищо
             }
+            return false;
+        });
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Премахваме всякакво отложено изпълнение, за да избегнем наслагване
-                etWeightInput.removeCallbacks(updateRunnable);
-            }
-
+        // Добавяме TextWatcher, който след всяка промяна обновява изходните стойности
+        etWeightInput.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
-                // Изчакваме 300 ms, след което актуализираме калориите и протеина
-                etWeightInput.postDelayed(updateRunnable, 300);
+                updateStats.run();
             }
         });
 
