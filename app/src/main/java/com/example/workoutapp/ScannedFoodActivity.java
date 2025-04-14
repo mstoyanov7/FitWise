@@ -15,9 +15,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,20 @@ public class ScannedFoodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_scanned_food);
+
+        Button btnNewScan = findViewById(R.id.btn_new_scan);
+        Button btnAddDiary = findViewById(R.id.btn_add_diary);
+
+        btnNewScan.setOnClickListener(v -> {
+            Intent intent = new Intent(ScannedFoodActivity.this, BarcodeScannerActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        // TODO: Add to diary functionality
+        btnAddDiary.setOnClickListener(v -> {
+            Toast.makeText(ScannedFoodActivity.this, "Food added to diary", Toast.LENGTH_SHORT).show();
+        });
 
         // Initialize views
         tabLayout = findViewById(R.id.tab_layout);
