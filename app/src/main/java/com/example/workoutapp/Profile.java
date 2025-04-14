@@ -70,8 +70,17 @@ public class Profile extends AppCompatActivity {
 
         buttonViewAll.setOnClickListener(v -> {
             String currentTab = textViewHeader.getText().toString();
-            Toast.makeText(this, "View all: " + currentTab, Toast.LENGTH_SHORT).show();
-            // need to implement the logic for this and not just pop out a toast lol
+            if (currentTab.contains("Goals")) {
+                Intent intent = new Intent(Profile.this, GoalsPage.class);
+                //intent.putExtra("tabName", currentTab);
+                startActivity(intent);
+            } else if (currentTab.contains("Meals")) {
+                // Example: open meals page
+                Toast.makeText(this, "Open MealsPageActivity (not implemented)", Toast.LENGTH_SHORT).show();
+            } else if (currentTab.contains("Workouts")) {
+                // Example: open workouts page
+                Toast.makeText(this, "Open WorkoutsPageActivity (not implemented)", Toast.LENGTH_SHORT).show();
+            }
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
