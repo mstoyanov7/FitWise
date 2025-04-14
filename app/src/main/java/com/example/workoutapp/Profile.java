@@ -42,7 +42,6 @@ public class Profile extends AppCompatActivity {
             updateUserAfterSignIn(userName, userPhotoUri);
         }
 
-
         FullscreenUtil.hideSystemUI(this);
 
         radioGroupTabs = findViewById(R.id.radioGroupTabs);

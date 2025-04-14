@@ -17,6 +17,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -24,7 +27,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 
 public class SignInPage extends AppCompatActivity {
-
+    private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
     private CheckBox rememberMeCheckBox;
 
@@ -36,6 +39,8 @@ public class SignInPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in);
         FullscreenUtil.hideSystemUI(this);
+
+        mAuth = FirebaseAuth.getInstance();
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
@@ -74,8 +79,10 @@ public class SignInPage extends AppCompatActivity {
             startActivity(intent);
         });
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if(acct != null) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        GoogleSignInAccount googleUser = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (firebaseUser != null || googleUser != null) {
             navigateToWorkoutsPage();
         }
     }
@@ -115,15 +122,15 @@ public class SignInPage extends AppCompatActivity {
             return;
         }
 
-        // Mock authentication logic (Replace with real authentication)
-        if (email.equals("test@example.com") && password.equals("password123")) {
-            Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-            // Navigate to Home or Dashboard Activity
-            Intent intent = new Intent(SignInPage.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
-        }
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(SignInPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        navigateToWorkoutsPage(); // Navigate to main screen
+                    } else {
+                        Toast.makeText(SignInPage.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }
