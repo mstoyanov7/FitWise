@@ -104,6 +104,13 @@ public class Profile extends AppCompatActivity {
                 return false;
             }
         });
+
+        String selectedTab = getIntent().getStringExtra("selectedTab");
+        if ("goals".equalsIgnoreCase(selectedTab)) {
+            radioGroupTabs.check(R.id.radioGoals);
+        } else {
+            radioGroupTabs.check(R.id.radioWorkouts);
+        }
     }
 
     private void loadFragment(Fragment fragment) {
@@ -112,4 +119,6 @@ public class Profile extends AppCompatActivity {
                 .replace(R.id.fragmentContainerProfileTabs, fragment)
                 .commit();
     }
+
+
 }
