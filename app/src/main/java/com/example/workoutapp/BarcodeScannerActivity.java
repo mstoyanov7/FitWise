@@ -56,7 +56,6 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                     if (status == 1) {
                         JSONObject product = json.getJSONObject("product");
 
-                        // Extract desired fields
                         String name = product.optString("product_name", "N/A");
                         String brand = product.optString("brands", "N/A");
                         String ingredients = product.optString("ingredients_text", "N/A");
@@ -65,36 +64,35 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                         String calories = nutriments != null ? nutriments.optString("energy-kcal_100g", "N/A") : "N/A";
                         String sugars = nutriments != null ? nutriments.optString("sugars_100g", "N/A") : "N/A";
                         String fat = nutriments != null ? nutriments.optString("fat_100g", "N/A") : "N/A";
+                        String protein = nutriments != null ? nutriments.optString("proteins_100g", "N/A") : "N/A";
+                        String carbs = nutriments != null ? nutriments.optString("carbohydrates_100g", "N/A") : "N/A";
 
-                        // Start new activity and pass data
+                        String imageUrl = product.optString("image_url", "");
+
                         runOnUiThread(() -> {
-                            Intent intent = new Intent(BarcodeScannerActivity.this, ProductDetailsActivity.class);
+                            Intent intent = new Intent(BarcodeScannerActivity.this, ScannedFoodActivity.class);
+                            intent.putExtra("image_url", imageUrl);
                             intent.putExtra("name", name);
                             intent.putExtra("brand", brand);
                             intent.putExtra("ingredients", ingredients);
                             intent.putExtra("calories", calories);
-                            intent.putExtra("sugar", sugars);
+                            intent.putExtra("sugars", sugars);
                             intent.putExtra("fat", fat);
+                            intent.putExtra("protein", protein);
+                            intent.putExtra("carbs", carbs);
                             startActivity(intent);
-                            finish(); // Optional: close scanner after showing details
+                            finish();
                         });
 
                     } else {
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "Product not found", Toast.LENGTH_SHORT).show();
-                        });
+                        runOnUiThread(() -> Toast.makeText(this, "Product not found", Toast.LENGTH_SHORT).show());
                     }
-
                 } else {
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "HTTP error: " + response.code(), Toast.LENGTH_SHORT).show();
-                    });
+                    runOnUiThread(() -> Toast.makeText(this, "HTTP error: " + response.code(), Toast.LENGTH_SHORT).show());
                 }
 
             } catch (Exception e) {
-                runOnUiThread(() -> {
-                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+                runOnUiThread(() -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }).start();
     }

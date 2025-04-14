@@ -49,4 +49,6 @@ dependencies {
     implementation("com.google.zxing:core:3.4.1")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.google.android.gms:play-services-auth:20.0.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 }

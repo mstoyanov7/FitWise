@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         Button testWorkoutsButton = findViewById(R.id.testWorkoutsButton);
 
         testWorkoutsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, Workouts.class);
+            Intent intent = new Intent(MainActivity.this, BarcodeScannerActivity.class);
             startActivity(intent);
         });
     }

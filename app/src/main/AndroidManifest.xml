@@ -23,10 +23,7 @@
         <activity
             android:name=".Profile"
             android:exported="false" />
-        <activity
-            android:name=".asd"
-            android:exported="false"
-            android:theme="@style/Theme.WorkoutApp" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -40,14 +37,20 @@
         <activity android:name=".SignInPage" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".Workouts"/>
+
         <activity
             android:name=".MyCaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name=".BarcodeScannerActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ProductDetailsActivity" />
+
+        <activity
+            android:name=".ScannedFoodActivity"
+            android:exported="false"
+            android:theme="@style/Theme.WorkoutApp" />
     </application>
 
 </manifest>
