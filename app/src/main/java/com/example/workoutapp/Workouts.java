@@ -1,5 +1,6 @@
 package com.example.workoutapp;
 
+import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -60,6 +61,16 @@ public class Workouts extends AppCompatActivity {
 
         // GridLayout and Cards
         exercisesGrid  = findViewById(R.id.exercisesGridLayout);
+
+        // Animation on filtering
+        LayoutTransition layoutTransition = new LayoutTransition();
+        layoutTransition.enableTransitionType(LayoutTransition.APPEARING);
+        layoutTransition.enableTransitionType(LayoutTransition.DISAPPEARING);
+        layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+
+        exercisesGrid.setLayoutTransition(layoutTransition);
+
+
         cardPullUps    = findViewById(R.id.card_pull_ups);
         cardPullups1    = findViewById(R.id.card_pull_ups1);
         cardPullups2    = findViewById(R.id.card_pull_ups2);
