@@ -110,13 +110,32 @@ public class Profile extends AppCompatActivity {
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_workout) {
-                startActivity(new Intent(Profile.this, Workouts.class));
-                return true;
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Intent intent = null;
+
+                if (id == R.id.nav_meals) {
+                    //intent = new Intent(CurrentActivity.this, MealsActivity.class);
+                } else if (id == R.id.nav_workout) {
+                    intent = new Intent(Profile.this, Workouts.class);
+                } else if (id == R.id.nav_home) {
+                    //intent = new Intent(CurrentActivity.this, HomeActivity.class);
+                } else if (id == R.id.nav_calendar) {
+                    //intent = new Intent(CurrentActivity.this, CalendarActivity.class);
+                } else if (id == R.id.nav_profile) {
+                    //intent = new Intent(Workouts.this, Profile.class);
+                }
+
+                if (intent != null) {
+                    startActivity(intent);
+                    // Apply fade in to the incoming activity and fade out from the current one.
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    return true;
+                }
+                return false;
             }
-            return id == R.id.nav_meals || id == R.id.nav_home || id == R.id.nav_calendar || id == R.id.nav_profile;
         });
 
         String selectedTab = getIntent().getStringExtra("selectedTab");
