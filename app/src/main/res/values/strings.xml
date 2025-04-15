@@ -128,5 +128,6 @@
 
     <!--PULL-UPS EXERCISES PAGE STRINGS-->
     <string name="pull_ups_title">Pull-Ups</string>
+    <string name="info_button_description">More info</string>
 
 </resources>

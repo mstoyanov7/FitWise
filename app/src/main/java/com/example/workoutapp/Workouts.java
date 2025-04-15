@@ -159,15 +159,15 @@ public class Workouts extends AppCompatActivity {
             case "calisthenics":
                 cardPullUps.setVisibility(View.VISIBLE);
                 cardDips.setVisibility(View.VISIBLE);
-                cardMuscleUps.setVisibility(View.GONE);
-                cardPistolSquats.setVisibility(View.GONE);
+                cardMuscleUps.setVisibility(View.VISIBLE);
+                cardPistolSquats.setVisibility(View.VISIBLE);
                 break;
 
             case "fitness":
                 cardPullUps.setVisibility(View.GONE);
                 cardDips.setVisibility(View.GONE);
-                cardMuscleUps.setVisibility(View.VISIBLE);
-                cardPistolSquats.setVisibility(View.VISIBLE);
+                cardMuscleUps.setVisibility(View.GONE);
+                cardPistolSquats.setVisibility(View.GONE);
                 break;
 
             case "running":
