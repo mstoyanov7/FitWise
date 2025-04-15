@@ -94,18 +94,16 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <Button
+                <ImageButton
                     android:id="@+id/buttonLogout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Logout"
-                    android:textAllCaps="false"
-                    android:textSize="14sp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/open_sans_semibold"
-                    />
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_logout"
+                    android:contentDescription="Logout"
+                    app:tint="@android:color/black" />
 
             </LinearLayout>
 

@@ -1,13 +1,15 @@
 package com.example.workoutapp;
 
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,29 +44,18 @@ public class Profile extends AppCompatActivity {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if(acct != null) {
+        if (acct != null) {
             userName = acct.getDisplayName();
             userPhotoUri = acct.getPhotoUrl();
             updateUserAfterSignIn(userName, userPhotoUri);
-        }
-        else if (firebaseUser != null) {
+        } else if (firebaseUser != null) {
             userName = firebaseUser.getDisplayName();
             updateUserAfterSignIn(userName, userPhotoUri);
         }
 
-        Button buttonLogout = findViewById(R.id.buttonLogout);
-
-        buttonLogout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut();
-
-            Intent intent = new Intent(Profile.this, SignInPage.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-
-            Toast.makeText(Profile.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-        });
+        // Three dots button
+        ImageButton buttonLogout = findViewById(R.id.buttonLogout);
+        buttonLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
 
         radioGroupTabs = findViewById(R.id.radioGroupTabs);
         textViewHeader = findViewById(R.id.textViewHeader);
@@ -110,38 +101,22 @@ public class Profile extends AppCompatActivity {
         buttonViewAll.setOnClickListener(v -> {
             String currentTab = textViewHeader.getText().toString();
             if (currentTab.contains("Goals")) {
-                Intent intent = new Intent(Profile.this, GoalsPage.class);
-                //intent.putExtra("tabName", currentTab);
-                startActivity(intent);
+                startActivity(new Intent(Profile.this, GoalsPage.class));
             } else if (currentTab.contains("Meals")) {
-                // Example: open meals page
                 Toast.makeText(this, "Open MealsPageActivity (not implemented)", Toast.LENGTH_SHORT).show();
             } else if (currentTab.contains("Workouts")) {
-                // Example: open workouts page
                 Toast.makeText(this, "Open WorkoutsPageActivity (not implemented)", Toast.LENGTH_SHORT).show();
             }
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                Fragment selectedFragment = null;
-                if (id == R.id.nav_meals) {
-                    return true;
-                } else if (id == R.id.nav_workout) {
-                    startActivity(new Intent(Profile.this, Workouts.class));
-                    return true;
-                } else if (id == R.id.nav_home) {
-                    return true;
-                } else if (id == R.id.nav_calendar) {
-                    return true;
-                } else if (id == R.id.nav_profile) {
-                    return true;
-                }
-                return false;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_workout) {
+                startActivity(new Intent(Profile.this, Workouts.class));
+                return true;
             }
+            return id == R.id.nav_meals || id == R.id.nav_home || id == R.id.nav_calendar || id == R.id.nav_profile;
         });
 
         String selectedTab = getIntent().getStringExtra("selectedTab");
@@ -171,10 +146,34 @@ public class Profile extends AppCompatActivity {
             Glide.with(this)
                     .load(photoUri)
                     .into(imageViewPhoto);
-        }
-        else {
+        } else {
             imageViewPhoto.setImageResource(R.drawable.avatar);
         }
+    }
 
+    private void showLogoutConfirmationDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout_confirmation, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        Button buttonCancel = dialogView.findViewById(R.id.buttonCancel);
+        Button buttonConfirm = dialogView.findViewById(R.id.buttonConfirmLogout);
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        buttonConfirm.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut();
+
+            Toast.makeText(Profile.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Profile.this, SignInPage.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
     }
 }
