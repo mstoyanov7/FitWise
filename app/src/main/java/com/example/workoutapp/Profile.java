@@ -1,10 +1,13 @@
 package com.example.workoutapp;
 
 import android.content.Intent;
+import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,19 +16,55 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Profile extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private RadioGroup radioGroupTabs;
     private TextView textViewHeader;
     private Button buttonViewAll;
+    private String userName;
+    private Uri userPhotoUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_page);
+
         FullscreenUtil.hideSystemUI(this);
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(acct != null) {
+            userName = acct.getDisplayName();
+            userPhotoUri = acct.getPhotoUrl();
+            updateUserAfterSignIn(userName, userPhotoUri);
+        }
+        else if (firebaseUser != null) {
+            userName = firebaseUser.getDisplayName();
+            updateUserAfterSignIn(userName, userPhotoUri);
+        }
+
+        Button buttonLogout = findViewById(R.id.buttonLogout);
+
+        buttonLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut();
+
+            Intent intent = new Intent(Profile.this, SignInPage.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+
+            Toast.makeText(Profile.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+        });
 
         radioGroupTabs = findViewById(R.id.radioGroupTabs);
         textViewHeader = findViewById(R.id.textViewHeader);
@@ -70,8 +109,17 @@ public class Profile extends AppCompatActivity {
 
         buttonViewAll.setOnClickListener(v -> {
             String currentTab = textViewHeader.getText().toString();
-            Toast.makeText(this, "View all: " + currentTab, Toast.LENGTH_SHORT).show();
-            // need to implement the logic for this and not just pop out a toast lol
+            if (currentTab.contains("Goals")) {
+                Intent intent = new Intent(Profile.this, GoalsPage.class);
+                //intent.putExtra("tabName", currentTab);
+                startActivity(intent);
+            } else if (currentTab.contains("Meals")) {
+                // Example: open meals page
+                Toast.makeText(this, "Open MealsPageActivity (not implemented)", Toast.LENGTH_SHORT).show();
+            } else if (currentTab.contains("Workouts")) {
+                // Example: open workouts page
+                Toast.makeText(this, "Open WorkoutsPageActivity (not implemented)", Toast.LENGTH_SHORT).show();
+            }
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
@@ -95,6 +143,13 @@ public class Profile extends AppCompatActivity {
                 return false;
             }
         });
+
+        String selectedTab = getIntent().getStringExtra("selectedTab");
+        if ("goals".equalsIgnoreCase(selectedTab)) {
+            radioGroupTabs.check(R.id.radioGoals);
+        } else {
+            radioGroupTabs.check(R.id.radioWorkouts);
+        }
     }
 
     private void loadFragment(Fragment fragment) {
@@ -102,5 +157,24 @@ public class Profile extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragmentContainerProfileTabs, fragment)
                 .commit();
+    }
+
+    public void updateUserAfterSignIn(String userName, Uri photoUri) {
+        TextView textViewName = findViewById(R.id.textViewName);
+        ImageView imageViewPhoto = findViewById(R.id.imageViewProfilePic);
+
+        if (userName != null) {
+            textViewName.setText(userName);
+        }
+
+        if (photoUri != null) {
+            Glide.with(this)
+                    .load(photoUri)
+                    .into(imageViewPhoto);
+        }
+        else {
+            imageViewPhoto.setImageResource(R.drawable.avatar);
+        }
+
     }
 }

@@ -43,7 +43,7 @@
             android:id="@+id/testWorkoutsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test Workouts Page"
+            android:text="Barcode Scanner"
             android:layout_marginTop="24dp"/>
 
         <Button
