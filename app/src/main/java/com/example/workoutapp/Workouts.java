@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -51,16 +50,16 @@ public class Workouts extends AppCompatActivity {
         dateTextView.setText(currentDate);
 
 
-        noResultsText  = findViewById(R.id.noResultsText);
-        searchInput    = findViewById(R.id.search_input);
-        searchButton   = findViewById(R.id.search_button);
-        btnCalisthenics= findViewById(R.id.btn_calisthenics);
-        btnFitness     = findViewById(R.id.btn_fitness);
-        btnRunning     = findViewById(R.id.btn_running);
-        btnYoga        = findViewById(R.id.btn_yoga);
+        noResultsText = findViewById(R.id.noResultsText);
+        searchInput = findViewById(R.id.search_input);
+        searchButton = findViewById(R.id.search_button);
+        btnCalisthenics = findViewById(R.id.btn_calisthenics);
+        btnFitness = findViewById(R.id.btn_fitness);
+        btnRunning = findViewById(R.id.btn_running);
+        btnYoga = findViewById(R.id.btn_yoga);
 
         // GridLayout and Cards
-        exercisesGrid  = findViewById(R.id.exercisesGridLayout);
+        exercisesGrid = findViewById(R.id.exercisesGridLayout);
 
         // Animation on filtering
         LayoutTransition layoutTransition = new LayoutTransition();
@@ -71,12 +70,12 @@ public class Workouts extends AppCompatActivity {
         exercisesGrid.setLayoutTransition(layoutTransition);
 
 
-        cardPullUps    = findViewById(R.id.card_pull_ups);
-        cardPullups1    = findViewById(R.id.card_pull_ups1);
-        cardPullups2    = findViewById(R.id.card_pull_ups2);
-        cardPullups3    = findViewById(R.id.card_pull_ups3);
-        cardDips       = findViewById(R.id.card_dips);
-        cardMuscleUps  = findViewById(R.id.card_muscle_ups);
+        cardPullUps = findViewById(R.id.card_pull_ups);
+        cardPullups1 = findViewById(R.id.card_pull_ups1);
+        cardPullups2 = findViewById(R.id.card_pull_ups2);
+        cardPullups3 = findViewById(R.id.card_pull_ups3);
+        cardDips = findViewById(R.id.card_dips);
+        cardMuscleUps = findViewById(R.id.card_muscle_ups);
         cardPistolSquats = findViewById(R.id.pistol_squats);
 
         searchButton.setOnClickListener(v -> {
@@ -90,8 +89,13 @@ public class Workouts extends AppCompatActivity {
 
         // Handle text searching
         searchInput.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -110,26 +114,29 @@ public class Workouts extends AppCompatActivity {
 
         // Setup bottom navigation
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        bottomNavigationView.setSelectedItemId(R.id.nav_workout);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                Fragment selectedFragment = null;
+                Intent intent = null;
+
                 if (id == R.id.nav_meals) {
-                    //TODO: Load Meals screen or fragment
-                    return true;
+                    //intent = new Intent(CurrentActivity.this, MealsActivity.class);
                 } else if (id == R.id.nav_workout) {
-                    // TODO: Load Workout screen or fragment
-                    return true;
+                    //intent = new Intent(CurrentActivity.this, WorkoutActivity.class);
                 } else if (id == R.id.nav_home) {
-                    // TODO: Load Home screen or fragment
-                    return true;
+                    //intent = new Intent(CurrentActivity.this, HomeActivity.class);
                 } else if (id == R.id.nav_calendar) {
-                    // TODO: Load Calendar screen or fragment
-                    return true;
+                    //intent = new Intent(CurrentActivity.this, CalendarActivity.class);
                 } else if (id == R.id.nav_profile) {
-                    startActivity(new Intent(Workouts.this, Profile.class));
+                    intent = new Intent(Workouts.this, Profile.class);
+                }
+
+                if (intent != null) {
+                    startActivity(intent);
+                    // Apply fade in to the incoming activity and fade out from the current one.
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     return true;
                 }
                 return false;
@@ -137,7 +144,8 @@ public class Workouts extends AppCompatActivity {
         });
     }
 
-    private void showCategory(String category) {
+
+        private void showCategory(String category) {
         exercisesGrid.removeAllViews();
         noResultsText.setVisibility(View.GONE);
 
