@@ -123,9 +123,9 @@ public class Profile extends AppCompatActivity {
                 } else if (id == R.id.nav_home) {
                     //intent = new Intent(CurrentActivity.this, HomeActivity.class);
                 } else if (id == R.id.nav_calendar) {
-                    //intent = new Intent(CurrentActivity.this, CalendarActivity.class);
+                    intent = new Intent(Profile.this, CalendarActivity.class);
                 } else if (id == R.id.nav_profile) {
-                    //intent = new Intent(Workouts.this, Profile.class);
+                    intent = new Intent(Profile.this, Profile.class);
                 }
 
                 if (intent != null) {
