@@ -37,7 +37,7 @@
         <activity android:name=".SignInPage" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".Workouts"/>
-
+        <activity android:name=".CalendarActivity"/>
         <activity android:name=".PullUpsActivity" />
         <activity android:name=".GoalsPage"/>
 
