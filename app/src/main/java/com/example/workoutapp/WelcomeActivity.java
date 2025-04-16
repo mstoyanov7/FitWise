@@ -1,13 +1,16 @@
 package com.example.workoutapp;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Window;
 import android.widget.*;
 
 import androidx.annotation.Nullable;
@@ -34,6 +37,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button finishButton;
 
     private Uri selectedAvatarUri;
+    private Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class WelcomeActivity extends AppCompatActivity {
         ageEditText = findViewById(R.id.ageEditText);
         sexRadioGroup = findViewById(R.id.sexRadioGroup);
         finishButton = findViewById(R.id.finishButton);
+
+        setupLoadingDialog();
 
         avatarImageView.setOnClickListener(v -> openGallery());
 
@@ -67,6 +73,8 @@ public class WelcomeActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             if (user != null) {
+                showLoading();
+
                 if (selectedAvatarUri != null) {
                     StorageReference storageRef = FirebaseStorage.getInstance().getReference()
                             .child("avatars/" + user.getUid() + ".jpg");
@@ -77,9 +85,11 @@ public class WelcomeActivity extends AppCompatActivity {
                                         saveUserDataToFirestore(user, age, weight, sex, downloadUri.toString());
                                     })
                                     .addOnFailureListener(e -> {
+                                        hideLoading();
                                         Toast.makeText(this, "Failed to get download URL", Toast.LENGTH_SHORT).show();
                                     }))
                             .addOnFailureListener(e -> {
+                                hideLoading();
                                 Toast.makeText(this, "Failed to upload avatar", Toast.LENGTH_SHORT).show();
                             });
                 } else {
@@ -106,7 +116,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 .document(user.getUid())
                 .set(userData)
                 .addOnSuccessListener(aVoid -> {
-                    // ✅ Cache the data locally for Profile
                     SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                     prefs.edit()
                             .putString("name", user.getDisplayName())
@@ -117,14 +126,34 @@ public class WelcomeActivity extends AppCompatActivity {
                             .putBoolean("avatarLoaded", true)
                             .apply();
 
+                    hideLoading();
                     Toast.makeText(this, "Welcome profile saved", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(this, Workouts.class));
                     finish();
                 })
                 .addOnFailureListener(e -> {
+                    hideLoading();
                     Log.e("FirestoreError", "Failed to save profile", e);
                     Toast.makeText(this, "Failed to save profile: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
+    }
+
+    private void setupLoadingDialog() {
+        loadingDialog = new Dialog(this);
+        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loadingDialog.setContentView(R.layout.dialog_loading);
+        loadingDialog.setCancelable(false);
+        if (loadingDialog.getWindow() != null) {
+            loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+    }
+
+    private void showLoading() {
+        if (!loadingDialog.isShowing()) loadingDialog.show();
+    }
+
+    private void hideLoading() {
+        if (loadingDialog.isShowing()) loadingDialog.dismiss();
     }
 
     private void openGallery() {
