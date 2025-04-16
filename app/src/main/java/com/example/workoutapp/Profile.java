@@ -2,6 +2,7 @@ package com.example.workoutapp;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,20 +19,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Profile extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private RadioGroup radioGroupTabs;
     private TextView textViewHeader;
     private Button buttonViewAll;
-    private String userName;
-    private Uri userPhotoUri;
+
+    private static final String PREFS_NAME = "UserPrefs";
+    private static final String PREF_IMAGE_LOADED = "avatarLoaded";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,29 +43,17 @@ public class Profile extends AppCompatActivity {
 
         FullscreenUtil.hideSystemUI(this);
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (acct != null) {
-            userName = acct.getDisplayName();
-            userPhotoUri = acct.getPhotoUrl();
-            updateUserAfterSignIn(userName, userPhotoUri);
-        } else if (firebaseUser != null) {
-            userName = firebaseUser.getDisplayName();
-            updateUserAfterSignIn(userName, userPhotoUri);
-        }
-
-        // Three dots button
-        ImageButton buttonLogout = findViewById(R.id.buttonLogout);
-        buttonLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
-
         radioGroupTabs = findViewById(R.id.radioGroupTabs);
         textViewHeader = findViewById(R.id.textViewHeader);
         buttonViewAll = findViewById(R.id.buttonViewAll);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        ImageButton buttonLogout = findViewById(R.id.buttonLogout);
+        buttonLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
 
         loadFragment(new WorkoutsFragment());
         textViewHeader.setText("Recent Workouts");
+
+        fetchAndDisplayUserData();
 
         radioGroupTabs.setOnCheckedChangeListener((group, checkedId) -> {
             Fragment selectedFragment = null;
@@ -90,11 +80,6 @@ public class Profile extends AppCompatActivity {
             textViewHeader.setText(headerText);
             if (selectedFragment != null) {
                 loadFragment(selectedFragment);
-            } else {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainerProfileTabs, new Fragment())
-                        .commit();
             }
         });
 
@@ -110,32 +95,26 @@ public class Profile extends AppCompatActivity {
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                Intent intent = null;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            Intent intent = null;
 
-                if (id == R.id.nav_meals) {
-                    //intent = new Intent(CurrentActivity.this, MealsActivity.class);
-                } else if (id == R.id.nav_workout) {
-                    intent = new Intent(Profile.this, Workouts.class);
-                } else if (id == R.id.nav_home) {
-                    //intent = new Intent(CurrentActivity.this, HomeActivity.class);
-                } else if (id == R.id.nav_calendar) {
-                    //intent = new Intent(CurrentActivity.this, CalendarActivity.class);
-                } else if (id == R.id.nav_profile) {
-                    //intent = new Intent(Workouts.this, Profile.class);
-                }
-
-                if (intent != null) {
-                    startActivity(intent);
-                    // Apply fade in to the incoming activity and fade out from the current one.
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    return true;
-                }
-                return false;
+            if (id == R.id.nav_meals) {
+                // intent = new Intent(this, MealsActivity.class);
+            } else if (id == R.id.nav_workout) {
+                intent = new Intent(this, Workouts.class);
+            } else if (id == R.id.nav_home) {
+                // intent = new Intent(this, HomeActivity.class);
+            } else if (id == R.id.nav_calendar) {
+                // intent = new Intent(this, CalendarActivity.class);
             }
+
+            if (intent != null) {
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                return true;
+            }
+            return false;
         });
 
         String selectedTab = getIntent().getStringExtra("selectedTab");
@@ -146,28 +125,99 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    private void fetchAndDisplayUserData() {
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String name = prefs.getString("name", null);
+        String age = prefs.getString("age", null);
+        String weight = prefs.getString("weight", null);
+        String sex = prefs.getString("sex", null);
+        String avatarUrl = prefs.getString("avatarUrl", null);
+
+        if (name != null && age != null && weight != null && sex != null) {
+            updateUserAfterSignIn(name, avatarUrl);
+
+            TextView textViewAge = findViewById(R.id.textViewAge);
+            TextView textViewWeight = findViewById(R.id.textViewWeight);
+            TextView textViewSex = findViewById(R.id.textViewSex);
+
+            textViewAge.setText("Age: " + age);
+            textViewWeight.setText("Weight: " + weight + " kg");
+            textViewSex.setText("Sex: " + sex);
+        }
+
+        // Then fetch fresh copy in background (optional)
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(user.getUid())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String freshName = documentSnapshot.getString("name");
+                            String freshAge = documentSnapshot.getString("age");
+                            String freshWeight = documentSnapshot.getString("weight");
+                            String freshSex = documentSnapshot.getString("sex");
+                            String freshAvatarUrl = documentSnapshot.getString("avatarUrl");
+
+                            updateUserAfterSignIn(freshName, freshAvatarUrl);
+
+                            TextView textViewAge = findViewById(R.id.textViewAge);
+                            TextView textViewWeight = findViewById(R.id.textViewWeight);
+                            TextView textViewSex = findViewById(R.id.textViewSex);
+
+                            textViewAge.setText("Age: " + freshAge);
+                            textViewWeight.setText("Weight: " + freshWeight + " kg");
+                            textViewSex.setText("Sex: " + freshSex);
+
+                            // Update cached values if needed
+                            prefs.edit()
+                                    .putString("name", freshName)
+                                    .putString("age", freshAge)
+                                    .putString("weight", freshWeight)
+                                    .putString("sex", freshSex)
+                                    .putString("avatarUrl", freshAvatarUrl)
+                                    .apply();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Failed to refresh profile", Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
+    private void updateUserAfterSignIn(String name, String photoUrl) {
+        TextView textViewName = findViewById(R.id.textViewName);
+        ImageView imageViewPhoto = findViewById(R.id.imageViewProfilePic);
+
+        textViewName.setText(name != null ? name : "");
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean avatarAlreadyLoaded = prefs.getBoolean(PREF_IMAGE_LOADED, false);
+
+        if (photoUrl != null && !photoUrl.isEmpty()) {
+            RequestOptions options = new RequestOptions()
+                    .placeholder(avatarAlreadyLoaded ? R.drawable.avatar : R.drawable.loading_avatar)
+                    .error(R.drawable.avatar);
+
+            Glide.with(this)
+                    .load(photoUrl)
+                    .apply(options)
+                    .into(imageViewPhoto);
+
+            if (!avatarAlreadyLoaded) {
+                prefs.edit().putBoolean(PREF_IMAGE_LOADED, true).apply();
+            }
+        } else {
+            imageViewPhoto.setImageResource(R.drawable.avatar);
+        }
+    }
+
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainerProfileTabs, fragment)
                 .commit();
-    }
-
-    public void updateUserAfterSignIn(String userName, Uri photoUri) {
-        TextView textViewName = findViewById(R.id.textViewName);
-        ImageView imageViewPhoto = findViewById(R.id.imageViewProfilePic);
-
-        if (userName != null) {
-            textViewName.setText(userName);
-        }
-
-        if (photoUri != null) {
-            Glide.with(this)
-                    .load(photoUri)
-                    .into(imageViewPhoto);
-        } else {
-            imageViewPhoto.setImageResource(R.drawable.avatar);
-        }
     }
 
     private void showLogoutConfirmationDialog() {
