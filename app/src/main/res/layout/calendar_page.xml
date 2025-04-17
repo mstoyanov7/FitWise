@@ -65,8 +65,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/card_border"
         app:cardCornerRadius="8dp"
-        app:cardElevation="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCalendarSubtitle">
@@ -81,32 +81,16 @@
             android:showWeekNumber="false" />
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/tvWorkoutsCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="0 Workouts"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/rvWorkouts"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/calendarCard" />
-
     <!-- Scrollable container for daily workouts -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvWorkouts"
+    <FrameLayout
+        android:id="@+id/calendarWorkoutFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvWorkoutsCount"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarCard" />
+
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

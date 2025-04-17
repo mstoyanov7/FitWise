@@ -7,35 +7,88 @@
     android:layout_marginTop="4dp"
     android:layout_marginBottom="16dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="3dp"
     android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
+        android:background="@drawable/card_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvWorkoutTitle"
-            android:layout_width="wrap_content"
+        <!-- Text section -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvWorkoutStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+            <!-- Title + Status -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvWorkoutTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+                <TextView
+                    android:id="@+id/tvWorkoutTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Workout Title"
+                    android:textStyle="bold"
+                    android:textColor="#111827"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/open_sans_bold" />
 
+                <TextView
+                    android:id="@+id/tvWorkoutStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" • Upcoming"
+                    android:textColor="#6B7280"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/open_sans_medium"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- Time Row with Icon -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/icTime"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_timer"
+                    app:tint="#6B7280"
+                    android:contentDescription="Time icon"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:id="@+id/tvWorkoutTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="07:00PM - 30 min"
+                    android:textColor="#6B7280"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/open_sans_medium" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Dropdown icon -->
+        <ImageView
+            android:id="@+id/imgDropdown"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_expand_more"
+            android:contentDescription="More"
+            app:tint="#9CA3AF"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="true" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

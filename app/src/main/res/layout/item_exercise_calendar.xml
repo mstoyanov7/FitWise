@@ -1,32 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@drawable/edit_text_background"
-    android:padding="12dp"
-    android:layout_marginBottom="8dp"
-    android:gravity="center_vertical">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="8dp"
+    app:strokeColor="@color/dark_gray"
+    app:strokeWidth="1dp">
 
-    <!-- First Letter Badge -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <!-- Exercise Name -->
-    <TextView
-        android:id="@+id/tvExerciseName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Push-up"
-        android:textSize="14sp"
-        android:textColor="#111827"
-        android:fontFamily="@font/open_sans_medium" />
+        <!-- HEADER ROW -->
+        <LinearLayout
+            android:id="@+id/headerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-    <!-- Remove Button -->
-    <ImageButton
-        android:id="@+id/btnRemoveExercise"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        android:contentDescription="Remove Exercise" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/tvWorkoutTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Strength Training"
+                android:fontFamily="@font/open_sans_bold"
+                android:textSize="14sp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upcoming"
+                android:textColor="#898989"
+                android:backgroundTint="#F4F4F5"
+                android:layout_marginLeft="4dp"
+                app:chipStrokeColor="@color/dark_gray"
+                app:chipStrokeWidth="0dp"
+                app:chipCornerRadius="8dp"
+                app:chipMinHeight="10dp"
+                app:chipBackgroundColor="@android:color/transparent"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="1dp"/>
+
+            <ImageView
+                android:id="@+id/ivArrow"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_expand_more"
+                android:contentDescription="Expand toggle"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical">
+
+            <!-- optional clock icon -->
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_timer"
+                app:tint="@color/dark_gray"/>
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="05:30PM · 50 min"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textColor="@color/dark_gray"/>
+        </LinearLayout>
+
+
+        <!-- DIVIDER -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="8dp"
+            android:background="@color/dark_gray"
+            android:visibility="gone"/>
+
+        <!-- EXPANDED CONTENT -->
+        <LinearLayout
+            android:id="@+id/expandedLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exercises"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/exerciseList"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_marginTop="16dp">
+
+                <ImageButton
+                    android:id="@+id/btnEdit"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_edit"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Edit"/>
+
+                <ImageButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_delete"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="Delete"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnComplete"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_marginStart="8dp"
+                    android:layout_height="36dp"
+                    android:text="Complete"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
