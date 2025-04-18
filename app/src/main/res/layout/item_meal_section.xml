@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/card_border"
     android:layout_marginBottom="8dp">
@@ -25,23 +25,53 @@
         android:paddingBottom="12dp"
         android:layout_marginLeft="12dp">
 
+        <!-- + Add Food -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddFood"
             android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:gravity="start|center_vertical"
+            android:includeFontPadding="false"
+            android:text="Add Food"
+            android:textSize="11sp"
             app:cornerRadius="8dp"
-            android:layout_height="35dp"
-            android:text="+ Add Food"
-            android:textSize="10sp"
-            app:backgroundTint="#DDDDDD" />
+            app:backgroundTint="@color/colorPrimary"
+            app:icon="@drawable/add"
+            app:iconSize="10dp"
+            app:iconTint="@android:color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="4dp" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnScanFood"
             android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:gravity="start|center_vertical"
+            android:includeFontPadding="false"
+            android:text="Scan Food"
+            android:textSize="11sp"
             app:cornerRadius="8dp"
-            android:layout_height="35dp"
-            android:text="+ Scan Food"
-            android:textSize="12sp"
-            android:layout_marginLeft="8dp"
-            app:backgroundTint="#DDDDDD" />
+            app:backgroundTint="@color/colorPrimary"
+            app:icon="@drawable/ic_scanner"
+            app:iconSize="10dp"
+            app:iconTint="@android:color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="4dp" />
+
+
     </LinearLayout>
 </LinearLayout>
