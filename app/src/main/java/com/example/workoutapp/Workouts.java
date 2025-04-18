@@ -124,11 +124,11 @@ public class Workouts extends AppCompatActivity {
                 if (id == R.id.nav_meals) {
                     //intent = new Intent(CurrentActivity.this, MealsActivity.class);
                 } else if (id == R.id.nav_workout) {
-                    //intent = new Intent(CurrentActivity.this, WorkoutActivity.class);
+                    intent = new Intent(Workouts.this, Workouts.class);
                 } else if (id == R.id.nav_home) {
                     //intent = new Intent(CurrentActivity.this, HomeActivity.class);
                 } else if (id == R.id.nav_calendar) {
-                    //intent = new Intent(CurrentActivity.this, CalendarActivity.class);
+                    intent = new Intent(Workouts.this, CalendarActivity.class);
                 } else if (id == R.id.nav_profile) {
                     intent = new Intent(Workouts.this, Profile.class);
                 }

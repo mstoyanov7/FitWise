@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="0dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:background="@drawable/card_border"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <!-- Header Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- Title + Status -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvWorkoutTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Strength Training"
+                        android:textStyle="bold"
+                        android:textColor="#111827"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/open_sans_bold" />
+
+                    <TextView
+                        android:id="@+id/tvWorkoutStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" • Upcoming"
+                        android:textColor="#6B7280"
+                        android:textSize="14sp"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/open_sans_medium" />
+                </LinearLayout>
+
+                <!-- Time Row -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_timer"
+                        app:tint="#6B7280"
+                        android:layout_marginEnd="4dp"
+                        android:contentDescription="Time" />
+
+                    <TextView
+                        android:id="@+id/tvWorkoutTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="05:30PM - 50 min"
+                        android:textColor="#6B7280"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/open_sans_medium" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Dropdown Icon -->
+            <ImageView
+                android:id="@+id/imgDropdown"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_expand_more"
+                android:contentDescription="More"
+                app:tint="#9CA3AF"
+                android:layout_marginStart="8dp"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <!-- Expandable Content -->
+        <LinearLayout
+            android:id="@+id/expandableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E5E7EB"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Exercise List -->
+            <LinearLayout
+                android:id="@+id/exerciseList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:divider="@android:color/transparent"
+                android:showDividers="middle"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Button Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:baselineAligned="false">
+
+                <!-- Trash Can -->
+                <ImageView
+                    android:id="@+id/btnDeleteWorkout"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_delete"
+                    android:contentDescription="Delete Workout"
+                    android:tint="#898989"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp" />
+
+                <!-- Complete Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCompleteWorkout"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Complete"
+                    android:textAllCaps="false"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/open_sans_medium"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#0BA284"
+                    app:cornerRadius="8dp"
+
+                    app:strokeWidth="1dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
