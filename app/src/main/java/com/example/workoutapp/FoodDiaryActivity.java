@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.threeten.bp.LocalDate;
@@ -73,6 +77,10 @@ public class FoodDiaryActivity extends AppCompatActivity {
             TextView title = (TextView) section.getChildAt(0);
             title.setText(MEAL_NAMES[i]);
 
+            MaterialButton btnAdd = section.findViewById(R.id.btnAddFood);
+            LinearLayout   items  = section.findViewById(R.id.foodItemsContainer);
+
+            btnAdd.setOnClickListener(v -> showAddFoodDialog(items));
             // TODO: clear existing food chips / views in this section
             // TODO: query your storage for foods on 'date' + MEAL_NAMES[i] and add them
         }
@@ -166,5 +174,58 @@ public class FoodDiaryActivity extends AppCompatActivity {
         catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    private void showAddFoodDialog(LinearLayout foodContainer) {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_food, null);
+
+        EditText etFood  = dialogView.findViewById(R.id.etFoodName);
+        EditText etCal   = dialogView.findViewById(R.id.etCalories);
+        EditText etCarbs = dialogView.findViewById(R.id.etCarbs);
+        EditText etFat   = dialogView.findViewById(R.id.etFat);
+        EditText etProt  = dialogView.findViewById(R.id.etProtein);
+
+        MaterialButton btnAdd    = dialogView.findViewById(R.id.btnAdd);
+        MaterialButton btnCancel = dialogView.findViewById(R.id.btnCancel);
+
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .create();
+        dialog.show();
+
+        // Cancel Button
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        // Add Button
+        btnAdd.setOnClickListener(v -> {
+            String food = etFood.getText().toString().trim();
+            if (food.isEmpty()) {
+                etFood.setError("Food name is required");
+                etFood.requestFocus();
+                return;
+            }
+
+            int cal  = parse(etCal);
+            int carb = parse(etCarbs);
+            int fat  = parse(etFat);
+            int prot = parse(etProt);
+
+            addFoodChip(food, cal, carb, fat, prot, foodContainer);
+            updateRemaining();
+            dialog.dismiss();
+        });
+    }
+
+
+    private void addFoodChip(String name, int cal, int carb, int fat, int prot,
+                             LinearLayout container) {
+
+        View chip = getLayoutInflater().inflate(R.layout.item_food_chip, container, false);
+        TextView tv = chip.findViewById(R.id.tvChipText);
+        tv.setText(
+                name + "\n" +
+                        cal + " kcal  •  " + carb + " g C  •  " + fat + " g F  •  " + prot + " g P");
+
+        container.addView(chip, 0);     // newest on top, before older items
     }
 }
