@@ -94,7 +94,7 @@ public class CalendarWorkoutFragment extends Fragment {
             tvTitle.setText(w.name);
             tvTime.setText(w.time);
 
-            // Set initial status color + label
+            // set initial status color + label
             boolean isCompleted = w.status.equalsIgnoreCase("Completed");
             if (isCompleted) {
                 btnComplete.setText("Undo");
@@ -110,7 +110,7 @@ public class CalendarWorkoutFragment extends Fragment {
                 tvStatus.setTextColor(Color.parseColor("#6B7280"));
             }
 
-            // Toggle complete/undo
+            // toggle complete/undo
             btnComplete.setOnClickListener(v -> {
                 boolean nowCompleted = btnComplete.getText().toString().equalsIgnoreCase("Complete");
                 if (nowCompleted) {
@@ -132,21 +132,21 @@ public class CalendarWorkoutFragment extends Fragment {
                 }
             });
 
-            // Handle dropdown expand/collapse
+            // handle dropdown expand/collapse
             imgDropdown.setOnClickListener(v -> {
                 if (expandableLayout.getVisibility() == View.VISIBLE) {
-                    // Collapse instantly
+                    // collapse instantly
                     expandableLayout.setVisibility(View.GONE);
                     imgDropdown.animate().rotation(0f).setDuration(200).start();
                 } else {
-                    // Animate expand
+                    // animate expand
                     TransitionManager.beginDelayedTransition((ViewGroup) expandableLayout.getParent(), new AutoTransition());
                     expandableLayout.setVisibility(View.VISIBLE);
                     imgDropdown.animate().rotation(180f).setDuration(200).start();
                 }
             });
 
-            // Populate exercises
+            // populate exercises
             exerciseList.removeAllViews();
             for (String ex : w.exerciseList) {
                 TextView chip = new TextView(requireContext());
@@ -162,7 +162,6 @@ public class CalendarWorkoutFragment extends Fragment {
                 exerciseList.addView(chip);
             }
 
-            // Optional: delete button logic (not implemented yet)
             btnDelete.setOnClickListener(v -> {
                 workouts.remove(w);
                 dataMap.put(selectedDate, workouts);
