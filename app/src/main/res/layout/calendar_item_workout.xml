@@ -147,7 +147,7 @@
                     android:layout_height="20dp"
                     android:src="@drawable/ic_delete"
                     android:contentDescription="Delete Workout"
-                    android:tint="#898989"
+                    app:tint="#898989"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="4dp" />
 
