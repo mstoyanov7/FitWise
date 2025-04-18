@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:background="@drawable/dialog_background"
+    android:gravity="center_horizontal">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add New Workout"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#111827"
+        android:fontFamily="@font/open_sans_bold"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Workout Name -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Workout Name"
+        android:textStyle="bold"
+        android:textColor="#111827"
+        android:textSize="14sp"
+        android:fontFamily="@font/open_sans_medium"
+        android:layout_marginBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/etWorkoutName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="e.g., Chest Day Blast"
+        android:background="@drawable/edit_text_background"
+        android:fontFamily="@font/open_sans_light"
+        android:padding="12dp"
+        android:textSize="14sp"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Date & Time -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="32dp">
+
+        <!-- Date -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:fontFamily="@font/open_sans_medium"
+                android:textSize="14sp"
+                android:textColor="#111827"
+                android:layout_marginBottom="4dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnWorkoutDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                android:padding="4dp"
+                android:text="Pick a date"
+                android:textColor="#6B7280"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:fontFamily="@font/open_sans_light"
+                app:backgroundTint="@android:color/white"
+                app:cornerRadius="8dp"
+                app:iconGravity="textStart"
+                app:rippleColor="@android:color/transparent"
+                app:strokeColor="#D1D5DB"
+                app:strokeWidth="1dp" />
+        </LinearLayout>
+
+        <!-- Time -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:fontFamily="@font/open_sans_medium"
+                android:textSize="14sp"
+                android:textColor="#111827"
+                android:layout_marginBottom="4dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnWorkoutTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                android:padding="4dp"
+                android:text="Pick a time"
+                android:textColor="#6B7280"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:fontFamily="@font/open_sans_light"
+                app:backgroundTint="@android:color/white"
+                app:cornerRadius="8dp"
+                app:iconGravity="textStart"
+                app:rippleColor="@android:color/transparent"
+                app:strokeColor="#D1D5DB"
+                app:strokeWidth="1dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Exercises Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Exercises"
+        android:textStyle="bold"
+        android:textColor="#111827"
+        android:textSize="14sp"
+        android:fontFamily="@font/open_sans_medium"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- RecyclerView for exercises -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/exerciseRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:overScrollMode="never"
+        android:nestedScrollingEnabled="false"/>
+
+    <!-- Add From Favorites (clickable text) -->
+    <TextView
+        android:id="@+id/btnAddFromFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+ Add from Favorites"
+        android:textStyle="bold"
+        android:textColor="#0BA284"
+        android:textSize="14sp"
+        android:fontFamily="@font/open_sans_medium"
+        android:layout_gravity="start"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelWorkout"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/open_sans_medium"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            app:cornerRadius="8dp"
+            app:strokeColor="#D1D5DB"
+            app:strokeWidth="1dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddWorkout"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Workout"
+            android:textAllCaps="false"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/open_sans_medium"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#0BA284"
+            app:cornerRadius="8dp"
+            app:strokeWidth="1dp"/>
+    </LinearLayout>
+</LinearLayout>
