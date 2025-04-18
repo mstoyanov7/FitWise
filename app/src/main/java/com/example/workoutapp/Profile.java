@@ -2,37 +2,38 @@ package com.example.workoutapp;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Profile extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private RadioGroup radioGroupTabs;
     private TextView textViewHeader;
     private Button buttonViewAll;
-    private String userName;
-    private Uri userPhotoUri;
+
+    private static final String PREFS_NAME = "UserPrefs";
+    private static final String PREF_IMAGE_LOADED = "avatarLoaded";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,29 +42,19 @@ public class Profile extends AppCompatActivity {
 
         FullscreenUtil.hideSystemUI(this);
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (acct != null) {
-            userName = acct.getDisplayName();
-            userPhotoUri = acct.getPhotoUrl();
-            updateUserAfterSignIn(userName, userPhotoUri);
-        } else if (firebaseUser != null) {
-            userName = firebaseUser.getDisplayName();
-            updateUserAfterSignIn(userName, userPhotoUri);
-        }
-
-        // Three dots button
-        ImageButton buttonLogout = findViewById(R.id.buttonLogout);
-        buttonLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
-
         radioGroupTabs = findViewById(R.id.radioGroupTabs);
         textViewHeader = findViewById(R.id.textViewHeader);
         buttonViewAll = findViewById(R.id.buttonViewAll);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        ImageButton buttonLogout = findViewById(R.id.buttonLogout);
+        buttonLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
 
+        // Default tab
         loadFragment(new WorkoutsFragment());
         textViewHeader.setText("Recent Workouts");
+
+        // Display user data
+        fetchAndDisplayUserData();
 
         radioGroupTabs.setOnCheckedChangeListener((group, checkedId) -> {
             Fragment selectedFragment = null;
@@ -90,11 +81,6 @@ public class Profile extends AppCompatActivity {
             textViewHeader.setText(headerText);
             if (selectedFragment != null) {
                 loadFragment(selectedFragment);
-            } else {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainerProfileTabs, new Fragment())
-                        .commit();
             }
         });
 
@@ -135,9 +121,9 @@ public class Profile extends AppCompatActivity {
                     return true;
                 }
                 return false;
-            }
-        });
+          });
 
+        // Select initial tab
         String selectedTab = getIntent().getStringExtra("selectedTab");
         if ("goals".equalsIgnoreCase(selectedTab)) {
             radioGroupTabs.check(R.id.radioGoals);
@@ -146,28 +132,100 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    private void fetchAndDisplayUserData() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String cachedName = prefs.getString("name", null);
+        String cachedAvatar = prefs.getString("avatarUrl", null);
+        String cachedAge = prefs.getString("age", null);
+        String cachedWeight = prefs.getString("weight", null);
+        String cachedSex = prefs.getString("sex", null);
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        String displayName = null;
+        String displayAvatar = null;
+        if (acct != null) {
+            displayName = acct.getDisplayName();
+            if (acct.getPhotoUrl() != null) displayAvatar = acct.getPhotoUrl().toString();
+            prefs.edit()
+                    .putString("name", displayName)
+                    .putString("avatarUrl", displayAvatar)
+                    .putBoolean(PREF_IMAGE_LOADED, true)
+                    .apply();
+        }
+        if (cachedName != null) displayName = cachedName;
+        if (cachedAvatar != null) displayAvatar = cachedAvatar;
+
+        updateUserAfterSignIn(displayName, displayAvatar);
+
+        if (cachedAge != null && cachedWeight != null && cachedSex != null) {
+            ((TextView)findViewById(R.id.textViewAge)).setText("Age: " + cachedAge);
+            ((TextView)findViewById(R.id.textViewWeight)).setText("Weight: " + cachedWeight + " kg");
+            ((TextView)findViewById(R.id.textViewSex)).setText("Sex: " + cachedSex);
+        }
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(user.getUid())
+                    .get()
+                    .addOnSuccessListener(doc -> {
+                        if (doc.exists()) {
+                            String freshName = doc.getString("name");
+                            String freshAge = doc.getString("age");
+                            String freshWeight = doc.getString("weight");
+                            String freshSex = doc.getString("sex");
+                            String freshAvatar = doc.getString("avatarUrl");
+
+                            updateUserAfterSignIn(freshName, freshAvatar);
+                            ((TextView)findViewById(R.id.textViewAge)).setText("Age: " + freshAge);
+                            ((TextView)findViewById(R.id.textViewWeight)).setText("Weight: " + freshWeight + " kg");
+                            ((TextView)findViewById(R.id.textViewSex)).setText("Sex: " + freshSex);
+
+                            prefs.edit()
+                                    .putString("name", freshName)
+                                    .putString("age", freshAge)
+                                    .putString("weight", freshWeight)
+                                    .putString("sex", freshSex)
+                                    .putString("avatarUrl", freshAvatar)
+                                    .apply();
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(this, "Failed to refresh profile", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void updateUserAfterSignIn(String name, String photoUrl) {
+        TextView textViewName = findViewById(R.id.textViewName);
+        ImageView imageViewPhoto = findViewById(R.id.imageViewProfilePic);
+
+        textViewName.setText(name != null ? name : "");
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean avatarLoaded = prefs.getBoolean(PREF_IMAGE_LOADED, false);
+
+        RequestOptions options = new RequestOptions()
+                .placeholder(avatarLoaded ? R.drawable.avatar : R.drawable.loading_avatar)
+                .error(R.drawable.avatar);
+
+        if (photoUrl != null && !photoUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(photoUrl)
+                    .apply(options)
+                    .centerCrop()      // ensure the image fills
+                    .circleCrop()      // crop into circle
+                    .into(imageViewPhoto);
+            if (!avatarLoaded) prefs.edit().putBoolean(PREF_IMAGE_LOADED, true).apply();
+        } else {
+            imageViewPhoto.setImageResource(R.drawable.avatar);
+        }
+    }
+
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainerProfileTabs, fragment)
                 .commit();
-    }
-
-    public void updateUserAfterSignIn(String userName, Uri photoUri) {
-        TextView textViewName = findViewById(R.id.textViewName);
-        ImageView imageViewPhoto = findViewById(R.id.imageViewProfilePic);
-
-        if (userName != null) {
-            textViewName.setText(userName);
-        }
-
-        if (photoUri != null) {
-            Glide.with(this)
-                    .load(photoUri)
-                    .into(imageViewPhoto);
-        } else {
-            imageViewPhoto.setImageResource(R.drawable.avatar);
-        }
     }
 
     private void showLogoutConfirmationDialog() {
@@ -180,10 +238,16 @@ public class Profile extends AppCompatActivity {
         Button buttonConfirm = dialogView.findViewById(R.id.buttonConfirmLogout);
 
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
-
         buttonConfirm.setOnClickListener(v -> {
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            prefs.edit().clear().apply();
+
             FirebaseAuth.getInstance().signOut();
-            GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut();
+            GoogleSignIn.getClient(this,
+                    new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestEmail()
+                            .build()
+            ).signOut();
 
             Toast.makeText(Profile.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Profile.this, SignInPage.class);
