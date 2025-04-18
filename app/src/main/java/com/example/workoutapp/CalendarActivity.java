@@ -3,6 +3,7 @@ package com.example.workoutapp;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
@@ -24,6 +29,8 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +44,6 @@ public class CalendarActivity extends AppCompatActivity {
 
     private final HashMap<LocalDate, List<CalendarWorkout>> workoutData = new HashMap<>();
     private LocalDate selectedDate;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +111,32 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void seedWorkouts() {
         LocalDate demoDate = LocalDate.of(2025, 4, 17);
+
         List<CalendarWorkout> demoList = new ArrayList<>();
-        demoList.add(new CalendarWorkout("Strength Training", "05:30PM - 50 min", "Upcoming"));
-        demoList.add(new CalendarWorkout("Yoga", "07:00PM - 30 min", "Upcoming"));
+
+        demoList.add(new CalendarWorkout(
+                "Strength Training",
+                "05:30PM - 50 min",
+                "Upcoming",
+                Arrays.asList(
+                        "Bench Press    4 x 10 · 135 lbs",
+                        "Shoulder Press 3 x 12 · 65 lbs",
+                        "Tricep Extensions 3 x 15 · 45 lbs",
+                        "Pull-ups        3 x 8"
+                )
+        ));
+
+        demoList.add(new CalendarWorkout(
+                "Yoga",
+                "07:00PM - 30 min",
+                "Upcoming",
+                Arrays.asList(
+                        "Sun Salutations   2 x 10 min",
+                        "Warrior Poses     1 x 10 min",
+                        "Cool Down         1 x 5 min"
+                )
+        ));
+
         workoutData.put(demoDate, demoList);
     }
 
@@ -121,27 +150,91 @@ public class CalendarActivity extends AppCompatActivity {
                 .setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
 
-        EditText etName     = dialogView.findViewById(R.id.etWorkoutName);
+        EditText etName = dialogView.findViewById(R.id.etWorkoutName);
         MaterialButton btnDate = dialogView.findViewById(R.id.btnWorkoutDate);
         MaterialButton btnTime = dialogView.findViewById(R.id.btnWorkoutTime);
-        TextView addFav        = dialogView.findViewById(R.id.btnAddFromFavorites);
-        MaterialButton btnAdd   = dialogView.findViewById(R.id.btnAddWorkout);
-        MaterialButton btnCancel= dialogView.findViewById(R.id.btnCancelWorkout);
+        TextView addFav = dialogView.findViewById(R.id.btnAddFromFavorites);
+        MaterialButton btnAdd = dialogView.findViewById(R.id.btnAddWorkout);
+        MaterialButton btnCancel = dialogView.findViewById(R.id.btnCancelWorkout);
+        RecyclerView exerciseRecycler = dialogView.findViewById(R.id.exerciseRecycler);
 
-        btnDate.setText(selectedDate.toString());
+        List<String> exerciseData = new ArrayList<>();
+        CalendarAddWorkoutsAdapter adapter = new CalendarAddWorkoutsAdapter(this, exerciseData);
+        exerciseRecycler.setAdapter(adapter);
+        exerciseRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView rv, @NonNull RecyclerView.ViewHolder from, @NonNull RecyclerView.ViewHolder to) {
+                adapter.moveItem(from.getAdapterPosition(), to.getAdapterPosition());
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder vh, int direction) {
+                // No swipe action
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(exerciseRecycler);
+
         btnDate.setOnClickListener(v -> showDatePicker(btnDate));
         btnTime.setOnClickListener(v -> showTimePicker(btnTime));
-        addFav.setOnClickListener(v ->
-                Toast.makeText(this, "Add from Favorites clicked", Toast.LENGTH_SHORT).show());
         btnCancel.setOnClickListener(v -> dialog.dismiss());
-        btnAdd.setOnClickListener(v -> addWorkout(etName, btnDate, btnTime, dialog));
+
+        addFav.setOnClickListener(v -> showFavoritesDialog(adapter));
+
+        btnAdd.setOnClickListener(v -> {
+            String name = etName.getText().toString().trim();
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Workout name required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            LocalDate date = selectedDate;
+            String time = btnTime.getText().toString() + " - 50 min";
+            List<String> finalList = new ArrayList<>(adapter.getExercises());
+
+            CalendarWorkout workout = new CalendarWorkout(name, time, "Upcoming", finalList);
+            workoutData.computeIfAbsent(date, k -> new ArrayList<>()).add(workout);
+            if (date.equals(selectedDate)) {
+                showWorkoutListFragment(date);
+            }
+            Toast.makeText(this, "Workout added!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+    }
+
+    private void showFavoritesDialog(CalendarAddWorkoutsAdapter adapter) {
+        String[] allExercises = {
+                "Push-ups", "Deadlifts", "Pull-ups", "Burpees", "Lunges",
+                "Shoulder Press", "Plank", "Mountain Climbers", "Russian Twists",
+                "Bicep Curls", "Tricep Dips", "Squats", "Jumping Jacks"
+        };
+
+        boolean[] checkedItems = new boolean[allExercises.length];
+        List<String> selected = new ArrayList<>();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick Favorite Exercises");
+        builder.setMultiChoiceItems(allExercises, checkedItems, (dialog, which, isChecked) -> {
+            if (isChecked) selected.add(allExercises[which]);
+            else selected.remove(allExercises[which]);
+        });
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            adapter.getExercises().addAll(selected);
+            adapter.notifyDataSetChanged();
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
     }
 
     private void showDatePicker(MaterialButton btnDate) {
         LocalDate now = LocalDate.now();
         new DatePickerDialog(this,
-                (view, y, m, d) -> btnDate.setText(
-                        LocalDate.of(y, m + 1, d).toString()),
+                (view, y, m, d) -> btnDate.setText(LocalDate.of(y, m + 1, d).toString()),
                 now.getYear(), now.getMonthValue() - 1, now.getDayOfMonth()
         ).show();
     }
@@ -156,47 +249,21 @@ public class CalendarActivity extends AppCompatActivity {
         ).show();
     }
 
-    private void addWorkout(EditText etName,
-                            MaterialButton btnDate,
-                            MaterialButton btnTime,
-                            AlertDialog dialog) {
-        String name = etName.getText().toString().trim();
-        if (name.isEmpty()) {
-            Toast.makeText(this, "Workout name required", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        LocalDate date = LocalDate.parse(btnDate.getText().toString());
-        String time = btnTime.getText().toString() + " - 50 min";
-
-        CalendarWorkout workout = new CalendarWorkout(name, time, "Upcoming");
-        workoutData.computeIfAbsent(date, k -> new ArrayList<>()).add(workout);
-        if (date.equals(selectedDate)) {
-            showWorkoutListFragment(date);
-        }
-        Toast.makeText(this, "Workout added!", Toast.LENGTH_SHORT).show();
-        dialog.dismiss();
-    }
-
-    /**
-     * Provide access to the workout data map for fragments.
-     */
     public HashMap<LocalDate, List<CalendarWorkout>> getWorkoutData() {
         return workoutData;
     }
 
-    /**
-     * Simple in-memory model for a calendar workout.
-     */
     public static class CalendarWorkout {
         public final String name;
         public final String time;
-        public final String status;
+        public String status;
+        public final List<String> exerciseList;
 
-        public CalendarWorkout(String name, String time, String status) {
-            this.name   = name;
-            this.time   = time;
+        public CalendarWorkout(String name, String time, String status, List<String> exercises) {
+            this.name = name;
+            this.time = time;
             this.status = status;
+            this.exerciseList = exercises;
         }
     }
 }
