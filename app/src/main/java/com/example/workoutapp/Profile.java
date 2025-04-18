@@ -53,7 +53,7 @@ public class Profile extends AppCompatActivity {
         loadFragment(new WorkoutsFragment());
         textViewHeader.setText("Recent Workouts");
 
-        // Display user data (Google first, then cache, then Firestore refresh)
+        // Display user data
         fetchAndDisplayUserData();
 
         radioGroupTabs.setOnCheckedChangeListener((group, checkedId) -> {
@@ -127,11 +127,6 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    /**
-     * Fetches and displays the user's name, avatar, age, weight, and sex.
-     * Priority: Google account > cached SharedPreferences > Firestore fresh.
-     * Also caches Google data on first load.
-     */
     private void fetchAndDisplayUserData() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String cachedName = prefs.getString("name", null);
@@ -140,36 +135,29 @@ public class Profile extends AppCompatActivity {
         String cachedWeight = prefs.getString("weight", null);
         String cachedSex = prefs.getString("sex", null);
 
-        // 1) Try Google account
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         String displayName = null;
         String displayAvatar = null;
         if (acct != null) {
             displayName = acct.getDisplayName();
             if (acct.getPhotoUrl() != null) displayAvatar = acct.getPhotoUrl().toString();
-            // Cache Google info immediately
             prefs.edit()
                     .putString("name", displayName)
                     .putString("avatarUrl", displayAvatar)
                     .putBoolean(PREF_IMAGE_LOADED, true)
                     .apply();
         }
-
-        // 2) Override with cached values if present
         if (cachedName != null) displayName = cachedName;
         if (cachedAvatar != null) displayAvatar = cachedAvatar;
 
-        // Show name & avatar
         updateUserAfterSignIn(displayName, displayAvatar);
 
-        // Show cached age/weight/sex if available
         if (cachedAge != null && cachedWeight != null && cachedSex != null) {
             ((TextView)findViewById(R.id.textViewAge)).setText("Age: " + cachedAge);
             ((TextView)findViewById(R.id.textViewWeight)).setText("Weight: " + cachedWeight + " kg");
             ((TextView)findViewById(R.id.textViewSex)).setText("Sex: " + cachedSex);
         }
 
-        // 3) Refresh from Firestore in background
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseFirestore.getInstance()
@@ -184,13 +172,11 @@ public class Profile extends AppCompatActivity {
                             String freshSex = doc.getString("sex");
                             String freshAvatar = doc.getString("avatarUrl");
 
-                            // Update UI
                             updateUserAfterSignIn(freshName, freshAvatar);
                             ((TextView)findViewById(R.id.textViewAge)).setText("Age: " + freshAge);
                             ((TextView)findViewById(R.id.textViewWeight)).setText("Weight: " + freshWeight + " kg");
                             ((TextView)findViewById(R.id.textViewSex)).setText("Sex: " + freshSex);
 
-                            // Cache results
                             prefs.edit()
                                     .putString("name", freshName)
                                     .putString("age", freshAge)
@@ -221,6 +207,8 @@ public class Profile extends AppCompatActivity {
             Glide.with(this)
                     .load(photoUrl)
                     .apply(options)
+                    .centerCrop()      // ensure the image fills
+                    .circleCrop()      // crop into circle
                     .into(imageViewPhoto);
             if (!avatarLoaded) prefs.edit().putBoolean(PREF_IMAGE_LOADED, true).apply();
         } else {
@@ -246,11 +234,9 @@ public class Profile extends AppCompatActivity {
 
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
         buttonConfirm.setOnClickListener(v -> {
-            // Clear cache on logout
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().clear().apply();
 
-            // Sign out
             FirebaseAuth.getInstance().signOut();
             GoogleSignIn.getClient(this,
                     new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

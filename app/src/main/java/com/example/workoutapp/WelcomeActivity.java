@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Window;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +27,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,52 +58,73 @@ public class WelcomeActivity extends AppCompatActivity {
         setupLoadingDialog();
 
         avatarImageView.setOnClickListener(v -> openGallery());
-
-        finishButton.setOnClickListener(v -> {
-            String weight = weightEditText.getText().toString().trim();
-            String age = ageEditText.getText().toString().trim();
-            int selectedSexId = sexRadioGroup.getCheckedRadioButtonId();
-
-            if (weight.isEmpty() || age.isEmpty() || selectedSexId == -1) {
-                Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            RadioButton selectedSex = findViewById(selectedSexId);
-            String sex = selectedSex.getText().toString();
-
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-            if (user != null) {
-                showLoading();
-
-                if (selectedAvatarUri != null) {
-                    StorageReference storageRef = FirebaseStorage.getInstance().getReference()
-                            .child("avatars/" + user.getUid() + ".jpg");
-
-                    storageRef.putFile(selectedAvatarUri)
-                            .addOnSuccessListener(taskSnapshot -> taskSnapshot.getStorage().getDownloadUrl()
-                                    .addOnSuccessListener(downloadUri -> {
-                                        saveUserDataToFirestore(user, age, weight, sex, downloadUri.toString());
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        hideLoading();
-                                        Toast.makeText(this, "Failed to get download URL", Toast.LENGTH_SHORT).show();
-                                    }))
-                            .addOnFailureListener(e -> {
-                                hideLoading();
-                                Toast.makeText(this, "Failed to upload avatar", Toast.LENGTH_SHORT).show();
-                            });
-                } else {
-                    saveUserDataToFirestore(user, age, weight, sex, null);
-                }
-            } else {
-                Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
-            }
-        });
+        finishButton.setOnClickListener(v -> handleFinish());
     }
 
-    private void saveUserDataToFirestore(FirebaseUser user, String age, String weight, String sex, @Nullable String avatarUrl) {
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Select Avatar"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            selectedAvatarUri = data.getData();
+            if (selectedAvatarUri != null) {
+                // Use Glide to ensure the image fills the circle completely
+                Glide.with(this)
+                        .load(selectedAvatarUri)
+                        .centerCrop()
+                        .circleCrop()
+                        .into(avatarImageView);
+            }
+        }
+    }
+
+    private void handleFinish() {
+        String weight = weightEditText.getText().toString().trim();
+        String age = ageEditText.getText().toString().trim();
+        int selectedSexId = sexRadioGroup.getCheckedRadioButtonId();
+
+        if (weight.isEmpty() || age.isEmpty() || selectedSexId == -1) {
+            Toast.makeText(this, "Please complete all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RadioButton selectedSex = findViewById(selectedSexId);
+        String sex = selectedSex.getText().toString();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        showLoading();
+
+        if (selectedAvatarUri != null) {
+            StorageReference storageRef = FirebaseStorage.getInstance()
+                    .getReference().child("avatars/" + user.getUid() + ".jpg");
+            storageRef.putFile(selectedAvatarUri)
+                    .addOnSuccessListener(taskSnapshot -> taskSnapshot.getStorage()
+                            .getDownloadUrl()
+                            .addOnSuccessListener(downloadUri -> saveUserDataToFirestore(user, age, weight, sex, downloadUri.toString()))
+                            .addOnFailureListener(e -> {
+                                hideLoading();
+                                Toast.makeText(this, "Failed to get download URL", Toast.LENGTH_SHORT).show();
+                            }))
+                    .addOnFailureListener(e -> {
+                        hideLoading();
+                        Toast.makeText(this, "Failed to upload avatar", Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            saveUserDataToFirestore(user, age, weight, sex, null);
+        }
+    }
+
+    private void saveUserDataToFirestore(FirebaseUser user, String age, String weight, String sex, String avatarUrl) {
         Map<String, Object> userData = new HashMap<>();
         userData.put("name", user.getDisplayName());
         userData.put("age", age);
@@ -154,26 +177,5 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void hideLoading() {
         if (loadingDialog.isShowing()) loadingDialog.dismiss();
-    }
-
-    private void openGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Avatar"), PICK_IMAGE_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            selectedAvatarUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedAvatarUri);
-                avatarImageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }
