@@ -1,0 +1,12 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/colorPrimary"/>   <!-- teal when selected -->
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#E0E0E0"/>   <!-- gray when not selected -->
+        </shape>
+    </item>
+</selector>

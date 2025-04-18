@@ -122,7 +122,7 @@ public class Workouts extends AppCompatActivity {
                 Intent intent = null;
 
                 if (id == R.id.nav_meals) {
-                    //intent = new Intent(CurrentActivity.this, MealsActivity.class);
+                    intent = new Intent(Workouts.this, FoodDiaryActivity.class);
                 } else if (id == R.id.nav_workout) {
                     intent = new Intent(Workouts.this, Workouts.class);
                 } else if (id == R.id.nav_home) {
