@@ -191,7 +191,7 @@ public class CalendarActivity extends AppCompatActivity {
                 return;
             }
 
-            LocalDate date = selectedDate;
+            LocalDate date = LocalDate.parse(btnDate.getText().toString());
             String time = btnTime.getText().toString() + " - 50 min";
             List<String> finalList = new ArrayList<>(adapter.getExercises());
 
