@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Logout"
             android:textAllCaps="false"
-            android:backgroundTint="@color/green"
+            android:backgroundTint="@color/colorPrimary"
             android:textColor="@android:color/white"
             android:fontFamily="@font/open_sans_semibold"/>
     </LinearLayout>

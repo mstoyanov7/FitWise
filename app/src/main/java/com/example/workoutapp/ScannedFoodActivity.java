@@ -1,186 +1,199 @@
 package com.example.workoutapp;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.Glide;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ScannedFoodActivity extends AppCompatActivity {
 
-    private TabLayout tabLayout;
+    private static final float INITIAL_WEIGHT = 100f;
+
+    // per‑100g values
+    private float per100Cal, per100Carbs, per100Fat, per100Sugar, per100Protein;
+
+    private final List<String> nutrientData   = new ArrayList<>();
+    private final List<String> ingredientData = new ArrayList<>();
+
+    private TabLayout    tabLayout;
     private RecyclerView rvDetails;
     private SimpleAdapter adapter;
-    private List<String> nutrientData;
-    private List<String> ingredientData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_scanned_food);
 
-        Button btnNewScan = findViewById(R.id.btn_new_scan);
-        Button btnAddDiary = findViewById(R.id.btn_add_diary);
-
-        btnNewScan.setOnClickListener(v -> {
-            Intent intent = new Intent(ScannedFoodActivity.this, BarcodeScannerActivity.class);
-            startActivity(intent);
-            finish();
+        // intercept back gesture/button
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override public void handleOnBackPressed() {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
         });
 
-        // TODO: Add to diary functionality
-        btnAddDiary.setOnClickListener(v -> {
-            Toast.makeText(ScannedFoodActivity.this, "Food added to diary", Toast.LENGTH_SHORT).show();
+        // — pull in Intent extras —
+        Intent in = getIntent();
+        final String selectedDate = in.getStringExtra("selectedDate");
+        final int    mealIndex    = in.getIntExtra("mealIndex", -1);
+
+        String name        = in.getStringExtra("name");
+        String ingredients = in.getStringExtra("ingredients");
+        String calStr      = in.getStringExtra("calories");
+        String sugarStr    = in.getStringExtra("sugars");
+        String fatStr      = in.getStringExtra("fat");
+        String protStr     = in.getStringExtra("protein");
+        String carbsStr    = in.getStringExtra("carbs");
+        String imageUrl    = in.getStringExtra("image_url");
+
+        // parse per‑100g floats
+        per100Cal     = safeFloat(calStr);
+        per100Sugar   = safeFloat(sugarStr);
+        per100Fat     = safeFloat(fatStr);
+        per100Protein = safeFloat(protStr);
+        per100Carbs   = safeFloat(carbsStr);
+
+        // — header UI —
+        TextView tvName    = findViewById(R.id.tv_food_name);
+        TextView tvSummary = findViewById(R.id.tv_food_summary);
+        ImageView ivFood   = findViewById(R.id.iv_food);
+
+        tvName.setText(name);
+        tvSummary.setText(String.format(
+                Locale.getDefault(),
+                "%.0f kcal | ~100g | %.1f g protein",
+                per100Cal, per100Protein
+        ));
+        Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.dinner)
+                .into(ivFood);
+
+        // — weight input & live stats —
+        EditText etWeightInput = findViewById(R.id.tv_stat_weight_value);
+        TextView tvCalories    = findViewById(R.id.tv_stat_calories_value);
+        TextView tvProteinOut  = findViewById(R.id.tv_stat_protein_value);
+
+        // initialize to 100g
+        etWeightInput.setText(String.valueOf((int) INITIAL_WEIGHT));
+
+        // zero‑default on blur → blank→"0" but keep focus
+        etWeightInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus && etWeightInput.getText().toString().trim().isEmpty()) {
+                etWeightInput.setText("0");
+                etWeightInput.requestFocus();
+            }
         });
 
-        // Initialize views
+        // build initial lists
+        initIngredientData(ingredients);
+        initNutrientData(INITIAL_WEIGHT);
+
+        // set initial top stats
+        tvCalories  .setText(String.format(Locale.getDefault(),
+                "%.0f kcal",  per100Cal     * INITIAL_WEIGHT / 100f));
+        tvProteinOut.setText(String.format(Locale.getDefault(),
+                "%.1f g",    per100Protein * INITIAL_WEIGHT / 100f));
+
+        // — RecyclerView + Tabs set‑up —
         tabLayout = findViewById(R.id.tab_layout);
         rvDetails = findViewById(R.id.rv_details);
         rvDetails.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SimpleAdapter(new ArrayList<>());
+
+        // adapter holds its own snapshot
+        adapter = new SimpleAdapter(new ArrayList<>(nutrientData));
         rvDetails.setAdapter(adapter);
 
-        View constraint_layout = findViewById(R.id.constraint_layout);
-        constraint_layout.setOnClickListener(v -> hideKeyboardAndClearFocus());
-
-        // Initialize the data lists for the tabs
-        initializeData();
-
-        // Set up tabs
         tabLayout.addTab(tabLayout.newTab().setText("Nutritional Values"));
         tabLayout.addTab(tabLayout.newTab().setText("Ingredients"));
-        updateRecyclerViewData(nutrientData);
-
+        tabLayout.selectTab(tabLayout.getTabAt(0));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
+            @Override public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
-                    updateRecyclerViewData(nutrientData);
+                    adapter.updateData(nutrientData);
                 } else {
-                    updateRecyclerViewData(ingredientData);
+                    adapter.updateData(ingredientData);
                 }
             }
+            @Override public void onTabUnselected(TabLayout.Tab t) {}
+            @Override public void onTabReselected(TabLayout.Tab t) {}
+        });
 
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+        // — live‑update on weight change —
+        etWeightInput.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s,int a,int b,int c){}
+            @Override public void onTextChanged(CharSequence s,int a,int b,int c){}
+            @Override public void afterTextChanged(Editable s) {
+                // strip leading zeros
+                String txt = s.toString();
+                if (txt.length() > 1 && txt.startsWith("0")) {
+                    s.replace(0, s.length(), txt.replaceFirst("^0+", ""));
+                }
+                // compute current weight
+                String inStr = s.toString().trim();
+                float weight = inStr.isEmpty() ? 0f : safeFloat(inStr);
+
+                // update header stats
+                tvCalories  .setText(String.format(Locale.getDefault(),
+                        "%.0f kcal",  per100Cal     * weight / 100f));
+                tvProteinOut.setText(String.format(Locale.getDefault(),
+                        "%.1f g",    per100Protein * weight / 100f));
+
+                // rebuild and refresh
+                initNutrientData(weight);
+                adapter.updateData(nutrientData);
+            }
+        });
+
+        // — Scan Again button —
+        Button btnNewScan = findViewById(R.id.btn_new_scan);
+        btnNewScan.setOnClickListener(v -> {
+            startActivity(new Intent(this, BarcodeScannerActivity.class));
+            finish();
+        });
+
+        // — Add to Diary button —
+        Button btnAddDiary = findViewById(R.id.btn_add_diary);
+        btnAddDiary.setOnClickListener(v -> {
+            String inStr = etWeightInput.getText().toString().trim();
+            float weight = inStr.isEmpty() ? 0f : safeFloat(inStr);
+
+            Intent out = new Intent();
+            out.putExtra("name",          name);
+            out.putExtra("calories",      String.valueOf(per100Cal     * weight / 100f));
+            out.putExtra("carbs",         String.valueOf(per100Carbs   * weight / 100f));
+            out.putExtra("fat",           String.valueOf(per100Fat     * weight / 100f));
+            out.putExtra("protein",       String.valueOf(per100Protein * weight / 100f));
+            out.putExtra("selectedDate",  selectedDate);
+            out.putExtra("mealIndex",     mealIndex);
+            setResult(RESULT_OK, out);
+            finish();
         });
     }
 
-    private void initializeData() {
-        Intent intent = getIntent();
-
-        // Original values per 100g
-        float caloriesPer100g = parseFloatSafe(intent.getStringExtra("calories"));
-        float proteinPer100g = parseFloatSafe(intent.getStringExtra("protein"));
-        String carbs = intent.getStringExtra("carbs");
-        String fat = intent.getStringExtra("fat");
-        String sugars = intent.getStringExtra("sugars");
-
-        // UI elements
-        EditText etWeightInput = findViewById(R.id.tv_stat_weight_value);
-        final TextView tvCalories = findViewById(R.id.tv_stat_calories_value);
-        final TextView tvProtein = findViewById(R.id.tv_stat_protein_value);
-
-        // Default weight in grams
-        final float defaultWeight = 100f;
-        etWeightInput.setText(String.valueOf((int) defaultWeight));
-
-        // Function to recalculate stats and update TextViews
-        final Runnable updateStats = () -> {
-            String input = etWeightInput.getText().toString().trim();
-            // Ако е празно, показваме placeholders, но не променяме съдържанието на EditText
-            if (input.isEmpty()) {
-                tvCalories.setText("0");
-                tvProtein.setText("0");
-                etWeightInput.setText(String.valueOf(0));
-            } else {
-                float weight = parseFloatSafe(input);
-                float adjustedCalories = caloriesPer100g * weight / 100f;
-                float adjustedProtein = proteinPer100g * weight / 100f;
-                tvCalories.setText(String.format("%.0f kcal", adjustedCalories));
-                tvProtein.setText(String.format("%.1f g", adjustedProtein));
-            }
-        };
-
-        // Извикваме изчислението веднага при инициализация
-        updateStats.run();
-
-        etWeightInput.setOnKeyListener((v, keyCode, event) -> {
-            if (event.getAction() == android.view.KeyEvent.ACTION_DOWN) {
-                String currentText = etWeightInput.getText().toString();
-                // Ако полето съдържа само "0" и натиснатият клавиш е цифра, различна от '0'
-                if (currentText.equals("0")) {
-                    int unicodeChar = event.getUnicodeChar();
-                    if (Character.isDigit(unicodeChar) && unicodeChar != '0') {
-                        // Заместваме "0" с новия въведен символ
-                        String newText = String.valueOf((char)unicodeChar);
-                        etWeightInput.setText(newText);
-                        etWeightInput.setSelection(newText.length());
-                        return true; // Консумираме събитието
-                    }
-                }
-            }
-            return false;
-        });
-
-        // Добавяме TextWatcher, който след всяка промяна обновява изходните стойности
-        etWeightInput.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                updateStats.run();
-            }
-        });
-
-        // Summary и заглавие
-        TextView nameView = findViewById(R.id.tv_food_name);
-        TextView summaryView = findViewById(R.id.tv_food_summary);
-        String name = intent.getStringExtra("name");
-        if (nameView != null && summaryView != null) {
-            nameView.setText(name);
-            summaryView.setText(String.format("%.0f kcal | ~%.0fg | %.1fg protein", caloriesPer100g, defaultWeight, proteinPer100g));
-        }
-
-        // Зареждане на изображението
-        String imageUrl = intent.getStringExtra("image_url");
-        ImageView ivFood = findViewById(R.id.iv_food);
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            Glide.with(this)
-                    .load(imageUrl)
-                    .placeholder(R.drawable.dinner)
-                    .into(ivFood);
-        }
-
-        // Данни за RecyclerView (Nutrient list)
-        nutrientData = new ArrayList<>();
-        nutrientData.add("Calories: " + caloriesPer100g + " kcal");
-        nutrientData.add("Carbs: " + carbs + " g");
-        nutrientData.add("Fat: " + fat + " g");
-        nutrientData.add("Sugar: " + sugars + " g");
-        nutrientData.add("Protein: " + proteinPer100g + " g");
-
-        // Данни за Ingredients
-        String ingredients = intent.getStringExtra("ingredients");
-        ingredientData = new ArrayList<>();
+    private void initIngredientData(String ingredients) {
+        ingredientData.clear();
         if (ingredients != null && !ingredients.equals("N/A")) {
             for (String item : ingredients.split(",\\s*")) {
                 ingredientData.add(item.trim());
@@ -190,66 +203,49 @@ public class ScannedFoodActivity extends AppCompatActivity {
         }
     }
 
-    private void hideKeyboardAndClearFocus() {
-        View view = getCurrentFocus();
-        if (view != null) {
-            view.clearFocus();
-            android.view.inputmethod.InputMethodManager imm =
-                    (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-        }
+    private void initNutrientData(float weight) {
+        nutrientData.clear();
+        nutrientData.add(String.format(Locale.getDefault(),
+                "Calories: %.0f kcal",   per100Cal     * weight / 100f));
+        nutrientData.add(String.format(Locale.getDefault(),
+                "Carbs: %.1f g",         per100Carbs   * weight / 100f));
+        nutrientData.add(String.format(Locale.getDefault(),
+                "Fat: %.1f g",           per100Fat     * weight / 100f));
+        nutrientData.add(String.format(Locale.getDefault(),
+                "Sugar: %.1f g",         per100Sugar   * weight / 100f));
+        nutrientData.add(String.format(Locale.getDefault(),
+                "Protein: %.1f g",       per100Protein * weight / 100f));
     }
 
-    private float parseFloatSafe(String str) {
+    private float safeFloat(String s) {
         try {
-            return Float.parseFloat(str.replace(",", "."));
+            return Float.parseFloat(s);
         } catch (Exception e) {
             return 0f;
         }
     }
 
-    private void updateRecyclerViewData(List<String> data) {
-        adapter.updateData(data);
-    }
-
-    private static class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder> {
-        private List<String> dataList;
-
-        public SimpleAdapter(List<String> data) {
-            this.dataList = data;
-        }
-
-        public void updateData(List<String> newData) {
-            dataList.clear();
-            dataList.addAll(newData);
+    private static class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.VH> {
+        private final List<String> list = new ArrayList<>();
+        SimpleAdapter(List<String> initial) { list.addAll(initial); }
+        void updateData(List<String> data) {
+            list.clear(); list.addAll(data);
             notifyDataSetChanged();
         }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(android.R.layout.simple_list_item_1, parent, false);
-            return new ViewHolder(view);
+        @Override public VH onCreateViewHolder(android.view.ViewGroup p,int vt) {
+            View v = LayoutInflater.from(p.getContext())
+                    .inflate(android.R.layout.simple_list_item_1, p, false);
+            return new VH(v);
         }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.textView.setText(dataList.get(position));
+        @Override public void onBindViewHolder(VH h,int pos) {
+            h.text1.setText(list.get(pos));
         }
-
-        @Override
-        public int getItemCount() {
-            return dataList.size();
-        }
-
-        static class ViewHolder extends RecyclerView.ViewHolder {
-            TextView textView;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                textView = itemView.findViewById(android.R.id.text1);
+        @Override public int getItemCount() { return list.size(); }
+        static class VH extends RecyclerView.ViewHolder {
+            TextView text1;
+            VH(View v) {
+                super(v);
+                text1 = v.findViewById(android.R.id.text1);
             }
         }
     }
