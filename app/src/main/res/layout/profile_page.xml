@@ -185,6 +185,7 @@
                 </LinearLayout>
             </LinearLayout>
 
+
             <!-- Progress Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewProgress"
@@ -196,27 +197,28 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="292dp"
-                    android:background="@drawable/segmented_control_background"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:background="@drawable/segmented_control_background"
                     android:padding="16dp">
 
                     <TextView
                         android:id="@+id/textViewWeekProgressTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_semibold"
-                        android:paddingTop="0dp"
                         android:text="This Week's Progress"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/open_sans_semibold" />
 
+                    <!-- Calories Consumed & Weight Forecast -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginTop="12dp">
 
+                        <!-- Average Calories -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -224,23 +226,24 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textViewCaloriesLabel"
+                                android:id="@+id/textViewCaloriesConsumedLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/open_sans_regular"
-                                android:text="Calories Burned"
+                                android:text="Avg Calories Consumed"
+                                android:textSize="12sp"
                                 android:textColor="#898989"
-                                android:textSize="12sp" />
+                                android:fontFamily="@font/open_sans_regular" />
 
                             <TextView
-                                android:id="@+id/textViewCaloriesValue"
+                                android:id="@+id/textViewCaloriesConsumed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/open_sans_bold"
-                                android:text="1,605 kcal"
-                                android:textSize="20sp" />
+                                android:text="2,040 kcal"
+                                android:textSize="20sp"
+                                android:fontFamily="@font/open_sans_bold" />
                         </LinearLayout>
 
+                        <!-- Forecast -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -248,28 +251,37 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/textViewActiveTimeLabel"
+                                android:id="@+id/textViewForecastLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/open_sans_regular"
-                                android:text="Active Time"
+                                android:text="Forecast"
+                                android:textSize="15sp"
                                 android:textColor="#898989"
-                                android:textSize="12sp" />
+                                android:fontFamily="@font/open_sans_regular" />
 
                             <TextView
-                                android:id="@+id/textViewActiveTimeValue"
+                                android:id="@+id/textViewForecastResult"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/open_sans_bold"
-                                android:text="1:03:30"
-                                android:textSize="20sp" />
+                                android:text="You will lose ~0.5kg"
+                                android:textSize="18sp"
+                                android:fontFamily="@font/open_sans_bold" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!--need to add a bar chart here but idk how to do it yet-->
+                    <!-- Placeholder for chart -->
+                    <FrameLayout
+                        android:id="@+id/weeklyCaloriesChartContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/rounded_card_background">
+                        <!-- Add your bar/line chart dynamically here -->
+                    </FrameLayout>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
 
             <!-- Tabs -->
             <LinearLayout
