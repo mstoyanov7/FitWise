@@ -10,29 +10,30 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.textfield.TextInputLayout;
-
-
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SignInPage extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
     private CheckBox rememberMeCheckBox;
 
-    GoogleSignInOptions gso;
-    GoogleSignInClient gsc;
+    private static final int RC_SIGN_IN = 1000;
+    private GoogleSignInClient gsc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,10 @@ public class SignInPage extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
         gsc = GoogleSignIn.getClient(this, gso);
 
         TextInputLayout emailLayout = findViewById(R.id.emailLayout);
@@ -56,24 +60,15 @@ public class SignInPage extends AppCompatActivity {
         TextView registerText = findViewById(R.id.registerText);
         ImageButton googleSignInButton = findViewById(R.id.googleSignInButton);
 
-        // Handle Login Button Click
         loginButton.setOnClickListener(v -> handleLogin());
 
-        // Handle Forgot Password Click
         forgotPasswordText.setOnClickListener(v -> {
             Intent intent = new Intent(SignInPage.this, ForgotPasswordActivity.class);
             startActivity(intent);
         });
 
+        googleSignInButton.setOnClickListener(v -> signIn());
 
-        googleSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
-
-        // Navigate to Register Page
         registerText.setOnClickListener(v -> {
             Intent intent = new Intent(SignInPage.this, RegisterForm.class);
             startActivity(intent);
@@ -87,28 +82,43 @@ public class SignInPage extends AppCompatActivity {
         }
     }
 
-
-    void signIn(){
+    private void signIn() {
         Intent signInIntent = gsc.getSignInIntent();
-        startActivityForResult(signInIntent,1000);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    void navigateToWorkoutsPage(){
-        finish();
-        Intent intent = new Intent(SignInPage.this, Workouts.class);
-        startActivity(intent);
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+
+                            Intent intent = new Intent(SignInPage.this, isNew ? WelcomeActivity.class : Workouts.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(SignInPage.this, "Firebase login failed: " + task.getException(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
+        if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                task.getResult(ApiException.class);
-                navigateToWorkoutsPage();
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null) {
+                    firebaseAuthWithGoogle(account.getIdToken());
+                }
             } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Google sign in failed: " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -127,10 +137,16 @@ public class SignInPage extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(SignInPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                        navigateToWorkoutsPage(); // Navigate to main screen
+                        navigateToWorkoutsPage();
                     } else {
                         Toast.makeText(SignInPage.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    private void navigateToWorkoutsPage() {
+        finish();
+        Intent intent = new Intent(SignInPage.this, Workouts.class);
+        startActivity(intent);
     }
 }
