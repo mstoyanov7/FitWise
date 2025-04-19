@@ -68,7 +68,7 @@ public class CalendarActivity extends AppCompatActivity {
             } else if (id == R.id.nav_workout) {
                 intent = new Intent(CalendarActivity.this, Workouts.class);
             } else if (id == R.id.nav_home) {
-                // intent = new Intent(this, HomeActivity.class);
+                intent = new Intent(this, HomeActivity.class);
             } else if (id == R.id.nav_profile) {
                 intent = new Intent(CalendarActivity.this, Profile.class);
             } else if (id == R.id.nav_calendar) {
