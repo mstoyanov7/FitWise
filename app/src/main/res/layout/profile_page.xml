@@ -153,16 +153,6 @@
                     android:layout_marginStart="8dp">
 
                     <ImageButton
-                        android:id="@+id/buttonLogout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_logout"
-                        android:contentDescription="Logout"
-                        app:tint="@android:color/black" />
-
-                    <ImageButton
                         android:id="@+id/buttonFlip"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -395,6 +385,19 @@
                 />
         </LinearLayout>
     </ScrollView>
+
+    <ImageButton
+        android:id="@+id/buttonLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Logout"
+        android:src="@drawable/ic_logout"
+        app:tint="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
