@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/dialog_background"
+    android:gravity="center_horizontal">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Food Item"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#111827"
+        android:fontFamily="@font/open_sans_bold"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Food Name -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Food Name"
+        android:textColor="#111827"
+        android:textSize="14sp"
+        android:fontFamily="@font/open_sans_medium"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etFoodName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="e.g., Chicken Breast"
+        android:background="@drawable/edit_text_background"
+        android:fontFamily="@font/open_sans_light"
+        android:textSize="14sp"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Row: Calories & Carbs -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <!-- Calories -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calories (kcal)"
+                android:textColor="#111827"
+                android:textSize="14sp"
+                android:fontFamily="@font/open_sans_medium"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etCalories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Calories"
+                android:background="@drawable/edit_text_background"
+                android:fontFamily="@font/open_sans_light"
+                android:textSize="14sp"
+                android:padding="12dp" />
+        </LinearLayout>
+
+        <!-- Carbs -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Carbs (g)"
+                android:textColor="#111827"
+                android:textSize="14sp"
+                android:fontFamily="@font/open_sans_medium"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etCarbs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Carbs"
+                android:background="@drawable/edit_text_background"
+                android:fontFamily="@font/open_sans_light"
+                android:textSize="14sp"
+                android:padding="12dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Row: Fat & Protein -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="24dp">
+
+        <!-- Fat -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fat (g)"
+                android:textColor="#111827"
+                android:textSize="14sp"
+                android:fontFamily="@font/open_sans_medium"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etFat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Fat"
+                android:background="@drawable/edit_text_background"
+                android:fontFamily="@font/open_sans_light"
+                android:textSize="14sp"
+                android:padding="12dp" />
+        </LinearLayout>
+
+        <!-- Protein -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Protein (g)"
+                android:textColor="#111827"
+                android:textSize="14sp"
+                android:fontFamily="@font/open_sans_medium"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etProtein"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Protein"
+                android:background="@drawable/edit_text_background"
+                android:fontFamily="@font/open_sans_light"
+                android:textSize="14sp"
+                android:padding="12dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/open_sans_medium"
+            app:cornerRadius="8dp"
+            app:strokeColor="#D1D5DB"
+            app:strokeWidth="1dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Add"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#0BA284"
+            android:fontFamily="@font/open_sans_medium"
+            app:cornerRadius="8dp"/>
+    </LinearLayout>
+</LinearLayout>

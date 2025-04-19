@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="56dp"
+    android:layout_height="72dp"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <!-- Day number in a circle -->
+    <TextView
+        android:id="@+id/tvDateNum"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:fontFamily="@font/open_sans_bold"
+        android:textColor="@drawable/selector_day_text"
+        android:textSize="16sp"
+        android:background="@drawable/selector_day_bg"/>
+
+    <!-- Mon / Tue / … -->
+    <TextView
+        android:id="@+id/tvDayName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mon"
+        android:fontFamily="@font/open_sans_medium"
+        android:textColor="#666666"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"/>
+</LinearLayout>

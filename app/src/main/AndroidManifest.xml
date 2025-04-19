@@ -41,6 +41,7 @@
         <activity android:name=".CalendarActivity"/>
         <activity android:name=".PullUpsActivity" />
         <activity android:name=".GoalsPage"/>
+        <activity android:name=".FoodDiaryActivity"/>
 
 
         <activity

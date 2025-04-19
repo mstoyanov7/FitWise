@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/foodDiaryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Diary"
+            android:textSize="26sp"
+            android:fontFamily="@font/open_sans_bold"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="Track your food and be healthy"
+            android:textSize="14sp"
+            android:textColor="#898989"
+            android:layout_marginBottom="12dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/weekRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:nestedScrollingEnabled="false" />
+    </LinearLayout>
+
+
+    <ScrollView
+        android:id="@+id/scrollContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp"
+            android:paddingTop="0dp">
+
+            <LinearLayout
+                android:id="@+id/diaryContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/card_border"
+                android:padding="12dp"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Your Food Diary For:"
+                    android:textSize="18sp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/selectedDateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tuesday, April 18"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:textColor="#898989"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
+
+                <include layout="@layout/item_meal_section" />
+                <include layout="@layout/item_meal_section" />
+                <include layout="@layout/item_meal_section" />
+                <include layout="@layout/item_meal_section" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/card_border"
+                    android:stretchColumns="*"
+                    android:padding="8dp">
+
+                    <TableRow android:gravity="center">
+                        <TextView android:text="" android:padding="6dp"/>
+
+                        <TextView
+                            android:text="Calories\n(kcal)"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"
+                            android:textColor="#333333"/>
+
+                        <TextView
+                            android:text="Carbs\n(g)"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"
+                            android:textColor="#333333"/>
+
+                        <TextView
+                            android:text="Fat\n(g)"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"
+                            android:textColor="#333333"/>
+
+                        <TextView
+                            android:text="Protein\n(g)"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"
+                            android:textColor="#333333"/>
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="#898989"/>
+
+                    <TableRow android:gravity="center">
+                        <TextView
+                            android:text="Daily Goal"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+
+                        <EditText
+                            android:id="@+id/inputCalories"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="0"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:background="@android:color/transparent"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+
+                        <EditText
+                            android:id="@+id/inputCarbs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="0"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:background="@android:color/transparent"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+
+                        <EditText
+                            android:id="@+id/inputFat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="0"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:background="@android:color/transparent"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+
+                        <EditText
+                            android:id="@+id/inputProtein"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="0"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:background="@android:color/transparent"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+                    </TableRow>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="#898989"/>
+
+                    <TableRow android:gravity="center">
+                        <TextView
+                            android:text="Remaining"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+
+                        <TextView
+                            android:id="@+id/remainCalories"
+                            android:text="0"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+
+                        <TextView
+                            android:id="@+id/remainCarbs"
+                            android:text="0"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+
+                        <TextView
+                            android:id="@+id/remainFat"
+                            android:text="0"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+
+                        <TextView
+                            android:id="@+id/remainProtein"
+                            android:text="0"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:padding="6dp"
+                            android:fontFamily="@font/open_sans_semibold"/>
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#F4F4F5"
+        app:itemIconTint="@drawable/nav_item_color"
+        app:itemTextColor="@drawable/nav_item_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
