@@ -58,21 +58,22 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <!-- Name Row -->
                         <TextView
                             android:id="@+id/textViewName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/open_sans_bold"
                             android:text="Marin Stoyanov"
-                            android:textSize="26sp"
+                            android:textSize="25sp"
                             android:textStyle="bold" />
 
+                        <!-- Age + Sex Row -->
                         <LinearLayout
-                            android:id="@+id/linearLayoutDetails"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:layout_marginTop="4dp">
 
                             <TextView
                                 android:id="@+id/textViewAge"
@@ -84,15 +85,6 @@
                                 android:textSize="14sp" />
 
                             <TextView
-                                android:id="@+id/textViewWeight"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:fontFamily="@font/open_sans_regular"
-                                android:text="Weight: 160 kg"
-                                android:textSize="14sp" />
-
-                            <TextView
                                 android:id="@+id/textViewSex"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -100,7 +92,33 @@
                                 android:text="Sex: Male"
                                 android:textSize="14sp" />
                         </LinearLayout>
+
+                        <!-- Height + Weight Row -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="4dp">
+
+                            <TextView
+                                android:id="@+id/textViewHeight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:fontFamily="@font/open_sans_regular"
+                                android:text="Height: 170 cm"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/textViewWeight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/open_sans_regular"
+                                android:text="Weight: 70 kg"
+                                android:textSize="14sp" />
+                        </LinearLayout>
                     </LinearLayout>
+
 
                     <!-- Back Side (initially hidden) -->
                     <LinearLayout
@@ -264,7 +282,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="You will lose ~0.5kg"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:fontFamily="@font/open_sans_bold" />
                         </LinearLayout>
                     </LinearLayout>
