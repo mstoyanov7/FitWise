@@ -2,6 +2,7 @@ package com.example.workoutapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                 fetchProductData(result.getContents());
             } else {
                 Toast.makeText(this, "Scan cancelled", Toast.LENGTH_LONG).show();
+                setResult(RESULT_CANCELED);
                 finish();
             }
         } else if (requestCode == SHOW_REQUEST && resultCode == RESULT_OK) {
@@ -63,6 +65,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                     });
                     return;
                 }
+
                 JSONObject json = new JSONObject(resp.body().string());
                 if (json.getInt("status") != 1) {
                     runOnUiThread(() -> {
@@ -71,16 +74,17 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                     });
                     return;
                 }
+
                 JSONObject prod = json.getJSONObject("product");
-                String name       = prod.optString("product_name", "N/A");
-                JSONObject nut    = prod.optJSONObject("nutriments");
-                String calories   = nut  != null ? nut.optString("energy-kcal_100g", "0") : "0";
-                String sugars     = nut  != null ? nut.optString("sugars_100g",     "0") : "0";
-                String fat        = nut  != null ? nut.optString("fat_100g",        "0") : "0";
-                String protein    = nut  != null ? nut.optString("proteins_100g",   "0") : "0";
-                String carbs      = nut  != null ? nut.optString("carbohydrates_100g","0") : "0";
-                String ingredients= prod.optString("ingredients_text", "N/A");
-                String imageUrl   = prod.optString("image_url", "");
+                String name        = prod.optString("product_name", "N/A");
+                JSONObject nut     = prod.optJSONObject("nutriments");
+                String calories    = nut != null ? nut.optString("energy-kcal_100g", "0") : "0";
+                String sugars      = nut != null ? nut.optString("sugars_100g", "0") : "0";
+                String fat         = nut != null ? nut.optString("fat_100g", "0") : "0";
+                String protein     = nut != null ? nut.optString("proteins_100g", "0") : "0";
+                String carbs       = nut != null ? nut.optString("carbohydrates_100g", "0") : "0";
+                String ingredients = prod.optString("ingredients_text", "N/A");
+                String imageUrl    = prod.optString("image_url", "");
 
                 Bundle extras = getIntent().getExtras();
 
@@ -97,6 +101,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                     intent.putExtra("image_url",   imageUrl);
                     startActivityForResult(intent, SHOW_REQUEST);
                 });
+
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
