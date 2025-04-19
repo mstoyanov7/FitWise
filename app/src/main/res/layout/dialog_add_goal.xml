@@ -156,7 +156,7 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/open_sans_medium"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#0BA284"
+            android:backgroundTint="@color/colorPrimary"
             app:cornerRadius="8dp"
 
             app:strokeWidth="1dp"/>

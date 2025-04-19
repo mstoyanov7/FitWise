@@ -12,7 +12,9 @@
         android:id="@+id/header_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -22,6 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Scanned Food"
+            android:textSize="26sp"
+            android:fontFamily="@font/open_sans_bold"
+            android:layout_marginTop="60dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
 
@@ -34,13 +39,19 @@
     </RelativeLayout>
 
     <!-- Food Details Card -->
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_food_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="2dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp"
+        app:strokeColor="#797979"
+        app:strokeWidth="0.5dp"
         app:layout_constraintTop_toBottomOf="@id/header_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -67,8 +78,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Healthy Food"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold"
+                android:textSize="18sp"
+                android:fontFamily="@font/open_sans_bold"
+                android:textColor="@color/black"
+
                 app:layout_constraintTop_toTopOf="@id/iv_food"
                 app:layout_constraintStart_toEndOf="@id/iv_food"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +93,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="83 kcal | 300g | 12g protein"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="14sp"
+                android:fontFamily="@font/open_sans_regular"
                 android:textColor="@color/dark_gray"
                 app:layout_constraintTop_toBottomOf="@id/tv_food_name"
                 app:layout_constraintStart_toStartOf="@id/tv_food_name"
@@ -114,12 +128,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="83"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/open_sans_bold"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_calories_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:textColor="#898989"
                         android:text="kcal"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                 </LinearLayout>
@@ -142,13 +162,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="100"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/open_sans_bold"
                         android:inputType="number"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:cursorVisible="true"
                         android:background="@android:color/transparent"
                         android:gravity="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textStyle="bold"
                         android:imeOptions="actionDone"
                         android:maxLength="4"/>
@@ -157,6 +178,8 @@
                         android:id="@+id/tv_weight_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:textColor="#898989"
                         android:text="grams"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                 </LinearLayout>
@@ -174,28 +197,33 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12g"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textStyle="bold"/>
+                        android:textSize="18sp"
+                        android:fontFamily="@font/open_sans_bold"
+                        />
                     <TextView
                         android:id="@+id/tv_protein_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:textColor="#898989"
                         android:text="protein"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                 </LinearLayout>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Tab Layout for Switching between Nutritional Values and Ingredients -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabSelectedTextColor="@color/colorAccent"
-        app:tabTextColor="@color/dark_gray"
+        android:background="@drawable/card_border"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabSelectedTextColor="@color/colorPrimary"
+
+        android:fontFamily="@font/open_sans_bold"
         app:layout_constraintTop_toBottomOf="@id/card_food_details"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -209,18 +237,18 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_container"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
     <!-- Контейнер за бутоните -->
     <LinearLayout
         android:id="@+id/button_container"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:padding="4dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -228,18 +256,30 @@
 
         <Button
             android:id="@+id/btn_new_scan"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Scan again" />
+            android:text="Scan again"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/open_sans_semibold"
+            android:backgroundTint="@color/colorPrimary"
+            android:minWidth="140dp"
+            android:paddingHorizontal="12dp" />
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btn_add_diary"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add food to diary"
-            android:layout_marginStart="8dp" />
+            android:text="Add food"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/open_sans_semibold"
+            android:backgroundTint="@color/colorPrimary"
+            android:minWidth="140dp"
+            android:paddingHorizontal="12dp" />
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

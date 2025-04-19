@@ -44,6 +44,7 @@ public class ScannedFoodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_scanned_food);
+        FullscreenUtil.hideSystemUI(this);
 
         // intercept back gesture/button
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
