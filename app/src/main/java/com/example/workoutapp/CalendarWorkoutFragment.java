@@ -17,12 +17,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class CalendarWorkoutFragment extends Fragment {
 
@@ -135,11 +139,9 @@ public class CalendarWorkoutFragment extends Fragment {
             // handle dropdown expand/collapse
             imgDropdown.setOnClickListener(v -> {
                 if (expandableLayout.getVisibility() == View.VISIBLE) {
-                    // collapse instantly
                     expandableLayout.setVisibility(View.GONE);
                     imgDropdown.animate().rotation(0f).setDuration(200).start();
                 } else {
-                    // animate expand
                     TransitionManager.beginDelayedTransition((ViewGroup) expandableLayout.getParent(), new AutoTransition());
                     expandableLayout.setVisibility(View.VISIBLE);
                     imgDropdown.animate().rotation(180f).setDuration(200).start();
@@ -163,9 +165,28 @@ public class CalendarWorkoutFragment extends Fragment {
             }
 
             btnDelete.setOnClickListener(v -> {
-                workouts.remove(w);
-                dataMap.put(selectedDate, workouts);
-                populateWorkouts();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    FirebaseFirestore.getInstance()
+                            .collection("workouts")
+                            .document(user.getUid())
+                            .collection("entries")
+                            .whereEqualTo("name", w.name)
+                            .whereEqualTo("time", w.time)
+                            .get()
+                            .addOnSuccessListener(querySnapshot -> {
+                                for (var doc : querySnapshot.getDocuments()) {
+                                    doc.getReference().delete();
+                                }
+                                workouts.remove(w);
+                                dataMap.put(selectedDate, workouts);
+                                populateWorkouts();
+                            });
+                } else {
+                    workouts.remove(w);
+                    dataMap.put(selectedDate, workouts);
+                    populateWorkouts();
+                }
             });
 
             exerciseContainer.addView(item);

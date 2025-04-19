@@ -143,29 +143,17 @@ public class Profile extends AppCompatActivity {
         String cachedWeight = prefs.getString("weight", null);
         String cachedSex = prefs.getString("sex", null);
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        String displayName = null;
-        String displayAvatar = null;
-        if (acct != null) {
-            displayName = acct.getDisplayName();
-            if (acct.getPhotoUrl() != null) displayAvatar = acct.getPhotoUrl().toString();
-            prefs.edit()
-                    .putString("name", displayName)
-                    .putString("avatarUrl", displayAvatar)
-                    .putBoolean(PREF_IMAGE_LOADED, true)
-                    .apply();
-        }
-        if (cachedName != null) displayName = cachedName;
-        if (cachedAvatar != null) displayAvatar = cachedAvatar;
+        // 🧠 Step 1: Show cached info instantly
+        updateUserAfterSignIn(cachedName, cachedAvatar);
 
-        updateUserAfterSignIn(displayName, displayAvatar);
+        if (cachedAge != null)
+            ((TextView) findViewById(R.id.textViewAge)).setText("Age: " + cachedAge);
+        if (cachedWeight != null)
+            ((TextView) findViewById(R.id.textViewWeight)).setText("Weight: " + cachedWeight + " kg");
+        if (cachedSex != null)
+            ((TextView) findViewById(R.id.textViewSex)).setText("Sex: " + cachedSex);
 
-        if (cachedAge != null && cachedWeight != null && cachedSex != null) {
-            ((TextView)findViewById(R.id.textViewAge)).setText("Age: " + cachedAge);
-            ((TextView)findViewById(R.id.textViewWeight)).setText("Weight: " + cachedWeight + " kg");
-            ((TextView)findViewById(R.id.textViewSex)).setText("Sex: " + cachedSex);
-        }
-
+        // 🧠 Step 2: Fetch updated info from Firestore in the background
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseFirestore.getInstance()
@@ -180,10 +168,14 @@ public class Profile extends AppCompatActivity {
                             String freshSex = doc.getString("sex");
                             String freshAvatar = doc.getString("avatarUrl");
 
+                            // Update UI & cache
                             updateUserAfterSignIn(freshName, freshAvatar);
-                            ((TextView)findViewById(R.id.textViewAge)).setText("Age: " + freshAge);
-                            ((TextView)findViewById(R.id.textViewWeight)).setText("Weight: " + freshWeight + " kg");
-                            ((TextView)findViewById(R.id.textViewSex)).setText("Sex: " + freshSex);
+                            if (freshAge != null)
+                                ((TextView) findViewById(R.id.textViewAge)).setText("Age: " + freshAge);
+                            if (freshWeight != null)
+                                ((TextView) findViewById(R.id.textViewWeight)).setText("Weight: " + freshWeight + " kg");
+                            if (freshSex != null)
+                                ((TextView) findViewById(R.id.textViewSex)).setText("Sex: " + freshSex);
 
                             prefs.edit()
                                     .putString("name", freshName)
@@ -191,10 +183,13 @@ public class Profile extends AppCompatActivity {
                                     .putString("weight", freshWeight)
                                     .putString("sex", freshSex)
                                     .putString("avatarUrl", freshAvatar)
+                                    .putBoolean(PREF_IMAGE_LOADED, true)
                                     .apply();
                         }
                     })
-                    .addOnFailureListener(e -> Toast.makeText(this, "Failed to refresh profile", Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Failed to refresh profile", Toast.LENGTH_SHORT).show();
+                    });
         }
     }
 

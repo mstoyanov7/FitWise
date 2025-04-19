@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Window;
 import android.widget.Button;
@@ -38,6 +39,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private RadioGroup sexRadioGroup;
     private Button finishButton;
 
+    // will hold either gallery uri or Google profile photo URL
     private Uri selectedAvatarUri;
     private Dialog loadingDialog;
 
@@ -57,6 +59,16 @@ public class WelcomeActivity extends AppCompatActivity {
 
         setupLoadingDialog();
 
+        // Prefill avatar with Google profile photo if available
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null && user.getPhotoUrl() != null) {
+            selectedAvatarUri = user.getPhotoUrl();
+            Glide.with(this)
+                    .load(selectedAvatarUri)
+                    .circleCrop()
+                    .into(avatarImageView);
+        }
+
         avatarImageView.setOnClickListener(v -> openGallery());
         finishButton.setOnClickListener(v -> handleFinish());
     }
@@ -71,9 +83,9 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            selectedAvatarUri = data.getData();
-            if (selectedAvatarUri != null) {
-                // Use Glide to ensure the image fills the circle completely
+            Uri uri = data.getData();
+            if (uri != null) {
+                selectedAvatarUri = uri;
                 Glide.with(this)
                         .load(selectedAvatarUri)
                         .centerCrop()
@@ -105,23 +117,34 @@ public class WelcomeActivity extends AppCompatActivity {
         showLoading();
 
         if (selectedAvatarUri != null) {
-            StorageReference storageRef = FirebaseStorage.getInstance()
-                    .getReference().child("avatars/" + user.getUid() + ".jpg");
-            storageRef.putFile(selectedAvatarUri)
-                    .addOnSuccessListener(taskSnapshot -> taskSnapshot.getStorage()
-                            .getDownloadUrl()
-                            .addOnSuccessListener(downloadUri -> saveUserDataToFirestore(user, age, weight, sex, downloadUri.toString()))
-                            .addOnFailureListener(e -> {
-                                hideLoading();
-                                Toast.makeText(this, "Failed to get download URL", Toast.LENGTH_SHORT).show();
-                            }))
-                    .addOnFailureListener(e -> {
-                        hideLoading();
-                        Toast.makeText(this, "Failed to upload avatar", Toast.LENGTH_SHORT).show();
-                    });
+            // If URI from Google sign-in is remote URL, download and upload file? Here we simply save URL directly
+            if ("content".equals(selectedAvatarUri.getScheme())) {
+                // local file picked
+                uploadAndSave(user, weight, age, sex, selectedAvatarUri);
+            } else {
+                // remote Google URL: skip storage upload, use URL directly
+                saveUserDataToFirestore(user, age, weight, sex, selectedAvatarUri.toString());
+            }
         } else {
             saveUserDataToFirestore(user, age, weight, sex, null);
         }
+    }
+
+    private void uploadAndSave(FirebaseUser user, String age, String weight, String sex, Uri fileUri) {
+        StorageReference storageRef = FirebaseStorage.getInstance()
+                .getReference().child("avatars/" + user.getUid() + ".jpg");
+        storageRef.putFile(fileUri)
+                .addOnSuccessListener(taskSnapshot -> taskSnapshot.getStorage()
+                        .getDownloadUrl()
+                        .addOnSuccessListener(downloadUri -> saveUserDataToFirestore(user, age, weight, sex, downloadUri.toString()))
+                        .addOnFailureListener(e -> {
+                            hideLoading();
+                            Toast.makeText(this, "Failed to get download URL", Toast.LENGTH_SHORT).show();
+                        }))
+                .addOnFailureListener(e -> {
+                    hideLoading();
+                    Toast.makeText(this, "Failed to upload avatar", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void saveUserDataToFirestore(FirebaseUser user, String age, String weight, String sex, String avatarUrl) {

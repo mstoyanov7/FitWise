@@ -3,7 +3,6 @@ package com.example.workoutapp;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,17 +22,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.threeten.bp.LocalDate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class CalendarActivity extends AppCompatActivity {
 
@@ -52,11 +49,13 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.calendar_page);
         FullscreenUtil.hideSystemUI(this);
 
+        FirebaseApp.initializeApp(this);
+
         initializeViews();
         setupCalendar();
         setupAddWorkoutButton();
-        seedWorkouts();
         showWorkoutListFragment(selectedDate);
+        loadWorkoutDataFromFirebase();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_calendar);
@@ -109,45 +108,40 @@ public class CalendarActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    private void seedWorkouts() {
-        LocalDate demoDate = LocalDate.of(2025, 4, 17);
+    private void loadWorkoutDataFromFirebase() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
 
-        List<CalendarWorkout> demoList = new ArrayList<>();
+        FirebaseFirestore.getInstance()
+                .collection("workouts")
+                .document(user.getUid())
+                .collection("entries")
+                .get()
+                .addOnSuccessListener(query -> {
+                    for (QueryDocumentSnapshot doc : query) {
+                        String dateStr = (String) doc.get("date");
+                        if (dateStr == null) continue;
 
-        demoList.add(new CalendarWorkout(
-                "Strength Training",
-                "05:30PM - 50 min",
-                "Upcoming",
-                Arrays.asList(
-                        "Bench Press    4 x 10 · 135 lbs",
-                        "Shoulder Press 3 x 12 · 65 lbs",
-                        "Tricep Extensions 3 x 15 · 45 lbs",
-                        "Pull-ups        3 x 8"
-                )
-        ));
+                        LocalDate date = LocalDate.parse(dateStr);
+                        String name = (String) doc.get("name");
+                        String time = (String) doc.get("time");
+                        String status = (String) doc.get("status");
+                        List<String> exercises = (List<String>) doc.get("exercises");
 
-        demoList.add(new CalendarWorkout(
-                "Yoga",
-                "07:00PM - 30 min",
-                "Upcoming",
-                Arrays.asList(
-                        "Sun Salutations   2 x 10 min",
-                        "Warrior Poses     1 x 10 min",
-                        "Cool Down         1 x 5 min"
-                )
-        ));
+                        CalendarWorkout workout = new CalendarWorkout(name, time, status, exercises);
+                        workoutData.computeIfAbsent(date, k -> new ArrayList<>()).add(workout);
+                    }
 
-        workoutData.put(demoDate, demoList);
+                    showWorkoutListFragment(selectedDate);
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Failed to load workouts: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
     private void showAddWorkoutDialog() {
-        View dialogView = LayoutInflater.from(this)
-                .inflate(R.layout.dialog_add_workout_calendar, null);
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(dialogView)
-                .create();
-        Objects.requireNonNull(dialog.getWindow())
-                .setBackgroundDrawableResource(android.R.color.transparent);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_workout_calendar, null);
+        AlertDialog dialog = new AlertDialog.Builder(this).setView(dialogView).create();
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
 
         EditText etName = dialogView.findViewById(R.id.etWorkoutName);
@@ -172,9 +166,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder vh, int direction) {
-                // No swipe action
-            }
+            public void onSwiped(@NonNull RecyclerView.ViewHolder vh, int direction) {}
         });
         itemTouchHelper.attachToRecyclerView(exerciseRecycler);
 
@@ -200,17 +192,35 @@ public class CalendarActivity extends AppCompatActivity {
             if (date.equals(selectedDate)) {
                 showWorkoutListFragment(date);
             }
+
+            // Save to Firestore under workouts/{uid}/entries
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                Map<String, Object> workoutMap = new HashMap<>();
+                workoutMap.put("name", name);
+                workoutMap.put("time", time);
+                workoutMap.put("status", "Upcoming");
+                workoutMap.put("exercises", finalList);
+                workoutMap.put("date", date.toString());
+
+                FirebaseFirestore.getInstance()
+                        .collection("workouts")
+                        .document(user.getUid())
+                        .collection("entries")
+                        .add(workoutMap)
+                        .addOnSuccessListener(docRef -> Toast.makeText(this, "Workout saved to cloud", Toast.LENGTH_SHORT).show())
+                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to save workout: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            }
+
             Toast.makeText(this, "Workout added!", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
     }
 
     private void showFavoritesDialog(CalendarAddWorkoutsAdapter adapter) {
-        String[] allExercises = {
-                "Push-ups", "Deadlifts", "Pull-ups", "Burpees", "Lunges",
+        String[] allExercises = {"Push-ups", "Deadlifts", "Pull-ups", "Burpees", "Lunges",
                 "Shoulder Press", "Plank", "Mountain Climbers", "Russian Twists",
-                "Bicep Curls", "Tricep Dips", "Squats", "Jumping Jacks"
-        };
+                "Bicep Curls", "Tricep Dips", "Squats", "Jumping Jacks"};
 
         boolean[] checkedItems = new boolean[allExercises.length];
         List<String> selected = new ArrayList<>();
@@ -242,8 +252,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void showTimePicker(MaterialButton btnTime) {
         java.util.Calendar c = java.util.Calendar.getInstance();
         new TimePickerDialog(this,
-                (view, h, min) -> btnTime.setText(
-                        String.format(Locale.getDefault(), "%02d:%02d", h, min)),
+                (view, h, min) -> btnTime.setText(String.format(Locale.getDefault(), "%02d:%02d", h, min)),
                 c.get(java.util.Calendar.HOUR_OF_DAY),
                 c.get(java.util.Calendar.MINUTE), true
         ).show();

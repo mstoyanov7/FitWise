@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "496356109560",
+    "firebase_url": "https://fitwise-3d159-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "fitwise-3d159",
     "storage_bucket": "fitwise-3d159.firebasestorage.app"
   },
@@ -14,13 +15,21 @@
       },
       "oauth_client": [
         {
+          "client_id": "496356109560-v5v17spobit6s2muj02677jd1v4ae8di.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.workoutapp",
+            "certificate_hash": "bd4f9fa6aa52fc3b77a8729885d91754615ac7d4"
+          }
+        },
+        {
           "client_id": "496356109560-8n715gdchiqrcf26n97ov6gvqi55hh6q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBg5YgfW7oGmfts27JLjD78w5u4Bd7k-KM"
+          "current_key": "AIzaSyCd12n57NQboKGKT10D1jJQTRZZitzlO_M"
         }
       ],
       "services": {

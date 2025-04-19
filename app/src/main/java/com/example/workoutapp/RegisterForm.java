@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;                // ← correct import
 import com.google.firebase.auth.FirebaseAuth;
@@ -140,7 +141,7 @@ public class RegisterForm extends AppCompatActivity {
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 Toast.makeText(this,
-                        "This google is already registered!: " + e.getStatusCode(),
+                        "Google sign in failed: " + e.getStatusCode(),
                         Toast.LENGTH_SHORT
                 ).show();
             }
@@ -152,7 +153,7 @@ public class RegisterForm extends AppCompatActivity {
                 GoogleAuthProvider.getCredential(idToken, null);
 
         mAuth.signInWithCredential(credential)
-                // ← specify <AuthResult> here so onComplete(Task<AuthResult>) compiles
+                // specify <AuthResult> so onComplete(Task<AuthResult>) matches
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
