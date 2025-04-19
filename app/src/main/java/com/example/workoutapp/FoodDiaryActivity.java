@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -38,6 +40,8 @@ public class FoodDiaryActivity extends AppCompatActivity {
     private LinearLayout diaryContainer;
 
     private LocalDate currentSelectedDate;
+
+    private BottomNavigationView bottomNavigationView;
     private final Map<LocalDate, List<List<FoodItem>>> foodLog = new HashMap<>();
 
     @Override
@@ -53,7 +57,36 @@ public class FoodDiaryActivity extends AppCompatActivity {
         bindNutritionViews();
         setupTextWatchers();
         setupWeekCalendar();
-        setupBottomNav();
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_meals);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Intent intent = null;
+
+                if (id == R.id.nav_meals) {
+                    intent = new Intent(FoodDiaryActivity.this, FoodDiaryActivity.class);
+                } else if (id == R.id.nav_workout) {
+                    intent = new Intent(FoodDiaryActivity.this, Workouts.class);
+                } else if (id == R.id.nav_home) {
+                    //intent = new Intent(Profile.this, HomeActivity.class);
+                } else if (id == R.id.nav_calendar) {
+                    intent = new Intent(FoodDiaryActivity.this, CalendarActivity.class);
+                } else if (id == R.id.nav_profile) {
+                    intent = new Intent(FoodDiaryActivity.this, Profile.class);
+                }
+
+                if (intent != null) {
+                    startActivity(intent);
+                    // Apply fade in to the incoming activity and fade out from the current one.
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void setupWeekCalendar() {
@@ -113,30 +146,6 @@ public class FoodDiaryActivity extends AppCompatActivity {
                 addFoodChip(f, itemsContainer);
             }
         }
-    }
-
-    private void setupBottomNav() {
-        BottomNavigationView nav = findViewById(R.id.bottom_navigation);
-        nav.setSelectedItemId(R.id.nav_meals);
-        nav.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_meals) return true;
-            Intent intent = null;
-            if (id == R.id.nav_workout)  {
-                intent = new Intent(this, Workouts.class);
-            }
-            else if (id == R.id.nav_profile) {
-                intent = new Intent(this, Profile.class);
-            }
-            else if (id == R.id.nav_calendar) {
-                intent = new Intent(this, CalendarActivity.class);
-            }
-            if (intent != null) {
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-            }
-            return true;
-        });
     }
 
     private void bindNutritionViews() {

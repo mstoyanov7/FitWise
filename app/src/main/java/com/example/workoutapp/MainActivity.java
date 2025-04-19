@@ -31,19 +31,5 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, RegisterForm.class);
             startActivity(intent);
         });
-
-        Button BarcodeScanner = findViewById(R.id.testWorkoutsButton);
-
-        BarcodeScanner.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, BarcodeScannerActivity.class);
-            startActivity(intent);
-        });
-
-        Button testButton = findViewById(R.id.testButtonEx);
-
-        testButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, PullUpsActivity.class);
-            startActivity(intent);
-        });
     }
 }
