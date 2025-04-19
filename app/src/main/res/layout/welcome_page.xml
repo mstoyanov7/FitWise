@@ -88,6 +88,27 @@
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Height -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="#E6F2EA"
+                    app:boxCornerRadiusTopStart="6dp"
+                    app:boxCornerRadiusTopEnd="6dp"
+                    app:boxCornerRadiusBottomStart="6dp"
+                    app:boxCornerRadiusBottomEnd="6dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/heightEditText"
+                        android:hint="Current Height (cm)"
+                        android:inputType="numberDecimal"
+                        android:padding="12dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <!-- Age -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
