@@ -78,7 +78,7 @@ public class SignInPage extends AppCompatActivity {
         GoogleSignInAccount googleUser = GoogleSignIn.getLastSignedInAccount(this);
 
         if (firebaseUser != null || googleUser != null) {
-            navigateToWorkoutsPage();
+            navigateToHomePage();
         }
     }
 
@@ -137,16 +137,16 @@ public class SignInPage extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(SignInPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                        navigateToWorkoutsPage();
+                        navigateToHomePage();
                     } else {
                         Toast.makeText(SignInPage.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
-    private void navigateToWorkoutsPage() {
+    private void navigateToHomePage() {
         finish();
-        Intent intent = new Intent(SignInPage.this, Workouts.class);
+        Intent intent = new Intent(SignInPage.this, HomeActivity.class);
         startActivity(intent);
     }
 }

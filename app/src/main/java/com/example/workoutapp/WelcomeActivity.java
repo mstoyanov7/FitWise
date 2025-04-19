@@ -230,7 +230,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
                     hideLoading();
                     Toast.makeText(this, "Welcome profile saved", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(this, Workouts.class));
+                    startActivity(new Intent(this, HomeActivity.class));
                     finish();
                 })
                 .addOnFailureListener(e -> {

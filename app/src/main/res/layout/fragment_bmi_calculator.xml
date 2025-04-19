@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <!-- BMI Result Box (Left side) -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/bmi_result_box_background"
+        android:padding="16dp"
+        android:elevation="2dp">
+
+        <!-- BMI Value -->
+        <TextView
+            android:id="@+id/bmiValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24.8"
+            android:textSize="60sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <!-- BMI Category -->
+        <TextView
+            android:id="@+id/bmiCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Normal"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"
+            android:textColor="#00C37A" />
+
+        <!-- Feedback -->
+        <TextView
+            android:id="@+id/bmiFeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Great job maintaining a healthy weight!"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:paddingHorizontal="24dp"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center">
+
+        <!-- Custom Vertical ProgressBar -->
+        <ProgressBar
+            android:id="@+id/bmiScale"
+            android:layout_width="12dp"
+            android:layout_height="match_parent"
+            android:max="50"
+            android:progress="0"
+            android:rotation="180"
+            android:layout_centerHorizontal="true"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:progressDrawable="@drawable/bmi_progress_drawable" />
+
+        <!-- Pointer Marker -->
+        <ImageView
+            android:id="@+id/bmiMarker"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignLeft="@id/bmiScale"
+            android:layout_marginStart="-18dp"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/ic_bmi_pointer" />
+    </RelativeLayout>
+
+</LinearLayout>
+

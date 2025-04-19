@@ -108,9 +108,9 @@ public class Profile extends AppCompatActivity {
                 headerText = "Recent Workouts";
                 buttonViewAll.setVisibility(View.VISIBLE);
             } else if (checkedId == R.id.radioMeals) {
-                selectedFragment = new MealsFragment();
-                headerText = "Recent Meals";
-                buttonViewAll.setVisibility(View.VISIBLE);
+                selectedFragment = new BMICalculatorFragment();
+                headerText = "BMI Calculator";
+                buttonViewAll.setVisibility(View.GONE); // optional
             } else if (checkedId == R.id.radioGoals) {
                 selectedFragment = new GoalsFragment();
                 headerText = "Recent Goals";
