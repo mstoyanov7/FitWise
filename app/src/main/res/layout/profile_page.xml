@@ -45,67 +45,135 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/avatar1" />
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
                     android:paddingStart="16dp">
 
-                    <TextView
-                        android:id="@+id/textViewName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/open_sans_bold"
-                        android:text="Marin Stoyanov"
-                        android:textSize="26sp"
-                        android:textStyle="bold" />
-
+                    <!-- Front Side -->
                     <LinearLayout
-                        android:id="@+id/linearLayoutDetails"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/frontSide"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textViewAge"
+                            android:id="@+id/textViewName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
+                            android:fontFamily="@font/open_sans_bold"
+                            android:text="Marin Stoyanov"
+                            android:textSize="26sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutDetails"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textViewAge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:fontFamily="@font/open_sans_regular"
+                                android:text="Age: 21"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/textViewWeight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:fontFamily="@font/open_sans_regular"
+                                android:text="Weight: 160 kg"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/textViewSex"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/open_sans_regular"
+                                android:text="Sex: Male"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Back Side (initially hidden) -->
+                    <LinearLayout
+                        android:id="@+id/backSide"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:paddingTop="4dp">
+
+                        <TextView
+                            android:id="@+id/textViewActivityLevel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Activity: Moderate"
                             android:fontFamily="@font/open_sans_regular"
-                            android:text="Age: 21"
                             android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/textViewWeight"
+                            android:id="@+id/textViewGoalWeight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
+                            android:text="Goal: 140 kg"
                             android:fontFamily="@font/open_sans_regular"
-                            android:text="Weight: 160 kg"
                             android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/textViewSex"
+                            android:id="@+id/textViewWeeklyGoal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="Weekly goal: -1.2 kg"
                             android:fontFamily="@font/open_sans_regular"
-                            android:text="Sex: Male"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/textViewCalories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Target calories: 0"
+                            android:fontFamily="@font/open_sans_regular"
                             android:textSize="14sp" />
                     </LinearLayout>
-                </LinearLayout>
+                </FrameLayout>
 
-                <ImageButton
-                    android:id="@+id/buttonLogout"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_gravity="center"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_logout"
-                    android:contentDescription="Logout"
-                    app:tint="@android:color/black" />
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginStart="8dp">
+
+                    <ImageButton
+                        android:id="@+id/buttonLogout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_logout"
+                        android:contentDescription="Logout"
+                        app:tint="@android:color/black" />
+
+                    <ImageButton
+                        android:id="@+id/buttonFlip"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:scaleType="centerCrop"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Flip Info"
+                        android:src="@drawable/ic_flip"
+                        app:tint="@android:color/black" />
+                </LinearLayout>
 
             </LinearLayout>
 

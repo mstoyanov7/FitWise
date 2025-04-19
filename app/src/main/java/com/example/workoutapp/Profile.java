@@ -1,5 +1,7 @@
 package com.example.workoutapp;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +39,14 @@ public class Profile extends AppCompatActivity {
     private static final String PREFS_NAME = "UserPrefs";
     private static final String PREF_IMAGE_LOADED = "avatarLoaded";
 
+    private boolean isFlipped = false;
+    private View frontSide;
+    private View backSide;
+
+    private TextView textViewAgeBack, textViewWeightBack, textViewSexBack;
+    private TextView textViewActivityBack, textViewGoalBack, textViewWeeklyChangeBack;
+    private TextView textViewCaloriesBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +61,23 @@ public class Profile extends AppCompatActivity {
         ImageButton buttonLogout = findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
 
-        // Default tab
+        frontSide = findViewById(R.id.frontSide);
+        backSide = findViewById(R.id.backSide);
+        ImageButton buttonFlip = findViewById(R.id.buttonFlip);
+
+        textViewAgeBack = findViewById(R.id.textViewAge);
+        textViewWeightBack = findViewById(R.id.textViewWeight);
+        textViewSexBack = findViewById(R.id.textViewSex);
+        textViewActivityBack = findViewById(R.id.textViewActivityLevel);
+        textViewGoalBack = findViewById(R.id.textViewGoalWeight);
+        textViewWeeklyChangeBack = findViewById(R.id.textViewWeeklyGoal);
+        textViewCaloriesBack = findViewById(R.id.textViewCalories);
+
+        buttonFlip.setOnClickListener(v -> toggleCard());
+
         loadFragment(new WorkoutsFragment());
         textViewHeader.setText("Recent Workouts");
 
-        // Display user data
         fetchAndDisplayUserData();
 
         radioGroupTabs.setOnCheckedChangeListener((group, checkedId) -> {
@@ -98,41 +120,53 @@ public class Profile extends AppCompatActivity {
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                Intent intent = null;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            Intent intent = null;
 
-                if (id == R.id.nav_meals) {
-                    intent = new Intent(Profile.this, FoodDiaryActivity.class);
-                } else if (id == R.id.nav_workout) {
-                    intent = new Intent(Profile.this, Workouts.class);
-                } else if (id == R.id.nav_home) {
-                    //intent = new Intent(Profile.this, HomeActivity.class);
-                } else if (id == R.id.nav_calendar) {
-                    intent = new Intent(Profile.this, CalendarActivity.class);
-                } else if (id == R.id.nav_profile) {
-                    intent = new Intent(Profile.this, Profile.class);
-                }
-
-                if (intent != null) {
-                    startActivity(intent);
-                    // Apply fade in to the incoming activity and fade out from the current one.
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    return true;
-                }
-                return false;
+            if (id == R.id.nav_meals) {
+                intent = new Intent(Profile.this, FoodDiaryActivity.class);
+            } else if (id == R.id.nav_workout) {
+                intent = new Intent(Profile.this, Workouts.class);
+            } else if (id == R.id.nav_calendar) {
+                intent = new Intent(Profile.this, CalendarActivity.class);
+            } else if (id == R.id.nav_profile) {
+                intent = new Intent(Profile.this, Profile.class);
             }
+
+            if (intent != null) {
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                return true;
+            }
+            return false;
         });
 
-        // Select initial tab
         String selectedTab = getIntent().getStringExtra("selectedTab");
         if ("goals".equalsIgnoreCase(selectedTab)) {
             radioGroupTabs.check(R.id.radioGoals);
         } else {
             radioGroupTabs.check(R.id.radioWorkouts);
         }
+    }
+
+    private void toggleCard() {
+        if (!isFlipped) {
+            frontSide.animate().rotationX(90).setDuration(200).withEndAction(() -> {
+                frontSide.setVisibility(View.GONE);
+                backSide.setVisibility(View.VISIBLE);
+                backSide.setRotationX(-90);
+                backSide.animate().rotationX(0).setDuration(200).start();
+            }).start();
+        } else {
+            backSide.animate().rotationX(90).setDuration(200).withEndAction(() -> {
+                backSide.setVisibility(View.GONE);
+                frontSide.setVisibility(View.VISIBLE);
+                frontSide.setRotationX(-90);
+                frontSide.animate().rotationX(0).setDuration(200).start();
+            }).start();
+        }
+        isFlipped = !isFlipped;
     }
 
     private void fetchAndDisplayUserData() {
@@ -142,18 +176,21 @@ public class Profile extends AppCompatActivity {
         String cachedAge = prefs.getString("age", null);
         String cachedWeight = prefs.getString("weight", null);
         String cachedSex = prefs.getString("sex", null);
+        String cachedActivity = prefs.getString("activityLevel", null);
+        String cachedGoal = prefs.getString("goalWeight", null);
+        String cachedWeeklyChange = prefs.getString("weeklyGoal", null);
+        int cachedCalories = prefs.getInt("calories", -1);
 
-        // 🧠 Step 1: Show cached info instantly
         updateUserAfterSignIn(cachedName, cachedAvatar);
 
-        if (cachedAge != null)
-            ((TextView) findViewById(R.id.textViewAge)).setText("Age: " + cachedAge);
-        if (cachedWeight != null)
-            ((TextView) findViewById(R.id.textViewWeight)).setText("Weight: " + cachedWeight + " kg");
-        if (cachedSex != null)
-            ((TextView) findViewById(R.id.textViewSex)).setText("Sex: " + cachedSex);
+        if (cachedAge != null) textViewAgeBack.setText("Age: " + cachedAge);
+        if (cachedWeight != null) textViewWeightBack.setText("Weight: " + cachedWeight + " kg");
+        if (cachedSex != null) textViewSexBack.setText("Sex: " + cachedSex);
+        if (cachedActivity != null) textViewActivityBack.setText("Activity: " + cachedActivity);
+        if (cachedGoal != null) textViewGoalBack.setText("Goal: " + cachedGoal + " kg");
+        if (cachedWeeklyChange != null) textViewWeeklyChangeBack.setText("Weekly: " + cachedWeeklyChange);
+        if (cachedCalories != -1) textViewCaloriesBack.setText("Target calories: " + cachedCalories);
 
-        // 🧠 Step 2: Fetch updated info from Firestore in the background
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseFirestore.getInstance()
@@ -167,15 +204,19 @@ public class Profile extends AppCompatActivity {
                             String freshWeight = doc.getString("weight");
                             String freshSex = doc.getString("sex");
                             String freshAvatar = doc.getString("avatarUrl");
+                            String freshActivity = doc.getString("activityLevel");
+                            String freshGoal = doc.getString("goalWeight");
+                            String freshWeeklyChange = doc.getString("weeklyGoal");
+                            Long freshCalories = doc.getLong("calories");
 
-                            // Update UI & cache
                             updateUserAfterSignIn(freshName, freshAvatar);
-                            if (freshAge != null)
-                                ((TextView) findViewById(R.id.textViewAge)).setText("Age: " + freshAge);
-                            if (freshWeight != null)
-                                ((TextView) findViewById(R.id.textViewWeight)).setText("Weight: " + freshWeight + " kg");
-                            if (freshSex != null)
-                                ((TextView) findViewById(R.id.textViewSex)).setText("Sex: " + freshSex);
+                            if (freshAge != null) textViewAgeBack.setText("Age: " + freshAge);
+                            if (freshWeight != null) textViewWeightBack.setText("Weight: " + freshWeight + " kg");
+                            if (freshSex != null) textViewSexBack.setText("Sex: " + freshSex);
+                            if (freshActivity != null) textViewActivityBack.setText("Activity: " + freshActivity);
+                            if (freshGoal != null) textViewGoalBack.setText("Goal: " + freshGoal + " kg");
+                            if (freshWeeklyChange != null) textViewWeeklyChangeBack.setText("Weekly: " + freshWeeklyChange);
+                            if (freshCalories != null) textViewCaloriesBack.setText("Target calories: " + freshCalories.intValue());
 
                             prefs.edit()
                                     .putString("name", freshName)
@@ -183,6 +224,10 @@ public class Profile extends AppCompatActivity {
                                     .putString("weight", freshWeight)
                                     .putString("sex", freshSex)
                                     .putString("avatarUrl", freshAvatar)
+                                    .putString("activity", freshActivity)
+                                    .putString("goal", freshGoal)
+                                    .putString("weeklyChange", freshWeeklyChange)
+                                    .putInt("calories", freshCalories != null ? freshCalories.intValue() : -1)
                                     .putBoolean(PREF_IMAGE_LOADED, true)
                                     .apply();
                         }
@@ -210,8 +255,8 @@ public class Profile extends AppCompatActivity {
             Glide.with(this)
                     .load(photoUrl)
                     .apply(options)
-                    .centerCrop()      // ensure the image fills
-                    .circleCrop()      // crop into circle
+                    .centerCrop()
+                    .circleCrop()
                     .into(imageViewPhoto);
             if (!avatarLoaded) prefs.edit().putBoolean(PREF_IMAGE_LOADED, true).apply();
         } else {

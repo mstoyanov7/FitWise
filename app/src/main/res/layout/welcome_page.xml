@@ -81,8 +81,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/weightEditText"
-                        android:hint="Weight (kg)"
-                        android:inputType="number"
+                        android:hint="Current Weight (kg)"
+                        android:inputType="numberDecimal"
                         android:padding="12dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -132,6 +132,59 @@
                         android:textColor="@color/black"
                         android:layout_marginStart="20dp" />
                 </RadioGroup>
+
+                <!-- Daily Activity Level -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="How do you describe yourself?"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="6dp"
+                    android:layout_gravity="start" />
+
+                <Spinner
+                    android:id="@+id/activityLevelSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Goal Weight -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="#E6F2EA"
+                    app:boxCornerRadiusTopStart="6dp"
+                    app:boxCornerRadiusTopEnd="6dp"
+                    app:boxCornerRadiusBottomStart="6dp"
+                    app:boxCornerRadiusBottomEnd="6dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/goalWeightEditText"
+                        android:hint="Goal Weight (kg)"
+                        android:inputType="numberDecimal"
+                        android:padding="12dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Weekly Goal -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weekly Goal"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="6dp"
+                    android:layout_gravity="start" />
+
+                <Spinner
+                    android:id="@+id/weeklyGoalSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp" />
 
                 <!-- Submit Button -->
                 <Button
