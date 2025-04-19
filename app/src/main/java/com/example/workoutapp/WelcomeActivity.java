@@ -150,28 +150,33 @@ public class WelcomeActivity extends AppCompatActivity {
                 weeklyGoal
         );
 
+        double protein = Double.parseDouble(weight) * 1.8; // g per kg
+        double fats = (calories * 0.25) / 9.0; // 25% of cals / 9 kcal/g
+        double carbs = (calories - (protein * 4 + fats * 9)) / 4.0; // remaining cals / 4 kcal/g
+
         showLoading();
 
         if (selectedAvatarUri != null) {
             if ("content".equals(selectedAvatarUri.getScheme())) {
-                uploadAndSave(user, age, weight, sex, selectedAvatarUri, goalWeight, activityLevel, weeklyGoal, calories);
+                uploadAndSave(user, age, weight, sex, selectedAvatarUri, goalWeight, activityLevel, weeklyGoal, calories, protein, carbs, fats);
             } else {
-                saveUserDataToFirestore(user, age, weight, sex, selectedAvatarUri.toString(), goalWeight, activityLevel, weeklyGoal, calories);
+                saveUserDataToFirestore(user, age, weight, sex, selectedAvatarUri.toString(), goalWeight, activityLevel, weeklyGoal, calories, protein, carbs, fats);
             }
         } else {
-            saveUserDataToFirestore(user, age, weight, sex, null, goalWeight, activityLevel, weeklyGoal, calories);
+            saveUserDataToFirestore(user, age, weight, sex, null, goalWeight, activityLevel, weeklyGoal, calories, protein, carbs, fats);
         }
     }
 
     private void uploadAndSave(FirebaseUser user, String age, String weight, String sex, Uri fileUri,
-                               String goalWeight, String activityLevel, String weeklyGoal, int calories) {
+                               String goalWeight, String activityLevel, String weeklyGoal, int calories,
+                               double protein, double carbs, double fats) {
         StorageReference storageRef = FirebaseStorage.getInstance()
                 .getReference().child("avatars/" + user.getUid() + ".jpg");
         storageRef.putFile(fileUri)
                 .addOnSuccessListener(taskSnapshot -> taskSnapshot.getStorage()
                         .getDownloadUrl()
                         .addOnSuccessListener(downloadUri -> saveUserDataToFirestore(user, age, weight, sex,
-                                downloadUri.toString(), goalWeight, activityLevel, weeklyGoal, calories))
+                                downloadUri.toString(), goalWeight, activityLevel, weeklyGoal, calories, protein, carbs, fats))
                         .addOnFailureListener(e -> {
                             hideLoading();
                             Toast.makeText(this, "Failed to get download URL", Toast.LENGTH_SHORT).show();
@@ -183,7 +188,8 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void saveUserDataToFirestore(FirebaseUser user, String age, String weight, String sex, String avatarUrl,
-                                         String goalWeight, String activityLevel, String weeklyGoal, int calories) {
+                                         String goalWeight, String activityLevel, String weeklyGoal, int calories,
+                                         double protein, double carbs, double fats) {
         Map<String, Object> userData = new HashMap<>();
         userData.put("name", user.getDisplayName());
         userData.put("age", age);
@@ -193,6 +199,9 @@ public class WelcomeActivity extends AppCompatActivity {
         userData.put("activityLevel", activityLevel);
         userData.put("weeklyGoal", weeklyGoal);
         userData.put("calories", calories);
+        userData.put("protein", (int) protein);
+        userData.put("carbs", (int) carbs);
+        userData.put("fats", (int) fats);
         if (avatarUrl != null) {
             userData.put("avatarUrl", avatarUrl);
         }
@@ -208,10 +217,13 @@ public class WelcomeActivity extends AppCompatActivity {
                             .putString("age", age)
                             .putString("weight", weight)
                             .putString("sex", sex)
-                            .putString("goal", goalWeight) // <- used to be goalWeight
-                            .putString("activity", activityLevel) // <- used to be activityLevel
-                            .putString("weeklyChange", weeklyGoal) // <- used to be weeklyGoal
+                            .putString("goal", goalWeight)
+                            .putString("activity", activityLevel)
+                            .putString("weeklyChange", weeklyGoal)
                             .putInt("calories", calories)
+                            .putInt("protein", (int) protein)
+                            .putInt("carbs", (int) carbs)
+                            .putInt("fats", (int) fats)
                             .putString("avatarUrl", avatarUrl)
                             .putBoolean("avatarLoaded", true)
                             .apply();
@@ -228,7 +240,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 });
     }
 
-    private int calculateCalories(String sex, int age, double weight, double goalWeight, String activityLevel, String weeklyGoal) {
+    public static int calculateCalories(String sex, int age, double weight, double goalWeight, String activityLevel, String weeklyGoal) {
         double bmr;
         if (sex.equalsIgnoreCase("Male")) {
             bmr = 10 * weight + 6.25 * 170 - 5 * age + 5;
@@ -277,7 +289,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         return (int) ((bmr * multiplier) + goalAdjustment);
     }
-
 
     private void setupLoadingDialog() {
         loadingDialog = new Dialog(this);

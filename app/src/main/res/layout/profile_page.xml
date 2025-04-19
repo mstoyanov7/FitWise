@@ -134,6 +134,16 @@
                             android:text="Weekly goal: -1.2 kg"
                             android:fontFamily="@font/open_sans_regular"
                             android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <!-- Third Side: Nutrition Summary (updated format) -->
+                    <LinearLayout
+                        android:id="@+id/nutritionSide"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:paddingTop="4dp">
 
                         <TextView
                             android:id="@+id/textViewCalories"
@@ -142,6 +152,15 @@
                             android:text="Target calories: 0"
                             android:fontFamily="@font/open_sans_regular"
                             android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/textViewMacros"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Macros: P: 0g, C: 0g, F: 0g"
+                            android:fontFamily="@font/open_sans_regular"
+                            android:textSize="14sp"
+                            android:paddingTop="4dp" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -157,14 +176,13 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:scaleType="centerCrop"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_gravity="center_horizontal"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="Flip Info"
                         android:src="@drawable/ic_flip"
                         app:tint="@android:color/black" />
                 </LinearLayout>
-
             </LinearLayout>
 
             <!-- Progress Card -->
@@ -390,7 +408,7 @@
         android:id="@+id/buttonLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="16dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="Logout"

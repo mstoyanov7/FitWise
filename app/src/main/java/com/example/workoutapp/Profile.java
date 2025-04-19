@@ -3,17 +3,23 @@ package com.example.workoutapp;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,9 +49,17 @@ public class Profile extends AppCompatActivity {
     private View frontSide;
     private View backSide;
 
-    private TextView textViewAgeBack, textViewWeightBack, textViewSexBack;
+    private View nutritionSide;
+
+    private TextView textViewAgeBack, textViewWeightBack, textViewSexBack, textViewMacros;
     private TextView textViewActivityBack, textViewGoalBack, textViewWeeklyChangeBack;
     private TextView textViewCaloriesBack;
+    private int currentSide = 0; // 0 = front, 1 = back, 2 = nutrition
+
+    private Dialog editDialog;
+    private Spinner spinnerActivityLevel, spinnerWeeklyGoal;
+    private EditText editGoalWeight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +77,8 @@ public class Profile extends AppCompatActivity {
 
         frontSide = findViewById(R.id.frontSide);
         backSide = findViewById(R.id.backSide);
+        nutritionSide = findViewById(R.id.nutritionSide);
+
         ImageButton buttonFlip = findViewById(R.id.buttonFlip);
 
         textViewAgeBack = findViewById(R.id.textViewAge);
@@ -72,8 +88,11 @@ public class Profile extends AppCompatActivity {
         textViewGoalBack = findViewById(R.id.textViewGoalWeight);
         textViewWeeklyChangeBack = findViewById(R.id.textViewWeeklyGoal);
         textViewCaloriesBack = findViewById(R.id.textViewCalories);
+        textViewMacros = findViewById(R.id.textViewMacros);
 
         buttonFlip.setOnClickListener(v -> toggleCard());
+
+        backSide.setOnClickListener(v -> showEditDialog());
 
         loadFragment(new WorkoutsFragment());
         textViewHeader.setText("Recent Workouts");
@@ -151,22 +170,129 @@ public class Profile extends AppCompatActivity {
     }
 
     private void toggleCard() {
-        if (!isFlipped) {
-            frontSide.animate().rotationX(90).setDuration(200).withEndAction(() -> {
-                frontSide.setVisibility(View.GONE);
-                backSide.setVisibility(View.VISIBLE);
-                backSide.setRotationX(-90);
-                backSide.animate().rotationX(0).setDuration(200).start();
-            }).start();
-        } else {
-            backSide.animate().rotationX(90).setDuration(200).withEndAction(() -> {
-                backSide.setVisibility(View.GONE);
-                frontSide.setVisibility(View.VISIBLE);
-                frontSide.setRotationX(-90);
-                frontSide.animate().rotationX(0).setDuration(200).start();
-            }).start();
+        View[] sides = {frontSide, backSide, nutritionSide};
+
+        sides[currentSide].animate().rotationX(90).setDuration(200).withEndAction(() -> {
+            sides[currentSide].setVisibility(View.GONE);
+            currentSide = (currentSide + 1) % sides.length;
+            sides[currentSide].setVisibility(View.VISIBLE);
+            sides[currentSide].setRotationX(-90);
+            sides[currentSide].animate().rotationX(0).setDuration(200).start();
+        }).start();
+    }
+
+    private float getFloatSafe(SharedPreferences prefs, String key, float defaultValue) {
+        try {
+            Object value = prefs.getAll().get(key);
+            if (value instanceof Float) return (Float) value;
+            if (value instanceof Integer) return ((Integer) value).floatValue();
+            if (value instanceof Double) return ((Double) value).floatValue();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        isFlipped = !isFlipped;
+        return defaultValue;
+    }
+
+    private void saveEditedValues(String activity, String goalWeight, String weeklyGoal) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String sex = prefs.getString("sex", "Male");
+        int age = Integer.parseInt(prefs.getString("age", "21"));
+        double weight = Double.parseDouble(prefs.getString("weight", "160"));
+
+        int calories = WelcomeActivity.calculateCalories(sex, age, weight, Double.parseDouble(goalWeight), activity, weeklyGoal);
+        float protein = (float) (calories * 0.3 / 4);
+        float carbs = (float) (calories * 0.4 / 4);
+        float fats = (float) (calories * 0.3 / 9);
+
+        // Update UI
+        textViewActivityBack.setText("Activity: " + activity);
+        textViewGoalBack.setText("Goal: " + goalWeight + " kg");
+        textViewWeeklyChangeBack.setText("Weekly: " + weeklyGoal);
+        textViewCaloriesBack.setText("Target calories: " + calories);
+
+        // Save to Firestore
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore.getInstance().collection("users").document(user.getUid())
+                    .update("activityLevel", activity,
+                            "goalWeight", goalWeight,
+                            "weeklyGoal", weeklyGoal,
+                            "calories", calories,
+                            "protein", protein,
+                            "carbs", carbs,
+                            "fats", fats)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
+                    });
+        }
+
+        // Save to SharedPreferences
+        prefs.edit()
+                .putString("activity", activity)
+                .putString("goal", goalWeight)
+                .putString("weeklyChange", weeklyGoal)
+                .putInt("calories", calories)
+                .putFloat("protein", protein)
+                .putFloat("carbs", carbs)
+                .putFloat("fats", fats)
+                .apply();
+    }
+
+    private void showEditDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_goals, null);
+        editDialog = new Dialog(this);
+        editDialog.setContentView(dialogView);
+        editDialog.setCancelable(true);
+        editDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        spinnerActivityLevel = dialogView.findViewById(R.id.spinnerActivityLevel);
+        spinnerWeeklyGoal = dialogView.findViewById(R.id.spinnerWeeklyGoal);
+        editGoalWeight = dialogView.findViewById(R.id.editTextGoalWeight);
+
+        Button buttonSave = dialogView.findViewById(R.id.buttonSave);
+        Button buttonCancel = dialogView.findViewById(R.id.buttonCancel);
+
+        // Load existing values from current view
+        editGoalWeight.setText(textViewGoalBack.getText().toString().replaceAll("[^0-9.]", ""));
+
+        ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                new String[]{"Not very active", "Lightly active", "Active", "Very active"});
+        activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerActivityLevel.setAdapter(activityAdapter);
+
+        ArrayAdapter<String> goalAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                new String[]{
+                        "Lose 1 kg per week", "Lose 0.75 kg per week", "Lose 0.5 kg per week", "Lose 0.25 kg per week",
+                        "Maintain my current", "Gain 0.25 kg per week", "Gain 0.5 kg per week"});
+        goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerWeeklyGoal.setAdapter(goalAdapter);
+
+        // Pre-select the current values
+        String currentActivity = textViewActivityBack.getText().toString().replace("Activity: ", "");
+        String currentGoal = textViewWeeklyChangeBack.getText().toString().replace("Weekly: ", "");
+
+        spinnerActivityLevel.setSelection(activityAdapter.getPosition(currentActivity));
+        spinnerWeeklyGoal.setSelection(goalAdapter.getPosition(currentGoal));
+
+        buttonCancel.setOnClickListener(v -> editDialog.dismiss());
+
+        buttonSave.setOnClickListener(v -> {
+            String newActivity = spinnerActivityLevel.getSelectedItem().toString();
+            String newWeeklyGoal = spinnerWeeklyGoal.getSelectedItem().toString();
+            String newGoalWeight = editGoalWeight.getText().toString().trim();
+
+            if (newGoalWeight.isEmpty()) {
+                Toast.makeText(this, "Goal weight is required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            saveEditedValues(newActivity, newGoalWeight, newWeeklyGoal);
+            editDialog.dismiss();
+        });
+
+        editDialog.show();
     }
 
     private void fetchAndDisplayUserData() {
@@ -178,8 +304,11 @@ public class Profile extends AppCompatActivity {
         String cachedSex = prefs.getString("sex", null);
         String cachedActivity = prefs.getString("activityLevel", null);
         String cachedGoal = prefs.getString("goalWeight", null);
-        String cachedWeeklyChange = prefs.getString("weeklyGoal", null);
+        String cachedWeeklyChange = prefs.getString("weeklyChange", null);
         int cachedCalories = prefs.getInt("calories", -1);
+        float cachedProtein = getFloatSafe(prefs, "protein", -1f);
+        float cachedCarbs = getFloatSafe(prefs, "carbs", -1f);
+        float cachedFats = getFloatSafe(prefs, "fats", -1f);
 
         updateUserAfterSignIn(cachedName, cachedAvatar);
 
@@ -190,6 +319,10 @@ public class Profile extends AppCompatActivity {
         if (cachedGoal != null) textViewGoalBack.setText("Goal: " + cachedGoal + " kg");
         if (cachedWeeklyChange != null) textViewWeeklyChangeBack.setText("Weekly: " + cachedWeeklyChange);
         if (cachedCalories != -1) textViewCaloriesBack.setText("Target calories: " + cachedCalories);
+
+        if (cachedProtein != -1f || cachedCarbs != -1f || cachedFats != -1f) {
+            textViewMacros.setText("Macros: P: " + cachedProtein + "g, C: " + cachedCarbs + "g, F: " + cachedFats + "g");
+        }
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -208,8 +341,12 @@ public class Profile extends AppCompatActivity {
                             String freshGoal = doc.getString("goalWeight");
                             String freshWeeklyChange = doc.getString("weeklyGoal");
                             Long freshCalories = doc.getLong("calories");
+                            Double freshProtein = doc.getDouble("protein");
+                            Double freshCarbs = doc.getDouble("carbs");
+                            Double freshFats = doc.getDouble("fats");
 
                             updateUserAfterSignIn(freshName, freshAvatar);
+
                             if (freshAge != null) textViewAgeBack.setText("Age: " + freshAge);
                             if (freshWeight != null) textViewWeightBack.setText("Weight: " + freshWeight + " kg");
                             if (freshSex != null) textViewSexBack.setText("Sex: " + freshSex);
@@ -217,6 +354,9 @@ public class Profile extends AppCompatActivity {
                             if (freshGoal != null) textViewGoalBack.setText("Goal: " + freshGoal + " kg");
                             if (freshWeeklyChange != null) textViewWeeklyChangeBack.setText("Weekly: " + freshWeeklyChange);
                             if (freshCalories != null) textViewCaloriesBack.setText("Target calories: " + freshCalories.intValue());
+                            if (freshProtein != null && freshCarbs != null && freshFats != null) {
+                                textViewMacros.setText("Protein: " + freshProtein.intValue() + "g Carbs: " + freshCarbs.intValue() + "g Fats: " + freshFats.intValue() + "g");
+                            }
 
                             prefs.edit()
                                     .putString("name", freshName)
@@ -228,6 +368,9 @@ public class Profile extends AppCompatActivity {
                                     .putString("goal", freshGoal)
                                     .putString("weeklyChange", freshWeeklyChange)
                                     .putInt("calories", freshCalories != null ? freshCalories.intValue() : -1)
+                                    .putFloat("protein", freshProtein != null ? freshProtein.floatValue() : -1f)
+                                    .putFloat("carbs", freshCarbs != null ? freshCarbs.floatValue() : -1f)
+                                    .putFloat("fats", freshFats != null ? freshFats.floatValue() : -1f)
                                     .putBoolean(PREF_IMAGE_LOADED, true)
                                     .apply();
                         }
