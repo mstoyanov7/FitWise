@@ -11,7 +11,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:gravity="center"
-        android:textStyle="bold"
+        android:fontFamily="@font/open_sans_bold"
         android:textColor="@drawable/selector_day_text"
         android:textSize="16sp"
         android:background="@drawable/selector_day_bg"/>
@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mon"
+        android:fontFamily="@font/open_sans_medium"
         android:textColor="#666666"
         android:textSize="12sp"
         android:layout_marginTop="4dp"/>

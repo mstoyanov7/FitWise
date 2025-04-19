@@ -65,7 +65,7 @@ public class CalendarActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.nav_meals) {
-                // intent = new Intent(this, MealsActivity.class);
+                intent = new Intent(CalendarActivity.this, FoodDiaryActivity.class);
             } else if (id == R.id.nav_workout) {
                 intent = new Intent(CalendarActivity.this, Workouts.class);
             } else if (id == R.id.nav_home) {

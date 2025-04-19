@@ -18,7 +18,7 @@
         android:textColor="#111827"
         android:fontFamily="@font/open_sans_bold"
         android:gravity="center"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="24dp" />
 
     <!-- Food Name -->
     <TextView
@@ -28,7 +28,7 @@
         android:textColor="#111827"
         android:textSize="14sp"
         android:fontFamily="@font/open_sans_medium"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginBottom="4dp" />
 
     <EditText
         android:id="@+id/etFoodName"
@@ -39,7 +39,7 @@
         android:fontFamily="@font/open_sans_light"
         android:textSize="14sp"
         android:padding="12dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
     <!-- Row: Calories & Carbs -->
     <LinearLayout
@@ -63,7 +63,7 @@
                 android:textColor="#111827"
                 android:textSize="14sp"
                 android:fontFamily="@font/open_sans_medium"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/etCalories"
@@ -74,7 +74,7 @@
                 android:background="@drawable/edit_text_background"
                 android:fontFamily="@font/open_sans_light"
                 android:textSize="14sp"
-                android:padding="12dp"/>
+                android:padding="12dp" />
         </LinearLayout>
 
         <!-- Carbs -->
@@ -91,7 +91,7 @@
                 android:textColor="#111827"
                 android:textSize="14sp"
                 android:fontFamily="@font/open_sans_medium"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/etCarbs"
@@ -102,7 +102,7 @@
                 android:background="@drawable/edit_text_background"
                 android:fontFamily="@font/open_sans_light"
                 android:textSize="14sp"
-                android:padding="12dp"/>
+                android:padding="12dp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -128,7 +128,7 @@
                 android:textColor="#111827"
                 android:textSize="14sp"
                 android:fontFamily="@font/open_sans_medium"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/etFat"
@@ -139,7 +139,7 @@
                 android:background="@drawable/edit_text_background"
                 android:fontFamily="@font/open_sans_light"
                 android:textSize="14sp"
-                android:padding="12dp"/>
+                android:padding="12dp" />
         </LinearLayout>
 
         <!-- Protein -->
@@ -156,7 +156,7 @@
                 android:textColor="#111827"
                 android:textSize="14sp"
                 android:fontFamily="@font/open_sans_medium"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/etProtein"
@@ -167,11 +167,11 @@
                 android:background="@drawable/edit_text_background"
                 android:fontFamily="@font/open_sans_light"
                 android:textSize="14sp"
-                android:padding="12dp"/>
+                android:padding="12dp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Action Buttons -->
+    <!-- Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -201,7 +201,6 @@
             android:textColor="#FFFFFF"
             android:backgroundTint="#0BA284"
             android:fontFamily="@font/open_sans_medium"
-            app:cornerRadius="8dp"
-            app:strokeWidth="1dp"/>
+            app:cornerRadius="8dp"/>
     </LinearLayout>
 </LinearLayout>

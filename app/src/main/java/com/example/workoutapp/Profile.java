@@ -105,11 +105,11 @@ public class Profile extends AppCompatActivity {
                 Intent intent = null;
 
                 if (id == R.id.nav_meals) {
-                    //intent = new Intent(CurrentActivity.this, MealsActivity.class);
+                    intent = new Intent(Profile.this, FoodDiaryActivity.class);
                 } else if (id == R.id.nav_workout) {
                     intent = new Intent(Profile.this, Workouts.class);
                 } else if (id == R.id.nav_home) {
-                    //intent = new Intent(CurrentActivity.this, HomeActivity.class);
+                    //intent = new Intent(Profile.this, HomeActivity.class);
                 } else if (id == R.id.nav_calendar) {
                     intent = new Intent(Profile.this, CalendarActivity.class);
                 } else if (id == R.id.nav_profile) {
