@@ -139,26 +139,32 @@ public class Profile extends AppCompatActivity {
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            Intent intent = null;
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Intent intent = null;
 
-            if (id == R.id.nav_meals) {
-                intent = new Intent(Profile.this, FoodDiaryActivity.class);
-            } else if (id == R.id.nav_workout) {
-                intent = new Intent(Profile.this, Workouts.class);
-            } else if (id == R.id.nav_calendar) {
-                intent = new Intent(Profile.this, CalendarActivity.class);
-            } else if (id == R.id.nav_profile) {
-                intent = new Intent(Profile.this, Profile.class);
-            }
+                if (id == R.id.nav_meals) {
+                    intent = new Intent(Profile.this, FoodDiaryActivity.class);
+                } else if (id == R.id.nav_workout) {
+                    intent = new Intent(Profile.this, Workouts.class);
+                } else if (id == R.id.nav_home) {
+                    intent = new Intent(Profile.this, HomeActivity.class);
+                } else if (id == R.id.nav_calendar) {
+                    intent = new Intent(Profile.this, CalendarActivity.class);
+                } else if (id == R.id.nav_profile) {
+                    intent = new Intent(Profile.this, Profile.class);
+                }
 
-            if (intent != null) {
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                return true;
+                if (intent != null) {
+                    startActivity(intent);
+                    // Apply fade in to the incoming activity and fade out from the current one.
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    return true;
+                }
+                return false;
             }
-            return false;
         });
 
         String selectedTab = getIntent().getStringExtra("selectedTab");
