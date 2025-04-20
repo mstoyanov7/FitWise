@@ -26,192 +26,219 @@
             android:paddingBottom="16dp">
 
             <!-- Profile Info -->
-            <LinearLayout
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:id="@+id/linearLayoutInfo"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewProfileInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="60dp"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/imageViewProfilePic"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/circle_white_shadow"
-                    android:clipToOutline="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/avatar1" />
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingStart="16dp">
-
-                    <!-- Front Side -->
-                    <LinearLayout
-                        android:id="@+id/frontSide"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <!-- Name Row -->
-                        <TextView
-                            android:id="@+id/textViewName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/open_sans_bold"
-                            android:text="Marin Stoyanov"
-                            android:textSize="25sp"
-                            android:textStyle="bold" />
-
-                        <!-- Age + Sex Row -->
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="4dp">
-
-                            <TextView
-                                android:id="@+id/textViewAge"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:fontFamily="@font/open_sans_regular"
-                                android:text="Age: 21"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/textViewSex"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/open_sans_regular"
-                                android:text="Sex: Male"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-
-                        <!-- Height + Weight Row -->
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="4dp">
-
-                            <TextView
-                                android:id="@+id/textViewHeight"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:fontFamily="@font/open_sans_regular"
-                                android:text="Height: 170 cm"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/textViewWeight"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/open_sans_regular"
-                                android:text="Weight: 70 kg"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                    <!-- Back Side (initially hidden) -->
-                    <LinearLayout
-                        android:id="@+id/backSide"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone"
-                        android:paddingTop="4dp">
-
-                        <TextView
-                            android:id="@+id/textViewActivityLevel"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Activity: Moderate"
-                            android:fontFamily="@font/open_sans_regular"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/textViewGoalWeight"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Goal: 140 kg"
-                            android:fontFamily="@font/open_sans_regular"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/textViewWeeklyGoal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Weekly goal: -1.2 kg"
-                            android:fontFamily="@font/open_sans_regular"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <!-- Third Side: Nutrition Summary (updated format) -->
-                    <LinearLayout
-                        android:id="@+id/nutritionSide"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone"
-                        android:paddingTop="4dp">
-
-                        <TextView
-                            android:id="@+id/textViewCalories"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Target calories: 0"
-                            android:fontFamily="@font/open_sans_regular"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/textViewMacros"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Macros: P: 0g, C: 0g, F: 0g"
-                            android:fontFamily="@font/open_sans_regular"
-                            android:textSize="14sp"
-                            android:paddingTop="4dp" />
-                    </LinearLayout>
-                </FrameLayout>
+                app:cardCornerRadius="8dp"
+                android:backgroundTint="@android:color/white">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_marginStart="8dp">
+                    android:paddingTop="8dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp">
 
-                    <ImageButton
-                        android:id="@+id/buttonFlip"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:scaleType="centerCrop"
-                        android:layout_marginTop="0dp"
-                        android:layout_gravity="center_horizontal"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Flip Info"
-                        android:src="@drawable/ic_flip"
-                        app:tint="@android:color/black" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="end">
+
+                        <ImageButton
+                            android:id="@+id/buttonEditProfile"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:scaleType="fitCenter"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_edit"
+                            app:tint="#898989"
+                            android:contentDescription="Edit" />
+
+                        <ImageButton
+                            android:id="@+id/buttonFlip"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:scaleType="fitCenter"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_flip"
+                            app:tint="#898989"
+                            android:contentDescription="Flip" />
+
+                        <ImageButton
+                            android:id="@+id/buttonLogout"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:scaleType="fitCenter"
+                            android:minWidth="10dp"
+                            android:minHeight="10dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_logout"
+                            app:tint="#898989"
+                            android:contentDescription="Export" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="4dp"
+                        android:background="#C6C6C6" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="4dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/imageViewProfilePic"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginEnd="12dp"
+                            android:background="@drawable/circle_white_shadow"
+                            android:clipToOutline="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/avatar1" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:id="@+id/frontSide"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textViewName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Marin Stoyanov"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="@font/open_sans_bold" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/textViewHeight"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="8dp"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Height: 184"
+                                        android:textColor="#777777"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/textViewWeight"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="8dp"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Weight: 80kg"
+                                        android:textColor="#777777"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/textViewSex"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/open_sans_regular"
+                                        android:text="Sex: Male"
+                                        android:textColor="#777777"
+                                        android:textSize="14sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/backSide"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/textViewActivityLevel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Activity: Moderate"
+                                    android:fontFamily="@font/open_sans_regular"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textViewGoalWeight"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Goal: 140 kg"
+                                    android:fontFamily="@font/open_sans_regular"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textViewWeeklyGoal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Weekly goal: -1.2 kg"
+                                    android:fontFamily="@font/open_sans_regular"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/nutritionSide"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/textViewCalories"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Target calories: 0"
+                                    android:fontFamily="@font/open_sans_regular"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textViewMacros"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Macros: P: 0g, C: 0g, F: 0g"
+                                    android:fontFamily="@font/open_sans_regular"
+                                    android:textSize="14sp"
+                                    android:paddingTop="4dp" />
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
 
             <!-- Progress Card -->
-            <androidx.cardview.widget.CardView
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:cardElevation="0dp"
-                app:contentPadding="16dp">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="8dp"
+                android:backgroundTint="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -286,7 +313,7 @@
                                 android:fontFamily="@font/open_sans_bold" />
                         </LinearLayout>
                     </LinearLayout>
-
+                  
                     <!-- Placeholder for chart -->
                     <FrameLayout
                         android:id="@+id/weeklyCaloriesChartContainer"
@@ -296,98 +323,102 @@
                         android:background="@drawable/rounded_card_background">
                         <!-- Add your bar/line chart dynamically here -->
                     </FrameLayout>
-
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Tabs -->
-            <LinearLayout
-                android:id="@+id/segmentedContainer"
+            <!-- Tabs Container as MaterialCardView -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/segmented_control_background"
-                android:clipToOutline="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="8dp"
+                android:backgroundTint="@android:color/white">
 
-                <RadioGroup
-                    android:id="@+id/radioGroupTabs"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:orientation="horizontal"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
+                    android:gravity="center_vertical">
 
-                    <RadioButton
-                        android:id="@+id/radioWorkouts"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:background="@color/tab_item_selector"
-                        android:button="@android:color/transparent"
-                        android:checked="true"
-                        android:drawableLeft="@drawable/barbell"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="@color/tab_icon_color_selector"
-                        android:fontFamily="@font/open_sans_semibold"
-                        android:gravity="center_vertical"
-                        android:padding="8dp"
-                        android:text="Workouts"
-                        android:textColor="@color/tab_text_color_selector"
-                        android:textSize="12sp" />
+                    <RadioGroup
+                        android:id="@+id/radioGroupTabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="4dp"
+                        android:gravity="center">
 
-                    <RadioButton
-                        android:id="@+id/radioMeals"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:background="@color/tab_item_selector"
-                        android:button="@android:color/transparent"
-                        android:drawableLeft="@drawable/fork"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="@color/tab_icon_color_selector"
-                        android:fontFamily="@font/open_sans_semibold"
-                        android:gravity="center_vertical"
-                        android:padding="8dp"
-                        android:text="Meals"
-                        android:textColor="@color/tab_text_color_selector"
-                        android:textSize="12sp" />
+                        <RadioButton
+                            android:id="@+id/radioWorkouts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:background="@color/tab_item_selector"
+                            android:button="@android:color/transparent"
+                            android:checked="true"
+                            android:drawableLeft="@drawable/barbell"
+                            android:drawablePadding="8dp"
+                            android:drawableTint="@color/tab_icon_color_selector"
+                            android:fontFamily="@font/open_sans_semibold"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:text="Workouts"
+                            android:textColor="@color/tab_text_color_selector"
+                            android:textSize="12sp" />
 
-                    <RadioButton
-                        android:id="@+id/radioGoals"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:background="@color/tab_item_selector"
-                        android:button="@android:color/transparent"
-                        android:drawableLeft="@drawable/goal"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="@color/tab_icon_color_selector"
-                        android:fontFamily="@font/open_sans_semibold"
-                        android:gravity="center_vertical"
-                        android:padding="8dp"
-                        android:text="Goals"
-                        android:textColor="@color/tab_text_color_selector"
-                        android:textSize="12sp" />
+                        <RadioButton
+                            android:id="@+id/radioMeals"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:background="@color/tab_item_selector"
+                            android:button="@android:color/transparent"
+                            android:drawableLeft="@drawable/fork"
+                            android:drawablePadding="8dp"
+                            android:drawableTint="@color/tab_icon_color_selector"
+                            android:fontFamily="@font/open_sans_semibold"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:text="Meals"
+                            android:textColor="@color/tab_text_color_selector"
+                            android:textSize="12sp" />
 
-                    <RadioButton
-                        android:id="@+id/radioProgress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:background="@color/tab_item_selector"
-                        android:button="@android:color/transparent"
-                        android:drawableLeft="@drawable/chart"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="@color/tab_icon_color_selector"
-                        android:fontFamily="@font/open_sans_semibold"
-                        android:gravity="center_vertical"
-                        android:padding="8dp"
-                        android:text="Progress"
-                        android:textColor="@color/tab_text_color_selector"
-                        android:textSize="12sp" />
-                </RadioGroup>
-            </LinearLayout>
+                        <RadioButton
+                            android:id="@+id/radioGoals"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:background="@color/tab_item_selector"
+                            android:button="@android:color/transparent"
+                            android:drawableLeft="@drawable/goal"
+                            android:drawablePadding="8dp"
+                            android:drawableTint="@color/tab_icon_color_selector"
+                            android:fontFamily="@font/open_sans_semibold"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:text="Goals"
+                            android:textColor="@color/tab_text_color_selector"
+                            android:textSize="12sp" />
+
+                        <RadioButton
+                            android:id="@+id/radioProgress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:background="@color/tab_item_selector"
+                            android:button="@android:color/transparent"
+                            android:drawableLeft="@drawable/chart"
+                            android:drawablePadding="8dp"
+                            android:drawableTint="@color/tab_icon_color_selector"
+                            android:fontFamily="@font/open_sans_semibold"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"
+                            android:text="Progress"
+                            android:textColor="@color/tab_text_color_selector"
+                            android:textSize="12sp" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
 
             <!--Recent and View All-->
             <LinearLayout
@@ -433,19 +464,6 @@
                 />
         </LinearLayout>
     </ScrollView>
-
-    <ImageButton
-        android:id="@+id/buttonLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="16dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Logout"
-        android:src="@drawable/ic_logout"
-        app:tint="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

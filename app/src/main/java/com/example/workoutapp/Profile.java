@@ -82,7 +82,7 @@ public class Profile extends AppCompatActivity {
 
         ImageButton buttonFlip = findViewById(R.id.buttonFlip);
 
-        textViewAgeBack = findViewById(R.id.textViewAge);
+        textViewAgeBack = findViewById(R.id.textViewHeight);
         textViewWeightBack = findViewById(R.id.textViewWeight);
         textViewHeightBack = findViewById(R.id.textViewHeight);
         textViewSexBack = findViewById(R.id.textViewSex);
@@ -94,7 +94,12 @@ public class Profile extends AppCompatActivity {
 
         buttonFlip.setOnClickListener(v -> toggleCard());
 
-        backSide.setOnClickListener(v -> showEditDialog());
+        ImageButton buttonEdit = findViewById((R.id.buttonEditProfile));
+        buttonEdit.setOnClickListener(v -> {
+            if (currentSide == 1) {
+                showEditDialog();
+            }
+        });
 
         loadFragment(new WorkoutsFragment());
         textViewHeader.setText("Recent Workouts");
