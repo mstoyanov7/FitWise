@@ -52,6 +52,7 @@ public class Profile extends AppCompatActivity {
     private View nutritionSide;
 
     private TextView textViewAgeBack, textViewWeightBack, textViewSexBack, textViewMacros;
+    private TextView textViewHeightBack;
     private TextView textViewActivityBack, textViewGoalBack, textViewWeeklyChangeBack;
     private TextView textViewCaloriesBack;
     private int currentSide = 0; // 0 = front, 1 = back, 2 = nutrition
@@ -83,6 +84,7 @@ public class Profile extends AppCompatActivity {
 
         textViewAgeBack = findViewById(R.id.textViewHeight);
         textViewWeightBack = findViewById(R.id.textViewWeight);
+        textViewHeightBack = findViewById(R.id.textViewHeight);
         textViewSexBack = findViewById(R.id.textViewSex);
         textViewActivityBack = findViewById(R.id.textViewActivityLevel);
         textViewGoalBack = findViewById(R.id.textViewGoalWeight);
@@ -312,6 +314,7 @@ public class Profile extends AppCompatActivity {
         String cachedAvatar = prefs.getString("avatarUrl", null);
         String cachedAge = prefs.getString("age", null);
         String cachedWeight = prefs.getString("weight", null);
+        String cachedHeight = prefs.getString("height", null);
         String cachedSex = prefs.getString("sex", null);
         String cachedActivity = prefs.getString("activityLevel", null);
         String cachedGoal = prefs.getString("goalWeight", null);
@@ -325,6 +328,7 @@ public class Profile extends AppCompatActivity {
 
         if (cachedAge != null) textViewAgeBack.setText("Age: " + cachedAge);
         if (cachedWeight != null) textViewWeightBack.setText("Weight: " + cachedWeight + " kg");
+        if (cachedHeight != null) textViewHeightBack.setText("Height: " + cachedHeight + " cm");
         if (cachedSex != null) textViewSexBack.setText("Sex: " + cachedSex);
         if (cachedActivity != null) textViewActivityBack.setText("Activity: " + cachedActivity);
         if (cachedGoal != null) textViewGoalBack.setText("Goal: " + cachedGoal + " kg");
@@ -346,6 +350,7 @@ public class Profile extends AppCompatActivity {
                             String freshName = doc.getString("name");
                             String freshAge = doc.getString("age");
                             String freshWeight = doc.getString("weight");
+                            String freshHeight = doc.getString("height");
                             String freshSex = doc.getString("sex");
                             String freshAvatar = doc.getString("avatarUrl");
                             String freshActivity = doc.getString("activityLevel");
@@ -360,6 +365,7 @@ public class Profile extends AppCompatActivity {
 
                             if (freshAge != null) textViewAgeBack.setText("Age: " + freshAge);
                             if (freshWeight != null) textViewWeightBack.setText("Weight: " + freshWeight + " kg");
+                            if (freshHeight != null) textViewHeightBack.setText("Height: " + freshHeight + " cm");
                             if (freshSex != null) textViewSexBack.setText("Sex: " + freshSex);
                             if (freshActivity != null) textViewActivityBack.setText("Activity: " + freshActivity);
                             if (freshGoal != null) textViewGoalBack.setText("Goal: " + freshGoal + " kg");
@@ -373,6 +379,7 @@ public class Profile extends AppCompatActivity {
                                     .putString("name", freshName)
                                     .putString("age", freshAge)
                                     .putString("weight", freshWeight)
+                                    .putString("height", freshHeight)
                                     .putString("sex", freshSex)
                                     .putString("avatarUrl", freshAvatar)
                                     .putString("activity", freshActivity)
