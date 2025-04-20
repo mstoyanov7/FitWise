@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/dialog_background"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/textViewEditTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="12dp" />
+
+        <!-- Height -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Height (cm)"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter height"
+            android:inputType="numberDecimal" />
+
+        <!-- Weight -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Weight (kg)"
+            android:textStyle="bold"
+            android:paddingTop="12dp" />
+
+        <EditText
+            android:id="@+id/editTextWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter weight"
+            android:inputType="numberDecimal" />
+
+        <!-- Sex -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sex"
+            android:textStyle="bold"
+            android:paddingTop="12dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupSex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <RadioButton
+                android:id="@+id/radioMale"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Male" />
+
+            <RadioButton
+                android:id="@+id/radioFemale"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Female" />
+        </RadioGroup>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/buttonCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/colorPrimary" />
+
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

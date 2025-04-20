@@ -33,10 +33,10 @@ public class ScannedFoodActivity extends AppCompatActivity {
     // per‑100g values
     private float per100Cal, per100Carbs, per100Fat, per100Sugar, per100Protein;
 
-    private final List<String> nutrientData   = new ArrayList<>();
+    private final List<String> nutrientData = new ArrayList<>();
     private final List<String> ingredientData = new ArrayList<>();
 
-    private TabLayout    tabLayout;
+    private TabLayout tabLayout;
     private RecyclerView rvDetails;
     private SimpleAdapter adapter;
 
@@ -57,28 +57,28 @@ public class ScannedFoodActivity extends AppCompatActivity {
         // — pull in Intent extras —
         Intent in = getIntent();
         final String selectedDate = in.getStringExtra("selectedDate");
-        final int    mealIndex    = in.getIntExtra("mealIndex", -1);
+        final int mealIndex = in.getIntExtra("mealIndex", -1);
 
-        String name        = in.getStringExtra("name");
+        String name = in.getStringExtra("name");
         String ingredients = in.getStringExtra("ingredients");
-        String calStr      = in.getStringExtra("calories");
-        String sugarStr    = in.getStringExtra("sugars");
-        String fatStr      = in.getStringExtra("fat");
-        String protStr     = in.getStringExtra("protein");
-        String carbsStr    = in.getStringExtra("carbs");
-        String imageUrl    = in.getStringExtra("image_url");
+        String calStr = in.getStringExtra("calories");
+        String sugarStr = in.getStringExtra("sugars");
+        String fatStr = in.getStringExtra("fat");
+        String protStr = in.getStringExtra("protein");
+        String carbsStr = in.getStringExtra("carbs");
+        String imageUrl = in.getStringExtra("image_url");
 
         // parse per‑100g floats
-        per100Cal     = safeFloat(calStr);
-        per100Sugar   = safeFloat(sugarStr);
-        per100Fat     = safeFloat(fatStr);
+        per100Cal = safeFloat(calStr);
+        per100Sugar = safeFloat(sugarStr);
+        per100Fat = safeFloat(fatStr);
         per100Protein = safeFloat(protStr);
-        per100Carbs   = safeFloat(carbsStr);
+        per100Carbs = safeFloat(carbsStr);
 
         // — header UI —
-        TextView tvName    = findViewById(R.id.tv_food_name);
+        TextView tvName = findViewById(R.id.tv_food_name);
         TextView tvSummary = findViewById(R.id.tv_food_summary);
-        ImageView ivFood   = findViewById(R.id.iv_food);
+        ImageView ivFood = findViewById(R.id.iv_food);
 
         tvName.setText(name);
         tvSummary.setText(String.format(
@@ -93,8 +93,8 @@ public class ScannedFoodActivity extends AppCompatActivity {
 
         // — weight input & live stats —
         EditText etWeightInput = findViewById(R.id.tv_stat_weight_value);
-        TextView tvCalories    = findViewById(R.id.tv_stat_calories_value);
-        TextView tvProteinOut  = findViewById(R.id.tv_stat_protein_value);
+        TextView tvCalories = findViewById(R.id.tv_stat_calories_value);
+        TextView tvProteinOut = findViewById(R.id.tv_stat_protein_value);
 
         // initialize to 100g
         etWeightInput.setText(String.valueOf((int) INITIAL_WEIGHT));
@@ -112,10 +112,10 @@ public class ScannedFoodActivity extends AppCompatActivity {
         initNutrientData(INITIAL_WEIGHT);
 
         // set initial top stats
-        tvCalories  .setText(String.format(Locale.getDefault(),
-                "%.0f kcal",  per100Cal     * INITIAL_WEIGHT / 100f));
+        tvCalories.setText(String.format(Locale.getDefault(),
+                "%.0f kcal",per100Cal * INITIAL_WEIGHT / 100f));
         tvProteinOut.setText(String.format(Locale.getDefault(),
-                "%.1f g",    per100Protein * INITIAL_WEIGHT / 100f));
+                "%.1f g",per100Protein * INITIAL_WEIGHT / 100f));
 
         // — RecyclerView + Tabs set‑up —
         tabLayout = findViewById(R.id.tab_layout);
@@ -181,13 +181,13 @@ public class ScannedFoodActivity extends AppCompatActivity {
             float weight = inStr.isEmpty() ? 0f : safeFloat(inStr);
 
             Intent out = new Intent();
-            out.putExtra("name",          name);
-            out.putExtra("calories",      String.valueOf(per100Cal     * weight / 100f));
-            out.putExtra("carbs",         String.valueOf(per100Carbs   * weight / 100f));
-            out.putExtra("fat",           String.valueOf(per100Fat     * weight / 100f));
-            out.putExtra("protein",       String.valueOf(per100Protein * weight / 100f));
-            out.putExtra("selectedDate",  selectedDate);
-            out.putExtra("mealIndex",     mealIndex);
+            out.putExtra("name", name);
+            out.putExtra("calories", String.valueOf(per100Cal * weight / 100f));
+            out.putExtra("carbs", String.valueOf(per100Carbs * weight / 100f));
+            out.putExtra("fat", String.valueOf(per100Fat * weight / 100f));
+            out.putExtra("protein", String.valueOf(per100Protein * weight / 100f));
+            out.putExtra("selectedDate", selectedDate);
+            out.putExtra("mealIndex", mealIndex);
             out.putExtra("grams", weight);
             setResult(RESULT_OK, out);
             finish();
@@ -208,15 +208,15 @@ public class ScannedFoodActivity extends AppCompatActivity {
     private void initNutrientData(float weight) {
         nutrientData.clear();
         nutrientData.add(String.format(Locale.getDefault(),
-                "Calories: %.0f kcal",   per100Cal     * weight / 100f));
+                "Calories: %.0f kcal",per100Cal * weight / 100f));
         nutrientData.add(String.format(Locale.getDefault(),
-                "Carbs: %.1f g",         per100Carbs   * weight / 100f));
+                "Carbs: %.1f g",per100Carbs * weight / 100f));
         nutrientData.add(String.format(Locale.getDefault(),
-                "Fat: %.1f g",           per100Fat     * weight / 100f));
+                "Fat: %.1f g",per100Fat * weight / 100f));
         nutrientData.add(String.format(Locale.getDefault(),
-                "Sugar: %.1f g",         per100Sugar   * weight / 100f));
+                "Sugar: %.1f g",per100Sugar * weight / 100f));
         nutrientData.add(String.format(Locale.getDefault(),
-                "Protein: %.1f g",       per100Protein * weight / 100f));
+                "Protein: %.1f g",per100Protein * weight / 100f));
     }
 
     private float safeFloat(String s) {
