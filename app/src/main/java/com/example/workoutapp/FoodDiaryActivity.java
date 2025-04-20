@@ -229,9 +229,10 @@ public class FoodDiaryActivity extends AppCompatActivity {
             String protStr = data.getStringExtra("protein");
 
             int mealIndex  = data.getIntExtra("mealIndex", -1);
+            float qty = data.getFloatExtra("grams", 0f);
             float cal = safeFloat(calStr), carb = safeFloat(carbStr), fat = safeFloat(fatStr), prot = safeFloat(protStr);
             List<List<FoodItem>> meals = foodLog.get(currentSelectedDate);
-            FoodItem item = new FoodItem(name, cal, carb, fat, prot);
+            FoodItem item = new FoodItem(name, cal, carb, fat, prot, qty);
             meals.get(mealIndex).add(item);
 
             saveFoodLogToPrefs();
@@ -250,6 +251,7 @@ public class FoodDiaryActivity extends AppCompatActivity {
         EditText etCarbs = dialogView.findViewById(R.id.etCarbs);
         EditText etFat = dialogView.findViewById(R.id.etFat);
         EditText etProt = dialogView.findViewById(R.id.etProtein);
+        EditText etQuantity = dialogView.findViewById(R.id.etGrams);
         MaterialButton btnCancel = dialogView.findViewById(R.id.btnCancel);
         MaterialButton btnAdd = dialogView.findViewById(R.id.btnAdd);
         AlertDialog dialog = new MaterialAlertDialogBuilder(this).setView(dialogView).create();
@@ -262,9 +264,10 @@ public class FoodDiaryActivity extends AppCompatActivity {
                 etFood.setError("Food name is required");
                 return;
             }
+            float qty  = parseFloat(etQuantity);
             float cal = parseFloat(etCal), carb = parseFloat(etCarbs), frekFat = parseFloat(etFat), prot = parseFloat(etProt);
             List<List<FoodItem>> meals = foodLog.get(currentSelectedDate);
-            FoodItem item = new FoodItem(food, cal, carb, frekFat, prot);
+            FoodItem item = new FoodItem(food, cal, carb, frekFat, prot, qty);
             meals.get(mealIndex).add(item);
 
             saveFoodLogToPrefs();
@@ -282,7 +285,7 @@ public class FoodDiaryActivity extends AppCompatActivity {
         TextView tvD = chip.findViewById(R.id.tvChipDetails);
         ImageButton btnR = chip.findViewById(R.id.btnRemove);
 
-        tvN.setText(f.name);
+        tvN.setText(f.name + " (" + (int)f.quantity + "g)");
         tvD.setText(fmt(f.calories)+" kcal • "+fmt(f.carbs)+"g Carbs • "+fmt(f.fat)+"g Fat • "+fmt(f.protein)+"g Protein");
 
         btnR.setOnClickListener(v -> {
@@ -345,21 +348,28 @@ public class FoodDiaryActivity extends AppCompatActivity {
 
     private void loadFoodLogFromPrefs() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Set<String> ents = prefs.getStringSet(PREFS_KEY_ENTRIES,new HashSet<>());
+        Set<String> ents = prefs.getStringSet(PREFS_KEY_ENTRIES, new HashSet<>());
         foodLog.clear();
-        for(String rec : ents) {
-            String[] p = rec.split("\\|",7);
+        for (String rec : ents) {
+            String[] p = rec.split("\\|");
+            if (p.length < 7) continue; // malformed record
             LocalDate d = LocalDate.parse(p[0]);
-
             int idx = Integer.parseInt(p[1]);
-            float c = Float.parseFloat(p[3]), car = Float.parseFloat(p[4]), f = Float.parseFloat(p[5]), pr=Float.parseFloat(p[6]);
-            FoodItem it = new FoodItem(p[2], c, car, f, pr);
+            float c   = Float.parseFloat(p[3]);
+            float car = Float.parseFloat(p[4]);
+            float f   = Float.parseFloat(p[5]);
+            float pr  = Float.parseFloat(p[6]);
+            float qty = 0f;
+            if (p.length > 7) {
+                try {
+                    qty = Float.parseFloat(p[7]);
+                } catch (NumberFormatException ignored) {}
+            }
+            FoodItem it = new FoodItem(p[2], c, car, f, pr, qty);
             List<List<FoodItem>> m = foodLog.get(d);
-            if(m == null){
+            if (m == null) {
                 m = new ArrayList<>();
-                for(int i = 0; i < MEAL_NAMES.length; i++) {
-                    m.add(new ArrayList<>());
-                }
+                for (int i = 0; i < MEAL_NAMES.length; i++) m.add(new ArrayList<>());
                 foodLog.put(d, m);
             }
             m.get(idx).add(it);
@@ -367,13 +377,19 @@ public class FoodDiaryActivity extends AppCompatActivity {
     }
 
     private void saveFoodLogToPrefs() {
-        SharedPreferences prefs=getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-        Set<String> ents=new HashSet<>();
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
+        Set<String> ents = new HashSet<>();
         for(Map.Entry<LocalDate, List<List<FoodItem>>> e : foodLog.entrySet()){
             String ds = e.getKey().toString();
             for(int i = 0; i < e.getValue().size(); i++){
                 for(FoodItem f : e.getValue().get(i)){
-                    ents.add(ds + "|"+ i + "|" + f.name + "|" + f.calories + "|" + f.carbs + "|" + f.fat + "|" + f.protein);
+                    ents.add(ds + "|" + i + "|"
+                            + f.name     + "|"
+                            + f.calories + "|"
+                            + f.carbs    + "|"
+                            + f.fat      + "|"
+                            + f.protein  + "|"
+                            + f.quantity);
                 }
             }
         }
@@ -382,7 +398,7 @@ public class FoodDiaryActivity extends AppCompatActivity {
 
     private void loadFoodLogFromFirebase() {
         FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
-        if (u==null) return;
+        if (u == null) return;
         FirebaseFirestore.getInstance().collection("foodDiary").document(u.getUid()).collection("entries")
                 .get().addOnSuccessListener(query->{
                     foodLog.clear();
@@ -393,7 +409,8 @@ public class FoodDiaryActivity extends AppCompatActivity {
                         float car = doc.getDouble("carbs").floatValue();
                         float f = doc.getDouble("fat").floatValue();
                         float pr = doc.getDouble("protein").floatValue();
-                        FoodItem it = new FoodItem(doc.getString("name"), c, car, f, pr);
+                        float qty = doc.getDouble("quantity").floatValue();
+                        FoodItem it = new FoodItem(doc.getString("name"), c, car, f, pr, qty);
                         List<List<FoodItem>> m = foodLog.computeIfAbsent(d,dd->{List<List<FoodItem>> mm = new ArrayList<>();
                             for(int i = 0; i < MEAL_NAMES.length; i++) {
                                 mm.add(new ArrayList<>());
@@ -475,7 +492,7 @@ public class FoodDiaryActivity extends AppCompatActivity {
 
     private void addEntryToFirebase(FoodItem item, int mealIndex){
         FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
-        if(u==null) return;
+        if(u == null) return;
         Map<String,Object> m = new HashMap<>();
         m.put("date", currentSelectedDate.toString());
         m.put("mealIndex", mealIndex);
@@ -484,18 +501,20 @@ public class FoodDiaryActivity extends AppCompatActivity {
         m.put("carbs", item.carbs);
         m.put("fat", item.fat);
         m.put("protein", item.protein);
+        m.put("quantity", item.quantity);
         FirebaseFirestore.getInstance().collection("foodDiary").document(u.getUid())
                 .collection("entries").add(m)
                 .addOnFailureListener(e->Toast.makeText(this,"Could not save food to cloud: "+e.getMessage(),Toast.LENGTH_SHORT).show());
     }
     private void removeEntryFromFirebase(FoodItem f, int mealIndex){
-        FirebaseUser u=FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
         if(u == null) return;
         FirebaseFirestore.getInstance().collection("foodDiary").document(u.getUid())
                 .collection("entries").whereEqualTo("date", currentSelectedDate.toString())
                 .whereEqualTo("mealIndex", mealIndex).whereEqualTo("name", f.name)
                 .whereEqualTo("calories", f.calories).whereEqualTo("carbs", f.carbs)
-                .whereEqualTo("fat", f.fat).whereEqualTo("protein", f.protein).get()
+                .whereEqualTo("fat", f.fat).whereEqualTo("protein", f.protein)
+                .whereEqualTo("quantity", f.quantity).get()
                 .addOnSuccessListener(q->{
                     for(DocumentSnapshot d:q.getDocuments())d.getReference().delete();
                 });
@@ -503,13 +522,14 @@ public class FoodDiaryActivity extends AppCompatActivity {
 
     static class FoodItem {
         final String name;
-        final float calories, carbs, fat, protein;
-        FoodItem(String name, float calories, float carbs, float fat, float protein){
+        final float calories, carbs, fat, protein, quantity;
+        FoodItem(String name, float calories, float carbs, float fat, float protein, float qty){
             this.name = name;
             this.calories = calories;
             this.carbs = carbs;
             this.fat = fat;
             this.protein = protein;
+            this.quantity = qty;
         }
     }
 }

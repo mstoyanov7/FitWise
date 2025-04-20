@@ -188,6 +188,7 @@ public class ScannedFoodActivity extends AppCompatActivity {
             out.putExtra("protein",       String.valueOf(per100Protein * weight / 100f));
             out.putExtra("selectedDate",  selectedDate);
             out.putExtra("mealIndex",     mealIndex);
+            out.putExtra("grams", weight);
             setResult(RESULT_OK, out);
             finish();
         });
