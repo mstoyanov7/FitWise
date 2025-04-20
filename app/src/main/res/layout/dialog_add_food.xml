@@ -42,19 +42,48 @@
         android:layout_marginBottom="16dp" />
 
     <!-- Row: Calories & Carbs -->
+    <!-- Row 1: Calories & Weight -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="12dp">
 
-        <!-- Calories -->
+        <!-- Weight (g) -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weight (g)"
+                android:textColor="#111827"
+                android:textSize="14sp"
+                android:fontFamily="@font/open_sans_medium"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etGrams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Weight"
+                android:background="@drawable/edit_text_background"
+                android:fontFamily="@font/open_sans_light"
+                android:textSize="14sp"
+                android:padding="12dp" />
+        </LinearLayout>
+
+        <!-- Calories -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,13 +105,22 @@
                 android:textSize="14sp"
                 android:padding="12dp" />
         </LinearLayout>
+    </LinearLayout>
+
+    <!-- Row 2: Carbs, Fat & Protein -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="24dp">
 
         <!-- Carbs -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -104,14 +142,6 @@
                 android:textSize="14sp"
                 android:padding="12dp" />
         </LinearLayout>
-    </LinearLayout>
-
-    <!-- Row: Fat & Protein -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="24dp">
 
         <!-- Fat -->
         <LinearLayout
@@ -170,6 +200,7 @@
                 android:padding="12dp" />
         </LinearLayout>
     </LinearLayout>
+
 
     <!-- Buttons -->
     <LinearLayout
