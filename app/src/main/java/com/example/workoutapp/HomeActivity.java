@@ -53,7 +53,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
 
-
         TextView greetingText = findViewById(R.id.greetingText);
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);

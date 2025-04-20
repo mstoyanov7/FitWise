@@ -29,7 +29,6 @@ public class Workouts extends AppCompatActivity {
     private GridLayout exercisesGrid;
 
     Button btnCalisthenics, btnFitness, btnRunning, btnYoga;
-
     FrameLayout cardPullUps, cardDips, cardMuscleUps, cardPistolSquats;
     FrameLayout cardPullups1, cardPullups2, cardPullups3;
 
@@ -49,7 +48,6 @@ public class Workouts extends AppCompatActivity {
         String currentDate = sdf.format(new Date());
         dateTextView.setText(currentDate);
 
-
         noResultsText = findViewById(R.id.noResultsText);
         searchInput = findViewById(R.id.search_input);
         searchButton = findViewById(R.id.search_button);
@@ -68,7 +66,6 @@ public class Workouts extends AppCompatActivity {
         layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
 
         exercisesGrid.setLayoutTransition(layoutTransition);
-
 
         cardPullUps = findViewById(R.id.card_pull_ups);
         cardPullups1 = findViewById(R.id.card_pull_ups1);

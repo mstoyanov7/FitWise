@@ -165,7 +165,7 @@ public class RegisterForm extends AppCompatActivity {
                             if (user != null) {
                                 Intent dest = isNew
                                         ? new Intent(RegisterForm.this, WelcomeActivity.class)
-                                        : new Intent(RegisterForm.this, Workouts.class);
+                                        : new Intent(RegisterForm.this, HomeActivity.class);
 
                                 startActivity(dest);
                                 finish();
