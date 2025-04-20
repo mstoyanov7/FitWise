@@ -340,12 +340,12 @@
                         android:textSize="12sp" />
 
                     <RadioButton
-                        android:id="@+id/radioMeals"
+                        android:id="@+id/radioBMI"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:background="@color/tab_item_selector"
                         android:button="@android:color/transparent"
-                        android:drawableLeft="@drawable/fork"
+                        android:drawableLeft="@drawable/ic_bmi"
                         android:drawablePadding="8dp"
                         android:drawableTint="@color/tab_icon_color_selector"
                         android:fontFamily="@font/open_sans_semibold"

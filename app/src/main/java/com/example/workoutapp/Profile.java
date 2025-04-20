@@ -109,7 +109,7 @@ public class Profile extends AppCompatActivity {
                 selectedFragment = new WorkoutsFragment();
                 headerText = "Recent Workouts";
                 buttonViewAll.setVisibility(View.VISIBLE);
-            } else if (checkedId == R.id.radioMeals) {
+            } else if (checkedId == R.id.radioBMI) {
                 selectedFragment = new BMICalculatorFragment();
                 headerText = "BMI Calculator";
                 buttonViewAll.setVisibility(View.GONE); // optional

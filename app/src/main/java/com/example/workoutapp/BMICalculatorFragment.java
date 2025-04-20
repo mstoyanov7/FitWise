@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ import java.util.Locale;
 public class BMICalculatorFragment extends Fragment {
 
     private TextView bmiValue, bmiCategory, bmiFeedback;
-    private ProgressBar bmiScale;
+    private View bmiScale;
     private ImageView bmiMarker;
 
     @Nullable
@@ -37,27 +36,37 @@ public class BMICalculatorFragment extends Fragment {
         bmiScale = view.findViewById(R.id.bmiScale);
         bmiMarker = view.findViewById(R.id.bmiMarker);
 
-        // Hardcoded height (in meters)
-        double height = 1.75;
-
-        // Get weight from SharedPreferences or fallback
+        // Get height and weight from SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String weightString = prefs.getString("weight", null);
-        double weight = 75;
+        String heightString = prefs.getString("height", null);
 
-        if (weightString != null) {
-            try {
+        double weight = -1;
+        double height = -1;
+
+        try {
+            if (weightString != null) {
                 weight = Double.parseDouble(weightString);
-            } catch (NumberFormatException ignored) {}
+            }
+            if (heightString != null) {
+                height = Double.parseDouble(heightString);
+            }
+        } catch (NumberFormatException ignored) {}
+
+        if (height <= 0 || weight <= 0) {
+            bmiValue.setText("–");
+            bmiCategory.setText("Missing data");
+            bmiFeedback.setText("Please set your height and weight in profile.");
+            return view;
         }
 
-        // Display
         calculateAndDisplayBMI(height, weight);
-
         return view;
     }
 
     private void calculateAndDisplayBMI(double height, double weight) {
+        height = height / 100.0;
+
         double bmi = weight / (height * height);
         String category;
         String feedback;
@@ -85,23 +94,19 @@ public class BMICalculatorFragment extends Fragment {
             color = Color.parseColor("#D32F2F");
         }
 
-        // Set UI text
         bmiValue.setText(String.format(Locale.getDefault(), "%.1f", bmi));
         bmiCategory.setText(category);
         bmiCategory.setTextColor(color);
         bmiFeedback.setText(feedback);
 
-        // Configure progress bar
-        bmiScale.setMax(50);
-        int progress = (int) Math.min(50, Math.round(bmi));
-        bmiScale.setProgress(progress);
-
-        // Move the marker on the bar
+        // Animate marker along custom scale
         bmiScale.post(() -> {
-            int totalHeight = bmiScale.getHeight();
-            float percentage = (float) Math.min(1f, bmi / 50f);
-            int offsetY = (int) (totalHeight * (1 - percentage));
-            bmiMarker.setTranslationY(offsetY - (bmiMarker.getHeight() / 2f));
+            int scaleHeight = bmiScale.getHeight();
+            int markerHeight = bmiMarker.getHeight();
+            float percentage = Math.min(1f, (float) bmi / 50f);
+            int availableHeight = scaleHeight - bmiScale.getPaddingTop() - bmiScale.getPaddingBottom();
+            int offsetY = (int) (availableHeight * (1 - percentage));
+            bmiMarker.setTranslationY(bmiScale.getPaddingTop() + offsetY - (markerHeight / 2f));
         });
     }
 }
