@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -29,7 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView trainingPlanImage, menuImage;
     private BottomNavigationView bottomNavigationView;
 
-    private LocalDate currentSelectedDate = LocalDate.now();
+    private LocalDate currentSelectedDate;
 
     private void setupWeekCalendar() {
         RecyclerView weekRv = findViewById(R.id.weekRecyclerView);
@@ -52,6 +53,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
+        AndroidThreeTen.init(this);
+        currentSelectedDate = LocalDate.now();
 
         TextView greetingText = findViewById(R.id.greetingText);
 
