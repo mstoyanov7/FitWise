@@ -96,8 +96,16 @@ public class Profile extends AppCompatActivity {
 
         ImageButton buttonEdit = findViewById((R.id.buttonEditProfile));
         buttonEdit.setOnClickListener(v -> {
-            if (currentSide == 1) {
-                showEditDialog();
+            switch (currentSide) {
+                case 0: // frontSide
+                    showEditProfileDialog();
+                    break;
+                case 1: // backSide
+                    showEditGoalsDialog();
+                    break;
+//              case 2: // nutritionSide
+//                  showEditNutritionDialog();
+//                  break;
             }
         });
 
@@ -209,6 +217,7 @@ public class Profile extends AppCompatActivity {
     private void saveEditedValues(String activity, String goalWeight, String weeklyGoal) {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String sex = prefs.getString("sex", "Male");
+        String height = prefs.getString("height", "170");
         int age = Integer.parseInt(prefs.getString("age", "21"));
         double weight = Double.parseDouble(prefs.getString("weight", "160"));
 
@@ -222,6 +231,7 @@ public class Profile extends AppCompatActivity {
         textViewGoalBack.setText("Goal: " + goalWeight + " kg");
         textViewWeeklyChangeBack.setText("Weekly: " + weeklyGoal);
         textViewCaloriesBack.setText("Target calories: " + calories);
+        textViewMacros.setText("Macros: P: " + (int) protein + "g, C: " + (int) carbs + "g, F: " + (int) fats + "g");
 
         // Save to Firestore
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -233,7 +243,10 @@ public class Profile extends AppCompatActivity {
                             "calories", calories,
                             "protein", protein,
                             "carbs", carbs,
-                            "fats", fats)
+                            "fats", fats,
+                            "weight", String.valueOf(weight),
+                            "height", height,
+                            "sex", sex)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show();
                     });
@@ -251,7 +264,76 @@ public class Profile extends AppCompatActivity {
                 .apply();
     }
 
-    private void showEditDialog() {
+
+    private void showEditProfileDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_profile, null);
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(dialogView);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        EditText editHeight = dialogView.findViewById(R.id.editTextHeight);
+        EditText editWeight = dialogView.findViewById(R.id.editTextWeight);
+        RadioGroup radioGroupSex = dialogView.findViewById(R.id.radioGroupSex);
+        Button buttonSave = dialogView.findViewById(R.id.buttonSave);
+        Button buttonCancel = dialogView.findViewById(R.id.buttonCancel);
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String currentHeight = prefs.getString("height", "");
+        String currentWeight = prefs.getString("weight", "");
+        String currentSex = prefs.getString("sex", "Male");
+
+        editHeight.setText(currentHeight);
+        editWeight.setText(currentWeight);
+
+        if ("Male".equalsIgnoreCase(currentSex)) {
+            radioGroupSex.check(R.id.radioMale);
+        } else {
+            radioGroupSex.check(R.id.radioFemale);
+        }
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        buttonSave.setOnClickListener(v -> {
+            String newHeight = editHeight.getText().toString().trim();
+            String newWeight = editWeight.getText().toString().trim();
+            int selectedSexId = radioGroupSex.getCheckedRadioButtonId();
+
+            if (newHeight.isEmpty() || newWeight.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String selectedSex = selectedSexId == R.id.radioFemale ? "Female" : "Male";
+
+            // Save height, weight, and sex to SharedPreferences
+            prefs.edit()
+                    .putString("height", newHeight)
+                    .putString("weight", newWeight)
+                    .putString("sex", selectedSex)
+                    .apply();
+
+            // Update UI
+            textViewHeightBack.setText(newHeight + " cm");
+            textViewWeightBack.setText(newWeight + " kg");
+            textViewSexBack.setText(selectedSex);
+
+            // Get the latest values to pass to saveEditedValues()
+            String activity = prefs.getString("activity", "Not very active");
+            String goalWeight = prefs.getString("goal", newWeight); // fallback to new weight
+            String weeklyGoal = prefs.getString("weeklyChange", "Maintain my current");
+
+            // Now reuse the logic for calories + macros + Firestore update
+            saveEditedValues(activity, goalWeight, weeklyGoal);
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+
+    private void showEditGoalsDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_goals, null);
         editDialog = new Dialog(this);
         editDialog.setContentView(dialogView);
@@ -327,9 +409,9 @@ public class Profile extends AppCompatActivity {
         updateUserAfterSignIn(cachedName, cachedAvatar);
 
         if (cachedAge != null) textViewAgeBack.setText("Age: " + cachedAge);
-        if (cachedWeight != null) textViewWeightBack.setText("Weight: " + cachedWeight + " kg");
-        if (cachedHeight != null) textViewHeightBack.setText("Height: " + cachedHeight + " cm");
-        if (cachedSex != null) textViewSexBack.setText("Sex: " + cachedSex);
+        if (cachedWeight != null) textViewWeightBack.setText(cachedWeight + " kg");
+        if (cachedHeight != null) textViewHeightBack.setText(cachedHeight + " cm");
+        if (cachedSex != null) textViewSexBack.setText(cachedSex);
         if (cachedActivity != null) textViewActivityBack.setText("Activity: " + cachedActivity);
         if (cachedGoal != null) textViewGoalBack.setText("Goal: " + cachedGoal + " kg");
         if (cachedWeeklyChange != null) textViewWeeklyChangeBack.setText("Weekly: " + cachedWeeklyChange);
@@ -364,9 +446,9 @@ public class Profile extends AppCompatActivity {
                             updateUserAfterSignIn(freshName, freshAvatar);
 
                             if (freshAge != null) textViewAgeBack.setText("Age: " + freshAge);
-                            if (freshWeight != null) textViewWeightBack.setText("Weight: " + freshWeight + " kg");
-                            if (freshHeight != null) textViewHeightBack.setText("Height: " + freshHeight + " cm");
-                            if (freshSex != null) textViewSexBack.setText("Sex: " + freshSex);
+                            if (freshWeight != null) textViewWeightBack.setText(freshWeight + " kg");
+                            if (freshHeight != null) textViewHeightBack.setText(freshHeight + " cm");
+                            if (freshSex != null) textViewSexBack.setText(freshSex);
                             if (freshActivity != null) textViewActivityBack.setText("Activity: " + freshActivity);
                             if (freshGoal != null) textViewGoalBack.setText("Goal: " + freshGoal + " kg");
                             if (freshWeeklyChange != null) textViewWeeklyChangeBack.setText("Weekly: " + freshWeeklyChange);

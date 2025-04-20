@@ -127,43 +127,93 @@
                                     android:text="Marin Stoyanov"
                                     android:textSize="22sp"
                                     android:textStyle="bold"
+                                    android:layout_marginLeft="6dp"
                                     android:fontFamily="@font/open_sans_bold" />
 
-                                <LinearLayout
+                                <TableLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:stretchColumns="0,1,2,3"
                                     android:layout_marginTop="4dp"
-                                    android:orientation="horizontal">
+                                    android:paddingHorizontal="0dp">
 
-                                    <TextView
-                                        android:id="@+id/textViewHeight"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginEnd="8dp"
-                                        android:fontFamily="@font/open_sans_regular"
-                                        android:text="Height: 184"
-                                        android:textColor="#777777"
-                                        android:textSize="14sp" />
+                                    <TableRow>
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical"
+                                            android:gravity="center_horizontal">
 
-                                    <TextView
-                                        android:id="@+id/textViewWeight"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginEnd="8dp"
-                                        android:fontFamily="@font/open_sans_regular"
-                                        android:text="Weight: 80kg"
-                                        android:textColor="#777777"
-                                        android:textSize="14sp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Height:"
+                                                android:textStyle="bold"
+                                                android:textSize="14sp" />
 
-                                    <TextView
-                                        android:id="@+id/textViewSex"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/open_sans_regular"
-                                        android:text="Sex: Male"
-                                        android:textColor="#777777"
-                                        android:textSize="14sp" />
-                                </LinearLayout>
+                                            <TextView
+                                                android:id="@+id/textViewHeight"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="184 cm"
+                                                android:textSize="14sp" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1.2"
+                                            android:orientation="vertical"
+                                            android:gravity="center_horizontal">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Weight:"
+                                                android:textStyle="bold"
+                                                android:textSize="14sp" />
+
+                                            <TextView
+                                                android:id="@+id/textViewWeight"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="72 kg"
+                                                android:textSize="14sp" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="0.75"
+                                            android:orientation="vertical"
+                                            android:gravity="center_horizontal">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Sex:"
+                                                android:textStyle="bold"
+                                                android:textSize="14sp" />
+
+                                            <TextView
+                                                android:id="@+id/textViewSex"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Male"
+                                                android:textSize="14sp" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical"
+                                            android:gravity="center_horizontal"/>
+
+                                    </TableRow>
+                                </TableLayout>
+
                             </LinearLayout>
 
                             <LinearLayout
