@@ -1,20 +1,28 @@
 package com.example.workoutapp;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-
 import android.view.MenuItem;
 import android.view.MotionEvent;
-
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -32,11 +40,16 @@ import org.threeten.bp.format.TextStyle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class FoodDiaryActivity extends AppCompatActivity {
+
+    private static final String PREFS_NAME        = "FoodDiaryPrefs";
+    private static final String PREFS_KEY_ENTRIES = "food_entries";
 
     private static final int SCAN_REQUEST = 1001;
     private static final String[] MEAL_NAMES = {"Breakfast", "Lunch", "Dinner", "Snacks"};
@@ -46,8 +59,6 @@ public class FoodDiaryActivity extends AppCompatActivity {
     private LinearLayout diaryContainer;
 
     private LocalDate currentSelectedDate;
-
-    private BottomNavigationView bottomNavigationView;
     private final Map<LocalDate, List<List<FoodItem>>> foodLog = new HashMap<>();
 
     @Override
@@ -55,6 +66,11 @@ public class FoodDiaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AndroidThreeTen.init(this);
         currentSelectedDate = LocalDate.now();
+
+        // load persisted entries into memory
+        loadFoodLogFromPrefs();
+        FirebaseApp.initializeApp(this);
+        loadFoodLogFromFirebase();
 
         setContentView(R.layout.food_diary_activity);
         FullscreenUtil.hideSystemUI(this);
@@ -64,45 +80,7 @@ public class FoodDiaryActivity extends AppCompatActivity {
         bindNutritionViews();
         setupTextWatchers();
         setupWeekCalendar();
-
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_meals);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                Intent intent = null;
-
-                if (id == R.id.nav_meals) {
-                    intent = new Intent(FoodDiaryActivity.this, FoodDiaryActivity.class);
-                } else if (id == R.id.nav_workout) {
-                    intent = new Intent(FoodDiaryActivity.this, Workouts.class);
-                } else if (id == R.id.nav_home) {
-                    //intent = new Intent(Profile.this, HomeActivity.class);
-                } else if (id == R.id.nav_calendar) {
-                    intent = new Intent(FoodDiaryActivity.this, CalendarActivity.class);
-                } else if (id == R.id.nav_profile) {
-                    intent = new Intent(FoodDiaryActivity.this, Profile.class);
-                }
-
-                if (intent != null) {
-                    startActivity(intent);
-                    // Apply fade in to the incoming activity and fade out from the current one.
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    // Formats a float: no decimal if whole, one decimal otherwise
-    private String fmt(float v) {
-        if (v == (long) v) {
-            return String.valueOf((long) v);
-        } else {
-            return String.format(Locale.getDefault(), "%.1f", v);
-        }
+        setupBottomNav();
     }
 
     private void bindNutritionViews() {
@@ -148,26 +126,6 @@ public class FoodDiaryActivity extends AppCompatActivity {
         inputProtein .addTextChangedListener(stripZeroWatcher);
     }
 
-    private void updateRemaining() {
-        float cals  = parseFloat(inputCalories);
-        float carbs = parseFloat(inputCarbs);
-        float fat   = parseFloat(inputFat);
-        float prot  = parseFloat(inputProtein);
-
-        remainCalories.setText(fmt(cals));
-        remainCarbs   .setText(fmt(carbs));
-        remainFat     .setText(fmt(fat));
-        remainProtein .setText(fmt(prot));
-    }
-
-    private float parseFloat(EditText et) {
-        try {
-            return Float.parseFloat(et.getText().toString().trim());
-        } catch (NumberFormatException e) {
-            return 0f;
-        }
-    }
-
     private void setupWeekCalendar() {
         RecyclerView weekRv = findViewById(R.id.weekRecyclerView);
         weekRv.setLayoutManager(new GridLayoutManager(this, 7));
@@ -179,6 +137,30 @@ public class FoodDiaryActivity extends AppCompatActivity {
 
         adapter.selectDate(currentSelectedDate);
         onDaySelected(currentSelectedDate);
+    }
+
+    private void setupBottomNav() {
+        BottomNavigationView nav = findViewById(R.id.bottom_navigation);
+        nav.setSelectedItemId(R.id.nav_meals);
+        nav.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            Intent intent = null;
+            if (id == R.id.nav_meals) return true;
+            else if (id == R.id.nav_workout)  intent = new Intent(this, Workouts.class);
+            else if (id == R.id.nav_calendar) intent = new Intent(this, CalendarActivity.class);
+            else if (id == R.id.nav_profile)  intent = new Intent(this, Profile.class);
+            if (intent != null) {
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+            return true;
+        });
+    }
+
+    private String fmt(float v) {
+        return (v == (long) v)
+                ? String.valueOf((long) v)
+                : String.format(Locale.getDefault(), "%.1f", v);
     }
 
     private void onDaySelected(LocalDate date) {
@@ -195,15 +177,14 @@ public class FoodDiaryActivity extends AppCompatActivity {
     private void reloadMealsForDate(LocalDate date) {
         List<List<FoodItem>> meals = foodLog.get(date);
         if (meals == null) {
-            meals = new ArrayList<>(MEAL_NAMES.length);
-            for (String ignored : MEAL_NAMES) meals.add(new ArrayList<>());
+            meals = new ArrayList<>();
+            for (int i = 0; i < MEAL_NAMES.length; i++) meals.add(new ArrayList<>());
             foodLog.put(date, meals);
         }
 
         for (int i = 0; i < MEAL_NAMES.length; i++) {
             LinearLayout section = (LinearLayout) diaryContainer.getChildAt(i + 2);
-            TextView title = section.findViewById(R.id.tvMealTitle);
-            title.setText(MEAL_NAMES[i]);
+            ((TextView)section.findViewById(R.id.tvMealTitle)).setText(MEAL_NAMES[i]);
 
             MaterialButton btnAdd  = section.findViewById(R.id.btnAddFood);
             MaterialButton btnScan = section.findViewById(R.id.btnScanFood);
@@ -212,10 +193,7 @@ public class FoodDiaryActivity extends AppCompatActivity {
             itemsContainer.removeAllViews();
             final int mealIndex = i;
 
-            btnAdd.setOnClickListener(v ->
-                    showAddFoodDialog(itemsContainer, mealIndex)
-            );
-
+            btnAdd.setOnClickListener(v -> showAddFoodDialog(itemsContainer, mealIndex));
             btnScan.setOnClickListener(v -> {
                 Intent scanIntent = new Intent(this, BarcodeScannerActivity.class);
                 scanIntent.putExtra("selectedDate", date.toString());
@@ -224,24 +202,9 @@ public class FoodDiaryActivity extends AppCompatActivity {
             });
 
             for (FoodItem f : meals.get(i)) {
-                addFoodChip(f, itemsContainer);
+                addFoodChip(f, itemsContainer, i);
             }
         }
-    }
-  
-    private void setupBottomNav() {
-        BottomNavigationView nav = findViewById(R.id.bottom_navigation);
-        nav.setSelectedItemId(R.id.nav_meals);
-        nav.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_meals) return true;
-            Intent intent = null;
-            if (id == R.id.nav_workout)  intent = new Intent(this, Workouts.class);
-            else if (id == R.id.nav_profile) intent = new Intent(this, Profile.class);
-            else if (id == R.id.nav_calendar) intent = new Intent(this, CalendarActivity.class);
-            if (intent != null) startActivity(intent);
-            return true;
-        });
     }
 
     @Override
@@ -259,23 +222,17 @@ public class FoodDiaryActivity extends AppCompatActivity {
                     carb = safeFloat(carbStr),
                     fat  = safeFloat(fatStr),
                     prot = safeFloat(protStr);
-   
+
             List<List<FoodItem>> meals = foodLog.get(currentSelectedDate);
             FoodItem item = new FoodItem(name, cal, carb, fat, prot);
             meals.get(mealIndex).add(item);
+            saveFoodLogToPrefs();  // persist addition
+            addEntryToFirebase(item, mealIndex);
 
             LinearLayout section = (LinearLayout) diaryContainer.getChildAt(mealIndex + 2);
             LinearLayout itemsContainer = section.findViewById(R.id.foodItemsContainer);
-            addFoodChip(item, itemsContainer);
+            addFoodChip(item, itemsContainer, mealIndex);
             updateRemaining();
-        }
-    }
-
-    private float safeFloat(String s) {
-        try {
-            return Float.parseFloat(s);
-        } catch (Exception e) {
-            return 0f;
         }
     }
 
@@ -297,7 +254,6 @@ public class FoodDiaryActivity extends AppCompatActivity {
         dialog.show();
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
-
         btnAdd.setOnClickListener(v -> {
             String food = etFood.getText().toString().trim();
             if (food.isEmpty()) {
@@ -314,27 +270,117 @@ public class FoodDiaryActivity extends AppCompatActivity {
             List<List<FoodItem>> meals = foodLog.get(currentSelectedDate);
             FoodItem item = new FoodItem(food, cal, carb, fat, prot);
             meals.get(mealIndex).add(item);
+            saveFoodLogToPrefs();  // persist addition
+            addEntryToFirebase(item, mealIndex);
 
-            addFoodChip(item, container);
+
+            addFoodChip(item, container, mealIndex);
             updateRemaining();
             dialog.dismiss();
         });
     }
 
-    private void addFoodChip(FoodItem f, LinearLayout container) {
+    private void addFoodChip(FoodItem f, LinearLayout container, int mealIndex) {
         View chip = getLayoutInflater().inflate(R.layout.item_food_chip, container, false);
         TextView tvName    = chip.findViewById(R.id.tvChipName);
         TextView tvDetails = chip.findViewById(R.id.tvChipDetails);
+        ImageButton btnRemove = chip.findViewById(R.id.btnRemove);
 
         tvName.setText(f.name);
         tvDetails.setText(
-                fmt(f.calories) + "kcal  •  " +
-                        fmt(f.carbs)    + "g Calories  •  " +
+                fmt(f.calories) + " kcal  •  " +
+                        fmt(f.carbs)    + "g Carbs  •  " +
                         fmt(f.fat)      + "g Fat  •  " +
                         fmt(f.protein) + "g Protein"
         );
 
+        btnRemove.setOnClickListener(v -> {
+            chip.animate()
+                    .alpha(0f)
+                    .setDuration(400)
+                    .withEndAction(() -> {
+                        container.removeView(chip);
+                        List<List<FoodItem>> meals = foodLog.get(currentSelectedDate);
+                        if (meals != null) meals.get(mealIndex).remove(f);
+                        saveFoodLogToPrefs();  // persist removal
+                        removeEntryFromFirebase(f, mealIndex);
+                        updateRemaining();
+                    });
+        });
+
         container.addView(chip, 0);
+    }
+
+    private void updateRemaining() {
+        float cals  = parseFloat(inputCalories);
+        float carbs = parseFloat(inputCarbs);
+        float fat   = parseFloat(inputFat);
+        float prot  = parseFloat(inputProtein);
+
+        remainCalories.setText(fmt(cals));
+        remainCarbs   .setText(fmt(carbs));
+        remainFat     .setText(fmt(fat));
+        remainProtein .setText(fmt(prot));
+    }
+
+    private float parseFloat(EditText et) {
+        try {
+            return Float.parseFloat(et.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            return 0f;
+        }
+    }
+
+    private float safeFloat(String s) {
+        try {
+            return Float.parseFloat(s);
+        } catch (Exception e) {
+            return 0f;
+        }
+    }
+
+    private void loadFoodLogFromPrefs() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        Set<String> entries = prefs.getStringSet(PREFS_KEY_ENTRIES, new HashSet<>());
+        foodLog.clear();
+        for (String entry : entries) {
+            // entry format: date|mealIndex|name|cal|carbs|fat|protein
+            String[] p = entry.split("\\|", 7);
+            LocalDate date       = LocalDate.parse(p[0]);
+            int mealIndex        = Integer.parseInt(p[1]);
+            String name          = p[2];
+            float calories       = Float.parseFloat(p[3]);
+            float carbs          = Float.parseFloat(p[4]);
+            float fat            = Float.parseFloat(p[5]);
+            float protein        = Float.parseFloat(p[6]);
+            FoodItem item        = new FoodItem(name, calories, carbs, fat, protein);
+            List<List<FoodItem>> meals = foodLog.get(date);
+            if (meals == null) {
+                meals = new ArrayList<>();
+                for (int i = 0; i < MEAL_NAMES.length; i++) meals.add(new ArrayList<>());
+                foodLog.put(date, meals);
+            }
+            meals.get(mealIndex).add(item);
+        }
+    }
+
+    private void saveFoodLogToPrefs() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        Set<String> entries = new HashSet<>();
+        for (Map.Entry<LocalDate, List<List<FoodItem>>> e : foodLog.entrySet()) {
+            String dateStr = e.getKey().toString();
+            List<List<FoodItem>> meals = e.getValue();
+            for (int i = 0; i < meals.size(); i++) {
+                for (FoodItem f : meals.get(i)) {
+                    String rec = dateStr + "|" + i + "|" + f.name + "|"
+                            + f.calories + "|" + f.carbs + "|" + f.fat + "|" + f.protein;
+                    entries.add(rec);
+                }
+            }
+        }
+        prefs.edit()
+                .putStringSet(PREFS_KEY_ENTRIES, entries)
+                .apply();
     }
 
     @Override
@@ -347,19 +393,99 @@ public class FoodDiaryActivity extends AppCompatActivity {
                 if (!outRect.contains((int)ev.getRawX(), (int)ev.getRawY())) {
                     EditText et = (EditText) focus;
                     focus.clearFocus();
-                    if (et.getText().toString().trim().isEmpty()) {
-                        et.setText("0");
-                    }
+                    if (et.getText().toString().trim().isEmpty()) et.setText("0");
                     InputMethodManager imm = (InputMethodManager)
                             getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(focus.getWindowToken(), 0);
-                    }
+                    if (imm != null) imm.hideSoftInputFromWindow(focus.getWindowToken(), 0);
                 }
             }
         }
         return super.dispatchTouchEvent(ev);
     }
+
+    private void addEntryToFirebase(FoodItem item, int mealIndex) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        Map<String, Object> m = new HashMap<>();
+        m.put("date", currentSelectedDate.toString());
+        m.put("mealIndex", mealIndex);
+        m.put("name", item.name);
+        m.put("calories", item.calories);
+        m.put("carbs", item.carbs);
+        m.put("fat", item.fat);
+        m.put("protein", item.protein);
+
+        FirebaseFirestore.getInstance()
+                .collection("foodDiary")
+                .document(user.getUid())
+                .collection("entries")
+                .add(m)
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Could not save food to cloud: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    private void removeEntryFromFirebase(FoodItem f, int mealIndex) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        FirebaseFirestore.getInstance()
+                .collection("foodDiary")
+                .document(user.getUid())
+                .collection("entries")
+                .whereEqualTo("date", currentSelectedDate.toString())
+                .whereEqualTo("mealIndex", mealIndex)
+                .whereEqualTo("name", f.name)
+                .whereEqualTo("calories", f.calories)
+                .whereEqualTo("carbs", f.carbs)
+                .whereEqualTo("fat", f.fat)
+                .whereEqualTo("protein", f.protein)
+                .get()
+                .addOnSuccessListener(query -> {
+                    for (DocumentSnapshot doc : query.getDocuments())
+                        doc.getReference().delete();
+                });
+    }
+
+
+    private void loadFoodLogFromFirebase() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        FirebaseFirestore.getInstance()
+                .collection("foodDiary")
+                .document(user.getUid())
+                .collection("entries")
+                .get()
+                .addOnSuccessListener(query -> {
+                    foodLog.clear();
+                    for (QueryDocumentSnapshot doc : query) {
+                        String dateStr = doc.getString("date");
+                        int mealIndex = doc.getLong("mealIndex").intValue();
+                        String name    = doc.getString("name");
+                        float cal      = doc.getDouble("calories").floatValue();
+                        float carb     = doc.getDouble("carbs").floatValue();
+                        float fat      = doc.getDouble("fat").floatValue();
+                        float prot     = doc.getDouble("protein").floatValue();
+
+                        LocalDate date = LocalDate.parse(dateStr);
+                        FoodItem item  = new FoodItem(name, cal, carb, fat, prot);
+                        List<List<FoodItem>> meals = foodLog.computeIfAbsent(date, d -> {
+                            List<List<FoodItem>> m = new ArrayList<>();
+                            for (int i = 0; i < MEAL_NAMES.length; i++) m.add(new ArrayList<>());
+                            return m;
+                        });
+                        meals.get(mealIndex).add(item);
+                    }
+                    saveFoodLogToPrefs();
+                    reloadMealsForDate(currentSelectedDate);
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Failed to sync food diary: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
+    }
+
 
     static class FoodItem {
         final String name;
