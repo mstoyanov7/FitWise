@@ -126,7 +126,6 @@
                                     android:layout_height="wrap_content"
                                     android:text="Marin Stoyanov"
                                     android:textSize="22sp"
-                                    android:textStyle="bold"
                                     android:layout_marginLeft="6dp"
                                     android:fontFamily="@font/open_sans_bold" />
 
@@ -149,7 +148,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="Height:"
-                                                android:textStyle="bold"
+                                                android:fontFamily="@font/open_sans_semibold"
                                                 android:textSize="14sp" />
 
                                             <TextView
@@ -157,6 +156,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="184 cm"
+                                                android:fontFamily="@font/open_sans_regular"
                                                 android:textSize="14sp" />
                                         </LinearLayout>
 
@@ -171,7 +171,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="Weight:"
-                                                android:textStyle="bold"
+                                                android:fontFamily="@font/open_sans_semibold"
                                                 android:textSize="14sp" />
 
                                             <TextView
@@ -179,6 +179,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="72 kg"
+                                                android:fontFamily="@font/open_sans_regular"
                                                 android:textSize="14sp" />
                                         </LinearLayout>
 
@@ -193,7 +194,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="Sex:"
-                                                android:textStyle="bold"
+                                                android:fontFamily="@font/open_sans_semibold"
                                                 android:textSize="14sp" />
 
                                             <TextView
@@ -201,6 +202,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="Male"
+                                                android:fontFamily="@font/open_sans_regular"
                                                 android:textSize="14sp" />
                                         </LinearLayout>
 
