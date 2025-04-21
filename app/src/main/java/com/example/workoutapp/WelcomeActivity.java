@@ -65,14 +65,17 @@ public class WelcomeActivity extends AppCompatActivity {
 
         setupLoadingDialog();
 
-        ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                new String[]{"Not very active", "Lightly active", "Active", "Very active"});
-        activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(
+                this,
+                R.layout.spinner_item,
+                new String[]{"Not very active", "Lightly active", "Active", "Very active"}
+        );
+        activityAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         activityLevelSpinner.setAdapter(activityAdapter);
 
-        ArrayAdapter<String> goalAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
+        ArrayAdapter<String> goalAdapter = new ArrayAdapter<>(
+                this,
+                R.layout.spinner_item,
                 new String[]{
                         "Lose 1 kg per week",
                         "Lose 0.75 kg per week",
@@ -82,7 +85,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         "Gain 0.25 kg per week",
                         "Gain 0.5 kg per week"
                 });
-        goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        goalAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         weeklyGoalSpinner.setAdapter(goalAdapter);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

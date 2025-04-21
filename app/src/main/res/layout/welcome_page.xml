@@ -2,222 +2,221 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/dips"
-        android:contentDescription="Header Image" />
+    android:background="#FAFAFA"
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:background="@android:color/white">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/register_form_container"
-            android:padding="24dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Welcome!"
-                android:textSize="23sp"
-                android:textStyle="bold"
-                android:textColor="#076653"
-                android:layout_marginBottom="4dp"
-                android:layout_marginStart="15dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tell us more about you"
-                android:textSize="18sp"
-                android:textColor="#3D3A37"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="16dp" />
+            android:gravity="center"
+            android:padding="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/form_inner_box"
+                android:background="@drawable/edit_text_background"
                 android:padding="20dp"
-                android:layout_marginBottom="20dp"
-                android:gravity="center_horizontal">
+                android:layout_margin="30dp">
 
-                <!-- Avatar Upload -->
+                <!-- Avatar -->
                 <ImageView
                     android:id="@+id/avatarImageView"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/avatar3"
-                    android:background="@drawable/circle_white_shadow"
                     android:scaleType="centerCrop"
+                    android:background="@drawable/circle_white_shadow"
                     android:clipToOutline="true"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="20dp"
                     android:contentDescription="User Avatar" />
 
                 <!-- Weight -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    app:boxBackgroundMode="filled"
-                    app:boxBackgroundColor="#E6F2EA"
-                    app:boxCornerRadiusTopStart="6dp"
-                    app:boxCornerRadiusTopEnd="6dp"
-                    app:boxCornerRadiusBottomStart="6dp"
-                    app:boxCornerRadiusBottomEnd="6dp">
+                    android:text="Current Weight (kg)"
+                    android:textSize="13sp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="8dp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/weightEditText"
-                        android:hint="Current Weight (kg)"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/weightEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/edit_text_background"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:textSize="12sp"
+                    android:hint="e.g. 75.4"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:inputType="numberDecimal"
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Height -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    app:boxBackgroundMode="filled"
-                    app:boxBackgroundColor="#E6F2EA"
-                    app:boxCornerRadiusTopStart="6dp"
-                    app:boxCornerRadiusTopEnd="6dp"
-                    app:boxCornerRadiusBottomStart="6dp"
-                    app:boxCornerRadiusBottomEnd="6dp">
+                    android:text="Current Height (cm)"
+                    android:textSize="13sp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:layout_marginBottom="6dp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/heightEditText"
-                        android:hint="Current Height (cm)"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/heightEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/edit_text_background"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:textSize="12sp"
+                    android:hint="e.g. 180"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:inputType="numberDecimal"
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Age -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    app:boxBackgroundMode="filled"
-                    app:boxBackgroundColor="#E6F2EA"
-                    app:boxCornerRadiusTopStart="6dp"
-                    app:boxCornerRadiusTopEnd="6dp"
-                    app:boxCornerRadiusBottomStart="6dp"
-                    app:boxCornerRadiusBottomEnd="6dp">
+                    android:text="Age"
+                    android:textSize="13sp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:layout_marginBottom="6dp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ageEditText"
-                        android:hint="Age"
-                        android:inputType="number"
-                        android:padding="12dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/ageEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/edit_text_background"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:textSize="12sp"
+                    android:hint="e.g. 21"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:inputType="number"
+                    android:layout_marginBottom="12dp" />
 
-                <!-- Sex -->
+                <!-- Gender -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sex"
+                    android:textSize="13sp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:layout_marginBottom="-6dp" />
+
                 <RadioGroup
                     android:id="@+id/sexRadioGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="20dp">
+                    android:layout_gravity="start"
+                    android:layout_marginBottom="0dp">
 
                     <RadioButton
                         android:id="@+id/maleRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Male"
-                        android:textColor="@color/black" />
+                        android:textColor="#444"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/open_sans_medium" />
 
                     <RadioButton
                         android:id="@+id/femaleRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Female"
-                        android:textColor="@color/black"
-                        android:layout_marginStart="20dp" />
+                        android:textColor="#444"
+                        android:layout_marginStart="16dp"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/open_sans_medium" />
                 </RadioGroup>
 
-                <!-- Daily Activity Level -->
+                <!-- Activity Level -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="How do you describe yourself?"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="6dp"
-                    android:layout_gravity="start" />
+                    android:text="Activity Level"
+                    android:textSize="13sp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:layout_marginBottom="6dp" />
 
                 <Spinner
                     android:id="@+id/activityLevelSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Goal Weight -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:boxBackgroundMode="filled"
-                    app:boxBackgroundColor="#E6F2EA"
-                    app:boxCornerRadiusTopStart="6dp"
-                    app:boxCornerRadiusTopEnd="6dp"
-                    app:boxCornerRadiusBottomStart="6dp"
-                    app:boxCornerRadiusBottomEnd="6dp">
+                    android:text="Goal Weight (kg)"
+                    android:textSize="13sp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:layout_marginBottom="6dp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/goalWeightEditText"
-                        android:hint="Goal Weight (kg)"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/goalWeightEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/edit_text_background"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:textSize="12sp"
+                    android:hint="e.g. 76.3"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:inputType="numberDecimal"
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Weekly Goal -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Weekly Goal"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="6dp"
-                    android:layout_gravity="start" />
+                    android:textSize="13sp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/open_sans_semibold"
+                    android:layout_marginBottom="6dp" />
 
                 <Spinner
                     android:id="@+id/weeklyGoalSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp" />
+                    android:layout_marginBottom="20dp"/>
 
                 <!-- Submit Button -->
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/finishButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:text="Continue"
-                    android:layout_width="230dp"
-                    android:layout_height="53dp"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="23sp"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="#076653" />
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:textSize="15sp"
+                    app:cornerRadius="8dp"
+                    app:backgroundTint="#0BA284"
+                    android:textColor="#FFFFFF" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
