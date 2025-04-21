@@ -382,7 +382,7 @@
             <!-- Tabs -->
             <!-- Tabs Container as MaterialCardView -->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
@@ -391,7 +391,7 @@
                 android:backgroundTint="@android:color/white">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
@@ -404,22 +404,7 @@
                         android:padding="4dp"
                         android:gravity="center">
 
-                        <RadioButton
-                            android:id="@+id/radioWorkouts"
-                            android:layout_width="wrap_content"
-                            android:layout_height="35dp"
-                            android:background="@color/tab_item_selector"
-                            android:button="@android:color/transparent"
-                            android:checked="true"
-                            android:drawableLeft="@drawable/barbell"
-                            android:drawablePadding="8dp"
-                            android:drawableTint="@color/tab_icon_color_selector"
-                            android:fontFamily="@font/open_sans_semibold"
-                            android:gravity="center_vertical"
-                            android:padding="8dp"
-                            android:text="Workouts"
-                            android:textColor="@color/tab_text_color_selector"
-                            android:textSize="12sp" />
+
 
                         <RadioButton
                             android:id="@+id/radioBMI"
@@ -453,21 +438,7 @@
                             android:textColor="@color/tab_text_color_selector"
                             android:textSize="12sp" />
 
-                        <RadioButton
-                            android:id="@+id/radioProgress"
-                            android:layout_width="wrap_content"
-                            android:layout_height="35dp"
-                            android:background="@color/tab_item_selector"
-                            android:button="@android:color/transparent"
-                            android:drawableLeft="@drawable/chart"
-                            android:drawablePadding="8dp"
-                            android:drawableTint="@color/tab_icon_color_selector"
-                            android:fontFamily="@font/open_sans_semibold"
-                            android:gravity="center_vertical"
-                            android:padding="8dp"
-                            android:text="Progress"
-                            android:textColor="@color/tab_text_color_selector"
-                            android:textSize="12sp" />
+
                     </RadioGroup>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

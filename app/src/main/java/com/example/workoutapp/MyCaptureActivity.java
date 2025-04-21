@@ -16,8 +16,8 @@ public class MyCaptureActivity extends CaptureActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.capture_layout);
         FullscreenUtil.hideSystemUI(this);
+        setContentView(R.layout.capture_layout);
 
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
         capture = new CaptureManager(this, barcodeScannerView);

@@ -28,8 +28,8 @@ public class SignInPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_in);
         FullscreenUtil.hideSystemUI(this);
+        setContentView(R.layout.sign_in);
 
         mAuth = FirebaseAuth.getInstance();
 

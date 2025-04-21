@@ -39,8 +39,9 @@ public class RegisterForm extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_form);
         FullscreenUtil.hideSystemUI(this);
+        setContentView(R.layout.register_form);
+
 
         mAuth = FirebaseAuth.getInstance();
 
