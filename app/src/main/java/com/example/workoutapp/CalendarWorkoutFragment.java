@@ -19,11 +19,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -83,6 +85,8 @@ public class CalendarWorkoutFragment extends Fragment {
         List<CalendarActivity.CalendarWorkout> workouts = dataMap.getOrDefault(selectedDate, new ArrayList<>());
 
         LayoutInflater inflater = LayoutInflater.from(requireContext());
+        int completedCount = 0;
+
         for (CalendarActivity.CalendarWorkout w : new ArrayList<>(workouts)) {
             View item = inflater.inflate(R.layout.calendar_item_workout, exerciseContainer, false);
 
@@ -98,9 +102,9 @@ public class CalendarWorkoutFragment extends Fragment {
             tvTitle.setText(w.name);
             tvTime.setText(w.time);
 
-            // set initial status color + label
             boolean isCompleted = w.status.equalsIgnoreCase("Completed");
             if (isCompleted) {
+                completedCount++; // ✅ Count it
                 btnComplete.setText("Undo");
                 btnComplete.setBackgroundColor(Color.parseColor("#F4F4F5"));
                 btnComplete.setTextColor(Color.parseColor("#898989"));
@@ -114,29 +118,76 @@ public class CalendarWorkoutFragment extends Fragment {
                 tvStatus.setTextColor(Color.parseColor("#6B7280"));
             }
 
-            // toggle complete/undo
             btnComplete.setOnClickListener(v -> {
                 boolean nowCompleted = btnComplete.getText().toString().equalsIgnoreCase("Complete");
-                if (nowCompleted) {
-                    // Mark as completed
-                    w.status = "Completed";
-                    btnComplete.setText("Undo");
-                    btnComplete.setBackgroundColor(Color.parseColor("#F4F4F5"));
-                    btnComplete.setTextColor(Color.parseColor("#898989"));
-                    tvStatus.setText(" • Completed");
-                    tvStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary));
-                } else {
-                    // Undo completion
-                    w.status = "Upcoming";
-                    btnComplete.setText("Complete");
-                    btnComplete.setBackgroundColor(Color.parseColor("#0BA284"));
-                    btnComplete.setTextColor(Color.WHITE);
-                    tvStatus.setText(" • Upcoming");
-                    tvStatus.setTextColor(Color.parseColor("#6B7280"));
+                String newStatus = nowCompleted ? "Completed" : "Upcoming";
+                String previousStatus = w.status;
+                w.status = newStatus;
+
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    String uid = user.getUid();
+                    String date = selectedDate.toString();
+
+
+                    db.collection("workouts").document(uid)
+                            .collection("entries")
+                            .whereEqualTo("name", w.name)
+                            .whereEqualTo("time", w.time)
+                            .get()
+                            .addOnSuccessListener(snapshot -> {
+                                for (var doc : snapshot.getDocuments()) {
+                                    doc.getReference().update("status", newStatus);
+                                }
+
+                                populateWorkouts(); // Refresh UI
+
+                                // 🔄 Update total count
+                                DocumentReference totalRef = db.collection("workouts")
+                                        .document(uid)
+                                        .collection("entries")
+                                        .document("completedWorkouts");
+
+                                totalRef.get().addOnSuccessListener(doc -> {
+                                    Long totalCount = doc.getLong("count");
+                                    if (totalCount == null) totalCount = 0L;
+
+                                    long newTotal = totalCount;
+                                    if (nowCompleted && !previousStatus.equalsIgnoreCase("Completed")) {
+                                        newTotal++;
+                                    } else if (!nowCompleted && previousStatus.equalsIgnoreCase("Completed")) {
+                                        newTotal = Math.max(0, newTotal - 1);
+                                    }
+
+                                    totalRef.set(Collections.singletonMap("count", newTotal));
+                                });
+
+                                // 📆 Update per-day count
+                                DocumentReference dayRef = db.collection("workouts")
+                                        .document(uid)
+                                        .collection("entries")
+                                        .document("completedWorkouts")
+                                        .collection("byDate")
+                                        .document(date);
+
+                                dayRef.get().addOnSuccessListener(doc -> {
+                                    Long current = doc.getLong("count");
+                                    if (current == null) current = 0L;
+
+                                    long newCount = current;
+                                    if (nowCompleted && !previousStatus.equalsIgnoreCase("Completed")) {
+                                        newCount++;
+                                    } else if (!nowCompleted && previousStatus.equalsIgnoreCase("Completed")) {
+                                        newCount = Math.max(0, newCount - 1);
+                                    }
+
+                                    dayRef.set(Collections.singletonMap("count", newCount));
+                                });
+                            });
                 }
             });
 
-            // handle dropdown expand/collapse
             imgDropdown.setOnClickListener(v -> {
                 if (expandableLayout.getVisibility() == View.VISIBLE) {
                     expandableLayout.setVisibility(View.GONE);
@@ -148,7 +199,6 @@ public class CalendarWorkoutFragment extends Fragment {
                 }
             });
 
-            // populate exercises
             exerciseList.removeAllViews();
             for (String ex : w.exerciseList) {
                 TextView chip = new TextView(requireContext());
@@ -167,17 +217,53 @@ public class CalendarWorkoutFragment extends Fragment {
             btnDelete.setOnClickListener(v -> {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    FirebaseFirestore.getInstance()
-                            .collection("workouts")
-                            .document(user.getUid())
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    String uid = user.getUid();
+                    String today = LocalDate.now().toString();
+
+                    db.collection("workouts")
+                            .document(uid)
                             .collection("entries")
                             .whereEqualTo("name", w.name)
                             .whereEqualTo("time", w.time)
                             .get()
                             .addOnSuccessListener(querySnapshot -> {
+                                boolean wasCompleted = w.status.equalsIgnoreCase("Completed");
+
                                 for (var doc : querySnapshot.getDocuments()) {
                                     doc.getReference().delete();
                                 }
+
+                                // 🔽 Update completed count if it was marked as Completed
+                                if (wasCompleted) {
+                                    DocumentReference totalRef = db.collection("workouts")
+                                            .document(uid)
+                                            .collection("entries")
+                                            .document("completedWorkouts");
+
+                                    totalRef.get().addOnSuccessListener(doc -> {
+                                        Long count = doc.getLong("count");
+                                        if (count == null) count = 0L;
+                                        long newCount = Math.max(0, count - 1);
+                                        totalRef.set(Collections.singletonMap("count", newCount));
+                                    });
+
+                                    // 📆 Also update per-day count
+                                    DocumentReference dayRef = db.collection("workouts")
+                                            .document(uid)
+                                            .collection("entries")
+                                            .document("completedWorkouts")
+                                            .collection("byDate")
+                                            .document(today);
+
+                                    dayRef.get().addOnSuccessListener(doc -> {
+                                        Long count = doc.getLong("count");
+                                        if (count == null) count = 0L;
+                                        long newCount = Math.max(0, count - 1);
+                                        dayRef.set(Collections.singletonMap("count", newCount));
+                                    });
+                                }
+
                                 workouts.remove(w);
                                 dataMap.put(selectedDate, workouts);
                                 populateWorkouts();
@@ -192,10 +278,12 @@ public class CalendarWorkoutFragment extends Fragment {
             exerciseContainer.addView(item);
         }
 
-        int count = workouts.size();
-        String label = count == 0 ? "No Workouts" : count + (count > 1 ? " Workouts" : " Workout");
+        int total = workouts.size();
+        String label = total == 0 ? "No Workouts" :
+                completedCount + "/" + total + " Completed";
         if (exerciseCountLabel != null) {
             exerciseCountLabel.setText(label);
         }
     }
+
 }

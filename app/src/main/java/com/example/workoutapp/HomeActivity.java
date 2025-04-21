@@ -62,6 +62,7 @@ public class HomeActivity extends AppCompatActivity {
 
         setupWeekCalendar();
         loadCaloriesForSelectedDate();
+        loadCompletedWorkoutsForDate(currentSelectedDate);
 
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -130,6 +131,28 @@ public class HomeActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    private void loadCompletedWorkoutsForDate(LocalDate date) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        String uid = user.getUid();
+        String dateStr = date.toString(); // yyyy-MM-dd
+
+        FirebaseFirestore.getInstance()
+                .collection("workouts")
+                .document(uid)
+                .collection("entries")
+                .document("completedWorkouts")
+                .collection("byDate")
+                .document(dateStr)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    Long count = doc.getLong("count");
+                    finishedWorkouts.setText(String.valueOf(count != null ? count : 0));
+                })
+                .addOnFailureListener(e -> finishedWorkouts.setText("0"));
     }
 
     private void setupWeekCalendar() {
