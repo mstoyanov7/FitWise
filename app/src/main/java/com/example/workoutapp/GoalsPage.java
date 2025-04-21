@@ -123,12 +123,7 @@ public class GoalsPage extends AppCompatActivity {
         });
 
         ImageButton buttonBack = findViewById(R.id.btnBack);
-        buttonBack.setOnClickListener(v -> {
-            Intent intent = new Intent(GoalsPage.this, Profile.class);
-            intent.putExtra("selectedTab", "goals");
-            startActivity(intent);
-            finish();
-        });
+        buttonBack.setOnClickListener(v -> onBackPressed());
 
         ImageButton btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(v -> showAddGoalDialog());

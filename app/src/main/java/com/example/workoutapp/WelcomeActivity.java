@@ -49,9 +49,8 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
-
-        setContentView(R.layout.welcome_page);
         FullscreenUtil.hideSystemUI(this);
+        setContentView(R.layout.welcome_page);
 
         avatarImageView = findViewById(R.id.avatarImageView);
         weightEditText = findViewById(R.id.weightEditText);

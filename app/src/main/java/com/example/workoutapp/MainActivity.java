@@ -22,22 +22,19 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
 
-        // ✅ Check Remember Me + Firebase Auth
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInAccount googleUser = GoogleSignIn.getLastSignedInAccount(this);
         SharedPreferences prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         boolean rememberMe = prefs.getBoolean("remember_me", false);
 
         if ((firebaseUser != null || googleUser != null) && rememberMe) {
-            // 🔁 Auto-redirect to HomeActivity
             startActivity(new Intent(this, HomeActivity.class));
             finish();
             return;
         }
 
-        // Show regular start screen
-        setContentView(R.layout.main_activity);
         FullscreenUtil.hideSystemUI(this);
+        setContentView(R.layout.main_activity);
 
         Button signInButton = findViewById(R.id.signInButton);
         TextView signUpText = findViewById(R.id.signUpText);

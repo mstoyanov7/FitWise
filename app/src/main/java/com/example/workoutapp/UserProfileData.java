@@ -7,7 +7,7 @@ public class UserProfileData {
     public String sex;
     public String avatarUri;
 
-    public UserProfileData() {} // Firestore needs empty constructor
+    public UserProfileData() {}
 
     public UserProfileData(String name, String age, String weight, String sex, String avatarUri) {
         this.name = name;

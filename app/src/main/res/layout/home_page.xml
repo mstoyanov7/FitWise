@@ -197,7 +197,7 @@
                                     app:tint="@color/colorPrimary" />
 
                                 <TextView
-                                    android:id="@+id/caloriesBurnt"
+                                    android:id="@+id/caloriesConsumed"
                                     android:text="2,354"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -209,9 +209,10 @@
                             </LinearLayout>
 
                             <TextView
+
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Calories burnt"
+                                android:text="Calories consumed"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/open_sans_regular"
                                 android:textColor="#888888" />

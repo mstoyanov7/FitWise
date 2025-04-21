@@ -67,14 +67,13 @@ public class FoodDiaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AndroidThreeTen.init(this);
         currentSelectedDate = LocalDate.now();
+        FullscreenUtil.hideSystemUI(this);
 
         loadFoodLogFromPrefs();
         FirebaseApp.initializeApp(this);
         loadFoodLogFromFirebase();
 
         setContentView(R.layout.food_diary_activity);
-        FullscreenUtil.hideSystemUI(this);
-
         diaryContainer = findViewById(R.id.diaryContainer);
 
         bindNutritionViews();

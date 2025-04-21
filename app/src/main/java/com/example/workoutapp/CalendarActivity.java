@@ -44,10 +44,10 @@ public class CalendarActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidThreeTen.init(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.calendar_page);
         FullscreenUtil.hideSystemUI(this);
+        setContentView(R.layout.calendar_page);
+        AndroidThreeTen.init(this);
 
         FirebaseApp.initializeApp(this);
 

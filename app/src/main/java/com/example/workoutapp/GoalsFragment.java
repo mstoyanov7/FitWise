@@ -2,6 +2,8 @@ package com.example.workoutapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -32,7 +35,8 @@ public class GoalsFragment extends Fragment {
     private SharedPreferences prefs;
     private static final String PREFS_NAME = "GoalPrefs";
     private static final String PREFS_KEY = "goals";
-    private long lastUpdateTime = 0;
+    private FirebaseUser currentUser;
+    private FirebaseFirestore db;
 
     static class Goal {
         String title, startDate, dueDate;
@@ -58,13 +62,7 @@ public class GoalsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        long lastCachedUpdate = prefs.getLong("lastUpdate", 0);
-
-        if (lastUpdateTime != lastCachedUpdate) {
-            lastUpdateTime = lastCachedUpdate;
-            loadGoalsFromPrefs();
-        }
+        loadGoalsFromFirebase();
     }
 
     @Nullable
@@ -76,19 +74,18 @@ public class GoalsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_goals, container, false);
         listView = view.findViewById(R.id.lvRecentGoals);
         prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
 
-        loadGoalsFromPrefs();
+        loadGoalsFromFirebase();
 
         return view;
     }
 
     private void deleteGoalFromFirebase(Goal goal) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) return;
-
-        FirebaseFirestore.getInstance()
-                .collection("goals")
-                .document(user.getUid())
+        if (currentUser == null) return;
+        db.collection("goals")
+                .document(currentUser.getUid())
                 .collection("entries")
                 .whereEqualTo("title", goal.title)
                 .whereEqualTo("startDate", goal.startDate)
@@ -102,19 +99,16 @@ public class GoalsFragment extends Fragment {
     }
 
     private void updateGoalStatusInFirebase(Goal goal) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) return;
-
-        FirebaseFirestore.getInstance()
-                .collection("goals")
-                .document(user.getUid())
+        if (currentUser == null) return;
+        db.collection("goals")
+                .document(currentUser.getUid())
                 .collection("entries")
                 .whereEqualTo("title", goal.title)
                 .whereEqualTo("startDate", goal.startDate)
                 .whereEqualTo("dueDate", goal.dueDate)
                 .get()
                 .addOnSuccessListener(query -> {
-                    for (QueryDocumentSnapshot doc : query) {
+                    for (DocumentSnapshot doc : query.getDocuments()) {
                         doc.getReference().update("isCompleted", goal.isCompleted);
                     }
                 });
@@ -128,49 +122,56 @@ public class GoalsFragment extends Fragment {
         prefs.edit().putStringSet(PREFS_KEY, entries).apply();
     }
 
-    private void loadGoalsFromPrefs() {
-        SharedPreferences prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        Set<String> entries = prefs.getStringSet("goals", new HashSet<>());
-        recentGoals.clear();
-        for (String s : entries) {
-            String[] p = s.split("\\|");
-            if (p.length == 4) {
-                String title = p[0];
-                String start = p[1];
-                String due = p[2];
-                boolean isCompleted = Boolean.parseBoolean(p[3]);
-                recentGoals.add(new Goal(title, start, due, isCompleted));
-            }
-        }
+    private void loadGoalsFromFirebase() {
+        if (currentUser == null) return;
+        db.collection("goals")
+                .document(currentUser.getUid())
+                .collection("entries")
+                .get()
+                .addOnSuccessListener(query -> {
+                    recentGoals.clear();
+                    for (QueryDocumentSnapshot doc : query) {
+                        String title = doc.getString("title");
+                        String start = doc.getString("startDate");
+                        String due = doc.getString("dueDate");
+                        boolean isCompleted = Boolean.TRUE.equals(doc.getBoolean("isCompleted"));
+                        recentGoals.add(new Goal(title, start, due, isCompleted));
+                    }
 
-        // Sort by start date (newest to oldest)
-        Collections.sort(recentGoals, (g1, g2) -> {
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                Date d1 = sdf.parse(g1.startDate);
-                Date d2 = sdf.parse(g2.startDate);
-                return d2.compareTo(d1);
-            } catch (ParseException e) {
-                return 0;
-            }
-        });
+                    // Sort by start date (newest first)
+                    Collections.sort(recentGoals, (g1, g2) -> {
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                            Date d1 = sdf.parse(g1.startDate);
+                            Date d2 = sdf.parse(g2.startDate);
+                            return d2.compareTo(d1);
+                        } catch (ParseException e) {
+                            return 0;
+                        }
+                    });
 
-        // Limit to recent 4
-        if (recentGoals.size() > 4) recentGoals.subList(4, recentGoals.size()).clear();
+                    // Limit to 4
+                    if (recentGoals.size() > 4) {
+                        recentGoals.subList(4, recentGoals.size()).clear();
+                    }
 
-        // Show 4 recent goals dynamically
+                    saveGoalsToPrefs();
+                    displayGoals();
+                });
+    }
+
+    private void displayGoals() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         listView.removeAllViews();
 
         for (Goal goal : recentGoals) {
             View itemView = inflater.inflate(R.layout.goal_item, listView, false);
 
-            // Reduce spacing between items
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
-            params.setMargins(0, 0, 0, 8); // small bottom gap
+            params.setMargins(0, 0, 0, 8);
             itemView.setLayoutParams(params);
 
             TextView tvTitle = itemView.findViewById(R.id.tvGoalTitle);
@@ -182,25 +183,24 @@ public class GoalsFragment extends Fragment {
             tvDate.setText(goal.getFormattedDate());
 
             btnAction.setText(goal.isCompleted ? "Undo" : "Complete");
-            btnAction.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor(goal.isCompleted ? "#F4F4F5" : "#0BA284")));
-            btnAction.setTextColor(android.graphics.Color.parseColor(goal.isCompleted ? "#6B7280" : "#FFFFFF"));
+            btnAction.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(goal.isCompleted ? "#F4F4F5" : "#0BA284")));
+            btnAction.setTextColor(Color.parseColor(goal.isCompleted ? "#6B7280" : "#FFFFFF"));
 
             btnAction.setOnClickListener(v -> {
                 goal.isCompleted = !goal.isCompleted;
                 updateGoalStatusInFirebase(goal);
                 saveGoalsToPrefs();
-                loadGoalsFromPrefs();
+                displayGoals();
             });
 
             btnRemove.setOnClickListener(v -> {
                 deleteGoalFromFirebase(goal);
                 recentGoals.remove(goal);
                 saveGoalsToPrefs();
-                loadGoalsFromPrefs();
+                displayGoals();
             });
 
             listView.addView(itemView);
         }
     }
 }
-

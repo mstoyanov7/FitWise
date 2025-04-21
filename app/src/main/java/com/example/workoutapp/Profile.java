@@ -77,9 +77,8 @@ public class Profile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.profile_page);
-
         FullscreenUtil.hideSystemUI(this);
+        setContentView(R.layout.profile_page);
 
         radioGroupTabs = findViewById(R.id.radioGroupTabs);
         textViewHeader = findViewById(R.id.textViewHeader);
@@ -132,22 +131,14 @@ public class Profile extends AppCompatActivity {
             Fragment selectedFragment = null;
             String headerText = "";
 
-            if (checkedId == R.id.radioWorkouts) {
-                selectedFragment = new WorkoutsFragment();
-                headerText = "Recent Workouts";
-                buttonViewAll.setVisibility(View.VISIBLE);
-            } else if (checkedId == R.id.radioBMI) {
+            if (checkedId == R.id.radioBMI) {
                 selectedFragment = new BMICalculatorFragment();
                 headerText = "BMI Calculator";
-                buttonViewAll.setVisibility(View.GONE); // optional
+                buttonViewAll.setVisibility(View.GONE);
             } else if (checkedId == R.id.radioGoals) {
                 selectedFragment = new GoalsFragment();
                 headerText = "Recent Goals";
                 buttonViewAll.setVisibility(View.VISIBLE);
-            } else if (checkedId == R.id.radioProgress) {
-                selectedFragment = new ProgressFragment();
-                headerText = "Progress";
-                buttonViewAll.setVisibility(View.GONE);
             }
 
             textViewHeader.setText(headerText);
@@ -160,10 +151,6 @@ public class Profile extends AppCompatActivity {
             String currentTab = textViewHeader.getText().toString();
             if (currentTab.contains("Goals")) {
                 startActivity(new Intent(Profile.this, GoalsPage.class));
-            } else if (currentTab.contains("Meals")) {
-                Toast.makeText(this, "Open MealsPageActivity (not implemented)", Toast.LENGTH_SHORT).show();
-            } else if (currentTab.contains("Workouts")) {
-                Toast.makeText(this, "Open WorkoutsPageActivity (not implemented)", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -200,7 +187,7 @@ public class Profile extends AppCompatActivity {
         if ("goals".equalsIgnoreCase(selectedTab)) {
             radioGroupTabs.check(R.id.radioGoals);
         } else {
-            radioGroupTabs.check(R.id.radioWorkouts);
+            radioGroupTabs.check(R.id.radioBMI);
         }
     }
 
@@ -800,8 +787,8 @@ public class Profile extends AppCompatActivity {
         boolean avatarLoaded = prefs.getBoolean(PREF_IMAGE_LOADED, false);
 
         RequestOptions options = new RequestOptions()
-                .placeholder(avatarLoaded ? R.drawable.avatar : R.drawable.loading_avatar)
-                .error(R.drawable.avatar);
+                .placeholder(avatarLoaded ? R.drawable.avatar3 : R.drawable.loading_avatar)
+                .error(R.drawable.avatar3);
 
         if (photoUrl != null && !photoUrl.isEmpty()) {
             Glide.with(this)
@@ -812,7 +799,7 @@ public class Profile extends AppCompatActivity {
                     .into(imageViewPhoto);
             if (!avatarLoaded) prefs.edit().putBoolean(PREF_IMAGE_LOADED, true).apply();
         } else {
-            imageViewPhoto.setImageResource(R.drawable.avatar);
+            imageViewPhoto.setImageResource(R.drawable.avatar3);
         }
     }
 

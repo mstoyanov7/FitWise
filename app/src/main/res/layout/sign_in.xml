@@ -6,18 +6,30 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/login_banner"
-        android:contentDescription="@string/background_image" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="8dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/login_banner"
+                    android:contentDescription="@string/background_image" />
+            </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:orientation="vertical"
@@ -204,8 +216,8 @@
                     android:scaleType="centerInside"
                     android:layout_gravity="center_horizontal"
                     android:contentDescription="@string/google_description" />
+                </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

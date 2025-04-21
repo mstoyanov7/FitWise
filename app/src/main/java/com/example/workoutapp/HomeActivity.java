@@ -29,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView dateTextView;
     private TextView selectedDateTextView;
-    private TextView finishedWorkouts, caloriesBurnt, minutesSpent;
+    private TextView finishedWorkouts, caloriesConsumed, minutesSpent;
     private ImageView trainingPlanImage, menuImage;
     private BottomNavigationView bottomNavigationView;
     private LocalDate currentSelectedDate;
@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         dateTextView = findViewById(R.id.dateTextView);
         selectedDateTextView = findViewById(R.id.dateTextView);
         finishedWorkouts = findViewById(R.id.finishedWorkouts);
-        caloriesBurnt = findViewById(R.id.caloriesBurnt);
+        caloriesConsumed = findViewById(R.id.caloriesConsumed);
         minutesSpent = findViewById(R.id.minutesSpent);
         trainingPlanImage = findViewById(R.id.trainingPlanImage);
         menuImage = findViewById(R.id.menuImage);
@@ -57,14 +57,12 @@ public class HomeActivity extends AppCompatActivity {
 
         FullscreenUtil.hideSystemUI(this);
 
-        // Set today's date
         String currentDate = DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault()).format(LocalDate.now());
         dateTextView.setText(currentDate);
 
-        // Setup calendar
         setupWeekCalendar();
+        loadCaloriesForSelectedDate();
 
-        // Time-based greeting string (used in Firestore listener below)
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         String timeGreeting;
@@ -102,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
                 Long minutes = snapshot.getLong("minutesSpent");
 
                 if (workouts != null) finishedWorkouts.setText(String.valueOf(workouts));
-                if (calories != null) caloriesBurnt.setText(String.format(Locale.getDefault(), "%,d", calories));
+                if (calories != null) caloriesConsumed.setText(String.format(Locale.getDefault(), "%,d", calories));
                 if (minutes != null) minutesSpent.setText(String.valueOf(minutes));
             });
         }
@@ -144,10 +142,38 @@ public class HomeActivity extends AppCompatActivity {
             currentSelectedDate = date;
             String formatted = DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault()).format(date);
             dateTextView.setText(formatted);
+            loadCaloriesForSelectedDate();
         });
 
         weekRv.setAdapter(adapter);
         adapter.selectDate(currentSelectedDate);
+    }
+
+    private void loadCaloriesForSelectedDate() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null || currentSelectedDate == null) return;
+
+        String selectedDate = currentSelectedDate.toString(); // Format: yyyy-MM-dd
+
+        FirebaseFirestore.getInstance()
+                .collection("foodDiary")
+                .document(user.getUid())
+                .collection("entries")
+                .whereEqualTo("date", selectedDate)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    int totalCals = 0;
+                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
+                        Number ncal = doc.getDouble("calories") != null
+                                ? doc.getDouble("calories")
+                                : doc.getLong("calories");
+                        if (ncal != null) totalCals += ncal.intValue();
+                    }
+                    caloriesConsumed.setText(String.format(Locale.getDefault(), "%,d", totalCals));
+                })
+                .addOnFailureListener(e ->
+                        caloriesConsumed.setText("N/A")
+                );
     }
 
     @Override

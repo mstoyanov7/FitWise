@@ -6,10 +6,7 @@
     android:background="@drawable/main_activity_page_background"
     tools:context=".MainActivity">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000" />
+
 
     <LinearLayout
         android:id="@+id/contentContainer"
@@ -20,14 +17,6 @@
         android:padding="24dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp">
-
-        <ImageView
-            android:contentDescription="@string/logo_desc"
-            android:layout_width="200dp"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/white_logo" />
 
         <TextView
             android:layout_width="match_parent"
