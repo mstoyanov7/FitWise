@@ -33,21 +33,7 @@ import java.util.List;
 public class GoalsPage extends AppCompatActivity {
 
     // Basic data model
-    class Goal {
-        String title, date;
-        boolean isCompleted;
 
-        Goal(String title, String date, boolean isCompleted) {
-            this.title = title;
-            this.date = date;
-            this.isCompleted = isCompleted;
-        }
-
-        @Override
-        public String toString() {
-            return title; // For filtering
-        }
-    }
 
     private BottomNavigationView bottomNavigationView;
     private ListView lvGoals;
@@ -210,4 +196,19 @@ public class GoalsPage extends AppCompatActivity {
         });
     }
 
+    class Goal {
+        String title, date;
+        boolean isCompleted;
+
+        Goal(String title, String date, boolean isCompleted) {
+            this.title = title;
+            this.date = date;
+            this.isCompleted = isCompleted;
+        }
+
+        @Override
+        public String toString() {
+            return title; // For filtering
+        }
+    }
 }
