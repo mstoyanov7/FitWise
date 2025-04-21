@@ -13,14 +13,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.*;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Calendar;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -29,26 +32,10 @@ public class HomeActivity extends AppCompatActivity {
     private TextView finishedWorkouts, caloriesBurnt, minutesSpent;
     private ImageView trainingPlanImage, menuImage;
     private BottomNavigationView bottomNavigationView;
-
     private LocalDate currentSelectedDate;
+    private TextView greetingText;
 
-    private void setupWeekCalendar() {
-        RecyclerView weekRv = findViewById(R.id.weekRecyclerView);
-        weekRv.setLayoutManager(new GridLayoutManager(this, 7));
-        weekRv.setHasFixedSize(true);
-        FullscreenUtil.hideSystemUI(this);
-
-        List<LocalDate> week = DateUtils.currentWeek(currentSelectedDate);
-
-        WeekAdapter adapter = new WeekAdapter(week, date -> {
-            currentSelectedDate = date;
-            String formatted = DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault()).format(date);
-            dateTextView.setText(formatted);
-        });
-
-        weekRv.setAdapter(adapter);
-        adapter.selectDate(currentSelectedDate);
-    }
+    private ListenerRegistration userListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,35 +44,10 @@ public class HomeActivity extends AppCompatActivity {
         AndroidThreeTen.init(this);
         currentSelectedDate = LocalDate.now();
 
-        TextView greetingText = findViewById(R.id.greetingText);
-
-        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String name = prefs.getString("name", "");
-
-        // Determine greeting based on time
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        String timeGreeting;
-
-        if (hour >= 5 && hour < 12) {
-            timeGreeting = "Добро утро";
-        } else if (hour >= 12 && hour < 17) {
-            timeGreeting = "Добър ден";
-        }
-        else {
-            timeGreeting = "Добър вечер";
-        }
-
-        // Set dynamic greeting with name
-        String greeting = timeGreeting + ",\n" + name;
-        greetingText.setText(greeting);
-
-        // Setup calendar
-        setupWeekCalendar();
-
         // Initialize views
+        greetingText = findViewById(R.id.greetingText);
         dateTextView = findViewById(R.id.dateTextView);
-        selectedDateTextView = findViewById(R.id.dateTextView); // Assuming this is where selected date goes
+        selectedDateTextView = findViewById(R.id.dateTextView);
         finishedWorkouts = findViewById(R.id.finishedWorkouts);
         caloriesBurnt = findViewById(R.id.caloriesBurnt);
         minutesSpent = findViewById(R.id.minutesSpent);
@@ -93,20 +55,63 @@ public class HomeActivity extends AppCompatActivity {
         menuImage = findViewById(R.id.menuImage);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Set current date
+        FullscreenUtil.hideSystemUI(this);
+
+        // Set today's date
         String currentDate = DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault()).format(LocalDate.now());
         dateTextView.setText(currentDate);
 
-        // Set example activity stats
-        finishedWorkouts.setText("3");
-        caloriesBurnt.setText("2,354");
-        minutesSpent.setText("134");
+        // Setup calendar
+        setupWeekCalendar();
 
-        // Bottom navigation logic
+        // Time-based greeting string (used in Firestore listener below)
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        String timeGreeting;
+        if (hour >= 5 && hour < 12) {
+            timeGreeting = "Добро утро";
+        } else if (hour >= 12 && hour < 17) {
+            timeGreeting = "Добър ден";
+        } else {
+            timeGreeting = "Добър вечер";
+        }
+
+        // Firestore listener for live updates
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference userRef = db.collection("users").document(uid);
+
+            userListener = userRef.addSnapshotListener((snapshot, error) -> {
+                if (error != null || snapshot == null || !snapshot.exists()) return;
+
+                // Update greeting with name
+                String name = snapshot.getString("name");
+                if (name != null && !name.isEmpty()) {
+                    greetingText.setText(timeGreeting + ",\n" + name);
+
+                    // Save name to SharedPreferences
+                    SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                    prefs.edit().putString("name", name).apply();
+                }
+
+                // Update stats
+                Long workouts = snapshot.getLong("finishedWorkouts");
+                Long calories = snapshot.getLong("caloriesBurnt");
+                Long minutes = snapshot.getLong("minutesSpent");
+
+                if (workouts != null) finishedWorkouts.setText(String.valueOf(workouts));
+                if (calories != null) caloriesBurnt.setText(String.format(Locale.getDefault(), "%,d", calories));
+                if (minutes != null) minutesSpent.setText(String.valueOf(minutes));
+            });
+        }
+
+        // Bottom navigation setup
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
             Intent intent = null;
+            int id = item.getItemId();
 
             if (id == R.id.nav_meals) {
                 intent = new Intent(this, FoodDiaryActivity.class);
@@ -127,5 +132,29 @@ public class HomeActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    private void setupWeekCalendar() {
+        RecyclerView weekRv = findViewById(R.id.weekRecyclerView);
+        weekRv.setLayoutManager(new GridLayoutManager(this, 7));
+        weekRv.setHasFixedSize(true);
+
+        List<LocalDate> week = DateUtils.currentWeek(currentSelectedDate);
+        WeekAdapter adapter = new WeekAdapter(week, date -> {
+            currentSelectedDate = date;
+            String formatted = DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault()).format(date);
+            dateTextView.setText(formatted);
+        });
+
+        weekRv.setAdapter(adapter);
+        adapter.selectDate(currentSelectedDate);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (userListener != null) {
+            userListener.remove();
+        }
     }
 }
