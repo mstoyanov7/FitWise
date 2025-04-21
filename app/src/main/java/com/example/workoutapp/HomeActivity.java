@@ -166,6 +166,7 @@ public class HomeActivity extends AppCompatActivity {
             String formatted = DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale.getDefault()).format(date);
             dateTextView.setText(formatted);
             loadCaloriesForSelectedDate();
+            loadCompletedWorkoutsForDate(currentSelectedDate);
         });
 
         weekRv.setAdapter(adapter);
