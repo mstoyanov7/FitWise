@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_popup_bg"
+    android:padding="24dp">
+
+    <!-- Stage name -->
+    <TextView
+        android:id="@+id/text_stage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stage"
+        android:textColor="#3C6EF3"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Progress ring with timer in center -->
+    <FrameLayout
+        android:id="@+id/progress_container"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/text_stage"
+        android:layout_marginTop="16dp">
+
+        <ProgressBar
+            android:id="@+id/progress_ring"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="false"
+            android:progressDrawable="@drawable/circular_progress_drawable" />
+
+        <TextView
+            android:id="@+id/text_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="00:00"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:textColor="#3C6EF3" />
+    </FrameLayout>
+
+    <!-- Completion message -->
+    <TextView
+        android:id="@+id/text_complete_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You crushed it! 💪"
+        android:textColor="#4CAF50"
+        android:textSize="16sp"
+        android:layout_below="@id/progress_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
+
+    <!-- Pause Button -->
+    <Button
+        android:id="@+id/btn_pause"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pause"
+        android:background="@drawable/rounded_button_green"
+        android:textColor="#FFFFFF"
+        android:layout_below="@id/text_complete_message"
+        android:layout_marginTop="24dp" />
+
+    <!-- Next Button -->
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:background="@drawable/rounded_button_green"
+        android:textColor="#FFFFFF"
+        android:layout_below="@id/btn_pause"
+        android:layout_marginTop="12dp" />
+
+</RelativeLayout>

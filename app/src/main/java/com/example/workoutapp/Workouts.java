@@ -202,8 +202,7 @@ public class Workouts extends AppCompatActivity {
         if (isFavoriteSection) {
             rightIcon.setImageResource(getIconForExercise(ex.title, true));
         } else {
-            rightIcon.setImageResource(favorites.contains(ex.title) ?
-                    R.drawable.ic_heart_filled : R.drawable.ic_heart_outline);
+            rightIcon.setImageResource(favorites.contains(ex.title) ? R.drawable.ic_heart_filled : R.drawable.ic_heart_outline);
 
             rightIcon.setOnClickListener(v -> {
                 if (favorites.contains(ex.title)) {
@@ -217,6 +216,13 @@ public class Workouts extends AppCompatActivity {
 
         cardLayout.addView(textContainer);
         cardLayout.addView(rightIcon);
+
+        cardLayout.setOnClickListener(v -> {
+            if (ex.title.equalsIgnoreCase("Light Jogging")) {
+                WorkoutPreviewBottomSheet bottomSheet = new WorkoutPreviewBottomSheet();
+                bottomSheet.show(getSupportFragmentManager(), "WorkoutPreview");
+            }
+        });
 
         FrameLayout wrapper = new FrameLayout(this);
         LinearLayout.LayoutParams wrapperParams = new LinearLayout.LayoutParams(
