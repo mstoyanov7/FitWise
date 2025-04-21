@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Fixed Bottom Navigation -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
         android:padding="20dp"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_above="@id/bottom_navigation">
 
         <LinearLayout
             android:id="@+id/all_exercises_container"
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Title -->
+            <!-- Page Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,9 +26,10 @@
                 android:text="Exercises"
                 android:textColor="#000000"
                 android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/open_sans_bold" />
 
-            <!-- Filter Chips -->
+            <!-- Filter Buttons -->
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,59 +41,89 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="#EEEEEE"
                         android:text="All"
-                        android:textColor="#000000" />
+                        android:textAllCaps="false"
+                        android:textColor="@color/category_button_text"
+                        app:backgroundTint="@color/category_button_bg"
+                        app:cornerRadius="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:checkedIcon="@null"
+                        android:checkable="true"
+                        app:fontFamily="@font/open_sans_regular" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_strength"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="#EEEEEE"
                         android:text="Strength"
-                        android:textColor="#000000" />
+                        android:textAllCaps="false"
+                        android:textColor="@color/category_button_text"
+                        app:backgroundTint="@color/category_button_bg"
+                        app:cornerRadius="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:checkedIcon="@null"
+                        android:checkable="true"
+                        app:fontFamily="@font/open_sans_regular" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_cardio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="#EEEEEE"
                         android:text="Cardio"
-                        android:textColor="#000000" />
+                        android:textAllCaps="false"
+                        android:textColor="@color/category_button_text"
+                        app:backgroundTint="@color/category_button_bg"
+                        app:cornerRadius="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:checkedIcon="@null"
+                        android:checkable="true"
+                        app:fontFamily="@font/open_sans_regular" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_calisthenics"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="#EEEEEE"
                         android:text="Calisthenics"
-                        android:textColor="#000000" />
+                        android:textAllCaps="false"
+                        android:textColor="@color/category_button_text"
+                        app:backgroundTint="@color/category_button_bg"
+                        app:cornerRadius="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:checkedIcon="@null"
+                        android:checkable="true"
+                        app:fontFamily="@font/open_sans_regular" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_running"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="#EEEEEE"
                         android:text="Running"
-                        android:textColor="#000000" />
+                        android:textAllCaps="false"
+                        android:textColor="@color/category_button_text"
+                        app:backgroundTint="@color/category_button_bg"
+                        app:cornerRadius="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:checkedIcon="@null"
+                        android:checkable="true"
+                        app:fontFamily="@font/open_sans_regular" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_yoga"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="#EEEEEE"
                         android:text="Yoga"
-                        android:textColor="#000000" />
+                        android:textAllCaps="false"
+                        android:textColor="@color/category_button_text"
+                        app:backgroundTint="@color/category_button_bg"
+                        app:cornerRadius="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:checkedIcon="@null"
+                        android:checkable="true"
+                        app:fontFamily="@font/open_sans_regular" />
                 </LinearLayout>
             </HorizontalScrollView>
 
@@ -107,8 +138,8 @@
 
                 <ImageView
                     android:id="@+id/search_icon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"
@@ -125,28 +156,58 @@
                     android:gravity="center_vertical"
                     android:hint="Search exercises"
                     android:inputType="text"
+                    android:textSize="14dp"
                     android:textColor="#000000"
-                    android:textColorHint="#888888" />
+                    android:textColorHint="#888888"
+                    android:fontFamily="@font/open_sans_regular" />
             </RelativeLayout>
 
-            <!-- Favorite Exercises Title -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Favorite Exercises"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
+            <!-- Favorite Section -->
             <LinearLayout
-                android:id="@+id/favorite_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
 
-            <!-- All Exercises Title -->
+                <RelativeLayout
+                    android:id="@+id/favorites_toggle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="12dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/favorite_toggle_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Favorite Exercises"
+                        android:textSize="18sp"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/open_sans_bold" />
+
+                    <ImageView
+                        android:id="@+id/favorite_toggle_arrow"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="18dp"
+                        android:src="@drawable/ic_expand_more"
+                        app:tint="#898989" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/favorite_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- All Exercises -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -155,14 +216,14 @@
                 android:text="Exercises"
                 android:textColor="#000000"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/open_sans_bold" />
 
             <LinearLayout
                 android:id="@+id/exercises_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
-
         </LinearLayout>
     </ScrollView>
 
@@ -176,5 +237,4 @@
         app:itemTextColor="@drawable/nav_item_color"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
-
 </RelativeLayout>

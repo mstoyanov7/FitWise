@@ -1,14 +1,19 @@
 package com.example.workoutapp;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -217,6 +222,7 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void showFavoritesDialog(CalendarAddWorkoutsAdapter adapter) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -240,29 +246,46 @@ public class CalendarActivity extends AppCompatActivity {
                         return;
                     }
 
-                    String[] favArray = favList.toArray(new String[0]);
-                    boolean[] checkedItems = new boolean[favArray.length];
+                    // Inflate layout
+                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_select_favorites, null);
+                    LinearLayout container = dialogView.findViewById(R.id.fav_container);
                     List<String> selected = new ArrayList<>();
+
+                    for (String exercise : favList) {
+                        CheckBox checkBox = new CheckBox(this);
+                        checkBox.setText(exercise);
+                        checkBox.setTextColor(Color.BLACK);
+                        checkBox.setTextSize(16f);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            checkBox.setTypeface(getResources().getFont(R.font.open_sans_regular));
+                        }
+                        checkBox.setPadding(0, 16, 0, 16);
+
+                        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                            if (isChecked) selected.add(exercise);
+                            else selected.remove(exercise);
+                        });
+
+                        container.addView(checkBox);
+                    }
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Pick Favorite Exercises");
-                    builder.setMultiChoiceItems(favArray, checkedItems, (dialog, which, isChecked) -> {
-                        if (isChecked) selected.add(favArray[which]);
-                        else selected.remove(favArray[which]);
-                    });
-
+                    builder.setView(dialogView);
                     builder.setPositiveButton("Add", (dialog, which) -> {
                         adapter.getExercises().addAll(selected);
                         adapter.notifyDataSetChanged();
                     });
-
                     builder.setNegativeButton("Cancel", null);
                     builder.show();
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Failed to load favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
+
+
+
 
     private void showDatePicker(MaterialButton btnDate) {
         LocalDate now = LocalDate.now();
