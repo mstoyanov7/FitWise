@@ -36,6 +36,7 @@ public class HomeActivity extends AppCompatActivity {
         RecyclerView weekRv = findViewById(R.id.weekRecyclerView);
         weekRv.setLayoutManager(new GridLayoutManager(this, 7));
         weekRv.setHasFixedSize(true);
+        FullscreenUtil.hideSystemUI(this);
 
         List<LocalDate> week = DateUtils.currentWeek(currentSelectedDate);
 
