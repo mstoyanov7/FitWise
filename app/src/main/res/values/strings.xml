@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WorkoutApp</string>
+    <string name="app_name">FitWise</string>
 
     <!--MAIN ACTIVITY PAGE STRINGS -->
     <string name="quote">Your personal fitness journey starts here.
