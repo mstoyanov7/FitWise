@@ -1,7 +1,10 @@
 package com.example.workoutapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,7 +23,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,9 +34,11 @@ public class SignInPage extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
     private CheckBox rememberMeCheckBox;
 
+
     private static final int RC_SIGN_IN = 1000;
     private GoogleSignInClient gsc;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +53,36 @@ public class SignInPage extends AppCompatActivity {
                 .build();
         gsc = GoogleSignIn.getClient(this, gso);
 
-        TextInputLayout emailLayout = findViewById(R.id.emailLayout);
-        TextInputLayout passwordLayout = findViewById(R.id.passwordLayout);
-        emailEditText = emailLayout.getEditText();
-        passwordEditText = passwordLayout.getEditText();
+        // Use EditText directly (no TextInputLayout)
+        emailEditText = findViewById(R.id.emailLayout);
+        passwordEditText = findViewById(R.id.passwordLayout);
         rememberMeCheckBox = findViewById(R.id.rememberMeCheckBox);
+
+        passwordEditText.setOnTouchListener((v, event) -> {
+            if (event.getAction() != MotionEvent.ACTION_UP) return false;
+
+            int end = 2; // index of drawableEnd
+            if (passwordEditText.getCompoundDrawables()[end] == null) return false;
+
+            int drawableWidth = passwordEditText.getCompoundDrawables()[end].getBounds().width();
+            float touchX = event.getRawX();
+            float fieldRight = passwordEditText.getRight();
+
+            if (touchX >= (fieldRight - drawableWidth)) {
+                int currentInputType = passwordEditText.getInputType();
+                boolean isCurrentlyVisible = (currentInputType == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
+
+                passwordEditText.setInputType(isCurrentlyVisible
+                        ? (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                        : (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
+
+                passwordEditText.setSelection(passwordEditText.length());
+                return true;
+            }
+
+            return false;
+        });
+
 
         Button loginButton = findViewById(R.id.loginButton);
         TextView forgotPasswordText = findViewById(R.id.forgotPasswordText);
@@ -90,19 +119,16 @@ public class SignInPage extends AppCompatActivity {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
 
-                            Intent intent = new Intent(SignInPage.this, isNew ? WelcomeActivity.class : Workouts.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(SignInPage.this, "Firebase login failed: " + task.getException(), Toast.LENGTH_LONG).show();
-                        }
+                        Intent intent = new Intent(SignInPage.this, isNew ? WelcomeActivity.class : Workouts.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(SignInPage.this, "Firebase login failed: " + task.getException(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
