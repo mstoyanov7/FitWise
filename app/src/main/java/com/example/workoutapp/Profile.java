@@ -110,20 +110,17 @@ public class Profile extends AppCompatActivity {
         ImageButton buttonEdit = findViewById((R.id.buttonEditProfile));
         buttonEdit.setOnClickListener(v -> {
             switch (currentSide) {
-                case 0: // frontSide
+                case 0:
                     showEditProfileDialog();
                     break;
-                case 1: // backSide
+                case 1:
                     showEditGoalsDialog();
                     break;
-              case 2: // nutritionSide
+              case 2:
                   showEditNutritionDialog();
                   break;
             }
         });
-
-        loadFragment(new WorkoutsFragment());
-        textViewHeader.setText("Recent Workouts");
 
         fetchAndDisplayUserData();
 
@@ -175,7 +172,6 @@ public class Profile extends AppCompatActivity {
 
                 if (intent != null) {
                     startActivity(intent);
-                    // Apply fade in to the incoming activity and fade out from the current one.
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     return true;
                 }
@@ -228,7 +224,6 @@ public class Profile extends AppCompatActivity {
         int targetCals = prefs.getInt("calories", -1);
         String activity = prefs.getString("weeklyChange", "Maintain my current");
 
-        // Step 1: Map weeklyChange to expected weight change per week
         double expectedKgPerWeek = 0.0;
         switch (activity) {
             case "Lose 1 kg per week":
@@ -250,7 +245,7 @@ public class Profile extends AppCompatActivity {
                 expectedKgPerWeek = 0.5;
                 break;
             default:
-                expectedKgPerWeek = 0.0; // Maintain
+                expectedKgPerWeek = 0.0;
         }
 
         double kcalPerKg = 7700.0;
@@ -298,13 +293,11 @@ public class Profile extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        // Build the last-7-days list oldest→newest
         LocalDate today = LocalDate.now();
         List<String> last7 = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {
             last7.add(today.minusDays(i).toString());
         }
-        // Initialize sums to zero
         Map<String,Integer> sums = new LinkedHashMap<>();
         for (String d : last7) sums.put(d, 0);
 
@@ -324,7 +317,6 @@ public class Profile extends AppCompatActivity {
                             sums.put(date, sums.get(date) + ncal.intValue());
                         }
                     }
-                    // Turn into chronologically ordered List<Integer>
                     List<Integer> dayTotals = new ArrayList<>();
                     for (String d : last7) dayTotals.add(sums.get(d));
 
@@ -398,14 +390,12 @@ public class Profile extends AppCompatActivity {
         float carbs = (float) (calories * 0.4 / 4);
         float fats = (float) (calories * 0.3 / 9);
 
-        // Update UI
         textViewActivityBack.setText("Activity: " + activity);
         textViewGoalBack.setText("Goal: " + goalWeight + " kg");
         textViewWeeklyChangeBack.setText("Weekly: " + weeklyGoal);
         textViewCaloriesBack.setText("Target calories: " + calories);
         textViewMacros.setText("Protein: " + protein + "g • Carbs: " + carbs + "g • Fats: " + fats + "g");
 
-        // Save to Firestore
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseFirestore.getInstance().collection("users").document(user.getUid())
@@ -424,7 +414,6 @@ public class Profile extends AppCompatActivity {
                     });
         }
 
-        // Save to SharedPreferences
         prefs.edit()
                 .putString("activity", activity)
                 .putString("goal", goalWeight)
@@ -478,26 +467,21 @@ public class Profile extends AppCompatActivity {
 
             String selectedSex = selectedSexId == R.id.radioFemale ? "Female" : "Male";
 
-            // Save height, weight, and sex to SharedPreferences
             prefs.edit()
                     .putString("height", newHeight)
                     .putString("weight", newWeight)
                     .putString("sex", selectedSex)
                     .apply();
 
-            // Update UI
             textViewHeightBack.setText(newHeight + " cm");
             textViewWeightBack.setText(newWeight + " kg");
             textViewSexBack.setText(selectedSex);
 
-            // Get the latest values to pass to saveEditedValues()
             String activity = prefs.getString("activity", "Not very active");
-            String goalWeight = prefs.getString("goal", newWeight); // fallback to new weight
+            String goalWeight = prefs.getString("goal", newWeight);
             String weeklyGoal = prefs.getString("weeklyChange", "Maintain my current");
 
-            // Now reuse the logic for calories + macros + Firestore update
             saveEditedValues(activity, goalWeight, weeklyGoal);
-            // Notify BMI calculator to refresh
             reloadBMICalculatorIfVisible();
             dialog.dismiss();
         });
@@ -520,7 +504,6 @@ public class Profile extends AppCompatActivity {
         Button buttonSave = dialogView.findViewById(R.id.buttonSave);
         Button buttonCancel = dialogView.findViewById(R.id.buttonCancel);
 
-        // Load existing values from current view
         editGoalWeight.setText(textViewGoalBack.getText().toString().replaceAll("[^0-9.]", ""));
 
         ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(this,
@@ -537,7 +520,6 @@ public class Profile extends AppCompatActivity {
         goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerWeeklyGoal.setAdapter(goalAdapter);
 
-        // Pre-select the current values
         String currentActivity = textViewActivityBack.getText().toString().replace("Activity: ", "");
         String currentGoal = textViewWeeklyChangeBack.getText().toString().replace("Weekly: ", "");
 
@@ -576,7 +558,6 @@ public class Profile extends AppCompatActivity {
             editDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        // UI refs
         TextView tvTotal      = dialogView.findViewById(R.id.tvMacroCalories);
         SeekBar seekP         = dialogView.findViewById(R.id.sliderProtein);
         SeekBar seekC         = dialogView.findViewById(R.id.sliderCarbs);
@@ -597,7 +578,6 @@ public class Profile extends AppCompatActivity {
             p = 30; c = 40; f = 30;
         }
 
-        // init
         tvTotal.setText("Total: " + totalCals + " kcal");
         seekP.setMax(100); seekC.setMax(100); seekF.setMax(100);
         seekP.setProgress((int)p);
@@ -646,8 +626,6 @@ public class Profile extends AppCompatActivity {
             int newC = seekC.getProgress();
             int newF = seekF.getProgress();
 
-            // Calculate actual grams
-            // protein & carbs = 4 kcal/g, fats = 9 kcal/g
             int gramsP = Math.round(totalCals * (newP/100f) / 4f);
             int gramsC = Math.round(totalCals * (newC/100f) / 4f);
             int gramsF = Math.round(totalCals * (newF/100f) / 9f);
@@ -670,7 +648,6 @@ public class Profile extends AppCompatActivity {
                         );
             }
 
-            // Save locally
             prefs.edit()
                     .putFloat("protein%", newP)
                     .putFloat("carbs%",   newC)

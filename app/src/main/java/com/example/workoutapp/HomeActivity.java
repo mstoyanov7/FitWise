@@ -3,11 +3,9 @@ package com.example.workoutapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,7 +42,6 @@ public class HomeActivity extends AppCompatActivity {
         AndroidThreeTen.init(this);
         currentSelectedDate = LocalDate.now();
 
-        // Initialize views
         greetingText = findViewById(R.id.greetingText);
         dateTextView = findViewById(R.id.dateTextView);
         selectedDateTextView = findViewById(R.id.dateTextView);
@@ -74,7 +71,6 @@ public class HomeActivity extends AppCompatActivity {
             timeGreeting = "Добър вечер";
         }
 
-        // Firestore listener for live updates
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
@@ -84,12 +80,10 @@ public class HomeActivity extends AppCompatActivity {
             userListener = userRef.addSnapshotListener((snapshot, error) -> {
                 if (error != null || snapshot == null || !snapshot.exists()) return;
 
-                // Update greeting with name
                 String name = snapshot.getString("name");
                 if (name != null && !name.isEmpty()) {
                     greetingText.setText(timeGreeting + ",\n" + name);
 
-                    // Save name to SharedPreferences
                     SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                     prefs.edit().putString("name", name).apply();
                 }
@@ -102,7 +96,6 @@ public class HomeActivity extends AppCompatActivity {
             });
         }
 
-        // Bottom navigation setup
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             Intent intent = null;

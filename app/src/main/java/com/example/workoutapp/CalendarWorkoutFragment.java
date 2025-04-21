@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 public class CalendarWorkoutFragment extends Fragment {
 
@@ -104,7 +103,7 @@ public class CalendarWorkoutFragment extends Fragment {
 
             boolean isCompleted = w.status.equalsIgnoreCase("Completed");
             if (isCompleted) {
-                completedCount++; // ✅ Count it
+                completedCount++;
                 btnComplete.setText("Undo");
                 btnComplete.setBackgroundColor(Color.parseColor("#F4F4F5"));
                 btnComplete.setTextColor(Color.parseColor("#898989"));
@@ -141,9 +140,8 @@ public class CalendarWorkoutFragment extends Fragment {
                                     doc.getReference().update("status", newStatus);
                                 }
 
-                                populateWorkouts(); // Refresh UI
+                                populateWorkouts();
 
-                                // 🔄 Update total count
                                 DocumentReference totalRef = db.collection("workouts")
                                         .document(uid)
                                         .collection("entries")
@@ -163,7 +161,6 @@ public class CalendarWorkoutFragment extends Fragment {
                                     totalRef.set(Collections.singletonMap("count", newTotal));
                                 });
 
-                                // 📆 Update per-day count
                                 DocumentReference dayRef = db.collection("workouts")
                                         .document(uid)
                                         .collection("entries")
@@ -234,7 +231,6 @@ public class CalendarWorkoutFragment extends Fragment {
                                     doc.getReference().delete();
                                 }
 
-                                // 🔽 Update completed count if it was marked as Completed
                                 if (wasCompleted) {
                                     DocumentReference totalRef = db.collection("workouts")
                                             .document(uid)
@@ -248,7 +244,6 @@ public class CalendarWorkoutFragment extends Fragment {
                                         totalRef.set(Collections.singletonMap("count", newCount));
                                     });
 
-                                    // 📆 Also update per-day count
                                     DocumentReference dayRef = db.collection("workouts")
                                             .document(uid)
                                             .collection("entries")

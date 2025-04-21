@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.*;
-import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -53,10 +52,6 @@ public class Workouts extends AppCompatActivity {
         btnYoga = findViewById(R.id.btn_yoga);
         btnRunning = findViewById(R.id.btn_running);
 
-        Button[] allButtons = {
-                btnAll, btnStrength, btnCardio, btnCalisthenics, btnYoga, btnRunning
-        };
-
         selectedCategoryButton = btnAll;
         btnAll.setChecked(true);
         renderExercises("All");
@@ -80,12 +75,12 @@ public class Workouts extends AppCompatActivity {
         ImageView dropdownIcon = findViewById(R.id.favorite_toggle_arrow);
         RelativeLayout favoriteToggle = findViewById(R.id.favorites_toggle);
         favoriteContainer.setVisibility(View.GONE);
-        dropdownIcon.setRotation(0f); // default state
+        dropdownIcon.setRotation(0f);
 
         favoriteToggle.setOnClickListener(v -> {
             TransitionSet transitionSet = new TransitionSet()
                     .addTransition(new ChangeBounds())
-                    .setDuration(180) // fast & smooth
+                    .setDuration(180)
                     .setInterpolator(new AccelerateDecelerateInterpolator());
 
             TransitionManager.beginDelayedTransition((ViewGroup) favoriteContainer.getParent(), transitionSet);
@@ -326,8 +321,6 @@ public class Workouts extends AppCompatActivity {
         if (title.contains("pull")) return isFavorite ? R.drawable.ic_biceps : R.drawable.ic_pullup;
         if (title.contains("lunge")) return isFavorite ? R.drawable.ic_squat_fav : R.drawable.ic_lunge;
 
-        // Running icons
-        // 🏃 Running examples (add matching icons)
         if (title.contains("light jogging")) return isFavorite ? R.drawable.ic_jogging_fav : R.drawable.ic_jogging;
         if (title.contains("sprint")) return isFavorite ? R.drawable.ic_jogging_fav : R.drawable.ic_jogging;
         if (title.contains("long distance")) return isFavorite ? R.drawable.ic_jogging_fav : R.drawable.ic_jogging;
@@ -342,18 +335,15 @@ public class Workouts extends AppCompatActivity {
 
     private void updateSelectedCategory(MaterialButton clickedButton, String category) {
         if (selectedCategoryButton == clickedButton) {
-            // Same button tapped again → unselect
             clickedButton.setChecked(false);
             selectedCategoryButton = null;
             currentCategory = "All";
             renderExercises("All");
         } else {
-            // Deselect previous
             if (selectedCategoryButton != null) {
                 selectedCategoryButton.setChecked(false);
             }
-
-            // Select new
+            
             clickedButton.setChecked(true);
             selectedCategoryButton = clickedButton;
             currentCategory = category;

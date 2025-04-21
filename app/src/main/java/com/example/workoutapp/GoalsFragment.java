@@ -138,7 +138,6 @@ public class GoalsFragment extends Fragment {
                         recentGoals.add(new Goal(title, start, due, isCompleted));
                     }
 
-                    // Sort by start date (newest first)
                     Collections.sort(recentGoals, (g1, g2) -> {
                         try {
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -150,7 +149,6 @@ public class GoalsFragment extends Fragment {
                         }
                     });
 
-                    // Limit to 4
                     if (recentGoals.size() > 4) {
                         recentGoals.subList(4, recentGoals.size()).clear();
                     }

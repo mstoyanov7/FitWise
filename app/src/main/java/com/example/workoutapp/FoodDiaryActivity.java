@@ -8,25 +8,18 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -304,10 +297,6 @@ public class FoodDiaryActivity extends AppCompatActivity {
         container.addView(chip,0);
     }
 
-    /**
-     * Recalculates and updates "Remaining" based on goals minus eaten,
-     * then persists those daily totals.
-     */
     private void updateRemaining() {
         float goalCals  = parseFloat(inputCalories);
         float goalCarbs = parseFloat(inputCarbs);
@@ -427,9 +416,6 @@ public class FoodDiaryActivity extends AppCompatActivity {
                 }).addOnFailureListener(e->Toast.makeText(this,"Failed to sync food diary: "+ e.getMessage(),Toast.LENGTH_LONG).show());
     }
 
-    /**
-     * Fetches profile goals, sets inputs, then loads or computes that day's remaining.
-     */
     private void fetchGoalsThenTotals(LocalDate date) {
         FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
         if(u == null) {

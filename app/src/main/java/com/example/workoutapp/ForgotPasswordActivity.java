@@ -3,7 +3,6 @@ package com.example.workoutapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.*;
 
 import androidx.annotation.Nullable;
@@ -33,7 +32,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         backToLogin = findViewById(R.id.back_to_login);
         googleSignInButton = findViewById(R.id.googleSignInButton);
 
-        // Send reset email
         submitButton.setOnClickListener(v -> {
             String email = resetEmailEditText.getText().toString().trim();
 
@@ -61,13 +59,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     });
         });
 
-        // Go back to login
         backToLogin.setOnClickListener(v -> {
             startActivity(new Intent(this, SignInPage.class));
             finish();
         });
 
-        // Optional: Google sign-in shortcut
         googleSignInButton.setOnClickListener(v -> {
             startActivity(new Intent(this, RegisterForm.class)); // or a dedicated Google login activity
             finish();

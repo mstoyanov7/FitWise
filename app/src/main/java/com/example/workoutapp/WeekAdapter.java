@@ -28,7 +28,6 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.DayVH> {
         this.listener  = listener;
     }
 
-    /* ---------- boilerplate ---------- */
     @NonNull @Override
     public DayVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
@@ -41,7 +40,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.DayVH> {
 
         h.tvDateNum.setText(String.valueOf(date.getDayOfMonth()));
         DayOfWeek dow = date.getDayOfWeek();
-        h.tvDayName.setText(dow.getDisplayName(TextStyle.SHORT, Locale.getDefault())); // Mon…
+        h.tvDayName.setText(dow.getDisplayName(TextStyle.SHORT, Locale.getDefault()));
 
         h.itemView.setSelected(pos == selectedPos);
 
@@ -56,7 +55,6 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.DayVH> {
 
     @Override public int getItemCount() { return weekDates.size(); }
 
-    /* ---------- ViewHolder ---------- */
     static class DayVH extends RecyclerView.ViewHolder {
         final TextView tvDateNum, tvDayName;
         DayVH(@NonNull View itemView) {
@@ -66,10 +64,9 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.DayVH> {
         }
     }
 
-    /** Programmatically marks the supplied date as selected. */
     public void selectDate(LocalDate date) {
         int idx = weekDates.indexOf(date);
-        if (idx == -1) return;          // date not in this adapter (shouldn’t happen)
+        if (idx == -1) return;
         int old = selectedPos;
         selectedPos = idx;
         notifyItemChanged(old);

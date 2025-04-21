@@ -1,19 +1,16 @@
 package com.example.workoutapp;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.InputType;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.*;
@@ -59,7 +56,6 @@ public class RegisterForm extends AppCompatActivity {
         haveAccountText = findViewById(R.id.haveAccountText);
         googleButton = findViewById(R.id.google_button);
 
-        // Password eye toggle
         passwordEditText.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
             if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
@@ -78,7 +74,6 @@ public class RegisterForm extends AppCompatActivity {
             return false;
         });
 
-        // Styled clickable span
         haveAccountText.setText(Html.fromHtml(getString(R.string.have_account), Html.FROM_HTML_MODE_LEGACY));
         haveAccountText.setOnClickListener(v ->
                 startActivity(new Intent(this, SignInPage.class))

@@ -1,14 +1,11 @@
 package com.example.workoutapp;
 
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -53,7 +50,6 @@ public class ScannedFoodActivity extends AppCompatActivity {
             }
         });
 
-        // — pull in Intent extras —
         Intent in = getIntent();
         final String selectedDate = in.getStringExtra("selectedDate");
         final int mealIndex = in.getIntExtra("mealIndex", -1);
@@ -67,14 +63,12 @@ public class ScannedFoodActivity extends AppCompatActivity {
         String carbsStr = in.getStringExtra("carbs");
         String imageUrl = in.getStringExtra("image_url");
 
-        // parse per‑100g floats
         per100Cal = safeFloat(calStr);
         per100Sugar = safeFloat(sugarStr);
         per100Fat = safeFloat(fatStr);
         per100Protein = safeFloat(protStr);
         per100Carbs = safeFloat(carbsStr);
 
-        // — header UI —
         TextView tvName = findViewById(R.id.tv_food_name);
         TextView tvSummary = findViewById(R.id.tv_food_summary);
         ImageView ivFood = findViewById(R.id.iv_food);
@@ -90,15 +84,12 @@ public class ScannedFoodActivity extends AppCompatActivity {
                 .placeholder(R.drawable.dinner)
                 .into(ivFood);
 
-        // — weight input & live stats —
         EditText etWeightInput = findViewById(R.id.tv_stat_weight_value);
         TextView tvCalories = findViewById(R.id.tv_stat_calories_value);
         TextView tvProteinOut = findViewById(R.id.tv_stat_protein_value);
 
-        // initialize to 100g
         etWeightInput.setText(String.valueOf((int) INITIAL_WEIGHT));
 
-        // zero‑default on blur → blank→"0" but keep focus
         etWeightInput.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus && etWeightInput.getText().toString().trim().isEmpty()) {
                 etWeightInput.setText("0");
@@ -106,22 +97,18 @@ public class ScannedFoodActivity extends AppCompatActivity {
             }
         });
 
-        // build initial lists
         initIngredientData(ingredients);
         initNutrientData(INITIAL_WEIGHT);
 
-        // set initial top stats
         tvCalories.setText(String.format(Locale.getDefault(),
                 "%.0f kcal",per100Cal * INITIAL_WEIGHT / 100f));
         tvProteinOut.setText(String.format(Locale.getDefault(),
                 "%.1f g",per100Protein * INITIAL_WEIGHT / 100f));
 
-        // — RecyclerView + Tabs set‑up —
         tabLayout = findViewById(R.id.tab_layout);
         rvDetails = findViewById(R.id.rv_details);
         rvDetails.setLayoutManager(new LinearLayoutManager(this));
 
-        // adapter holds its own snapshot
         adapter = new SimpleAdapter(new ArrayList<>(nutrientData));
         rvDetails.setAdapter(adapter);
 
@@ -140,40 +127,35 @@ public class ScannedFoodActivity extends AppCompatActivity {
             @Override public void onTabReselected(TabLayout.Tab t) {}
         });
 
-        // — live‑update on weight change —
         etWeightInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s,int a,int b,int c){}
             @Override public void onTextChanged(CharSequence s,int a,int b,int c){}
             @Override public void afterTextChanged(Editable s) {
-                // strip leading zeros
+
                 String txt = s.toString();
                 if (txt.length() > 1 && txt.startsWith("0")) {
                     s.replace(0, s.length(), txt.replaceFirst("^0+", ""));
                 }
-                // compute current weight
+
                 String inStr = s.toString().trim();
                 float weight = inStr.isEmpty() ? 0f : safeFloat(inStr);
 
-                // update header stats
                 tvCalories  .setText(String.format(Locale.getDefault(),
                         "%.0f kcal",  per100Cal     * weight / 100f));
                 tvProteinOut.setText(String.format(Locale.getDefault(),
                         "%.1f g",    per100Protein * weight / 100f));
 
-                // rebuild and refresh
                 initNutrientData(weight);
                 adapter.updateData(nutrientData);
             }
         });
 
-        // — Scan Again button —
         Button btnNewScan = findViewById(R.id.btn_new_scan);
         btnNewScan.setOnClickListener(v -> {
             startActivity(new Intent(this, BarcodeScannerActivity.class));
             finish();
         });
 
-        // — Add to Diary button —
         Button btnAddDiary = findViewById(R.id.btn_add_diary);
         btnAddDiary.setOnClickListener(v -> {
             String inStr = etWeightInput.getText().toString().trim();

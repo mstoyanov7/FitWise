@@ -41,11 +41,9 @@ public class BMICalculatorFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // Avoid double-calling during fragment recreation if not visible
         if (getUserVisibleHint()) {
             fetchUserHeightAndWeight();
         } else {
-            // For good measure, fallback if hint is unreliable
             fetchUserHeightAndWeight();
         }
     }
@@ -117,7 +115,6 @@ public class BMICalculatorFragment extends Fragment {
         bmiCategory.setTextColor(color);
         bmiFeedback.setText(feedback);
 
-        // Animate marker line position on the scale
         bmiScale.post(() -> {
             int scaleHeight = bmiScale.getHeight();
             int markerHeight = bmiMarkerLine.getHeight();

@@ -43,11 +43,10 @@ public class SignInPage extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordLayout);
         rememberMeCheckBox = findViewById(R.id.rememberMeCheckBox);
 
-        // Eye icon toggle for password
         passwordEditText.setOnTouchListener((v, event) -> {
             if (event.getAction() != MotionEvent.ACTION_UP) return false;
 
-            int end = 2; // index of drawableEnd
+            int end = 2;
             if (passwordEditText.getCompoundDrawables()[end] == null) return false;
 
             int drawableWidth = passwordEditText.getCompoundDrawables()[end].getBounds().width();
@@ -83,7 +82,6 @@ public class SignInPage extends AppCompatActivity {
 
         googleSignInButton.setOnClickListener(v -> signInWithGoogle());
 
-        // Auto login if user is already remembered
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInAccount googleUser = GoogleSignIn.getLastSignedInAccount(this);
         SharedPreferences prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -108,7 +106,6 @@ public class SignInPage extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
 
-                        // Save remember me preference
                         if (rememberMeCheckBox.isChecked()) {
                             SharedPreferences prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
                             prefs.edit().putBoolean("remember_me", true).apply();
@@ -132,7 +129,6 @@ public class SignInPage extends AppCompatActivity {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Save remember me preference
                         SharedPreferences prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
                         prefs.edit().putBoolean("remember_me", true).apply();
 
