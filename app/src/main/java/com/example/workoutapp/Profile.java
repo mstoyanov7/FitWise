@@ -497,7 +497,8 @@ public class Profile extends AppCompatActivity {
 
             // Now reuse the logic for calories + macros + Firestore update
             saveEditedValues(activity, goalWeight, weeklyGoal);
-
+            // Notify BMI calculator to refresh
+            reloadBMICalculatorIfVisible();
             dialog.dismiss();
         });
 
@@ -841,4 +842,17 @@ public class Profile extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
     }
+
+    private void reloadBMICalculatorIfVisible() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainerProfileTabs);
+        if (currentFragment instanceof BMICalculatorFragment) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragmentContainerProfileTabs, new BMICalculatorFragment())
+                    .commit();
+        }
+    }
+
+
 }
