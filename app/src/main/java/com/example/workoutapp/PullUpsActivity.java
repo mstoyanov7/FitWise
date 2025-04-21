@@ -20,7 +20,7 @@ public class PullUpsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pull_ups); // замени с точния layout файл
+        setContentView(R.layout.activity_pull_ups);
 
         searchButton = findViewById(R.id.search_button);
         searchInput = findViewById(R.id.search_input);
