@@ -29,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView dateTextView;
     private TextView selectedDateTextView;
-    private TextView finishedWorkouts, caloriesConsumed, minutesSpent;
+    private TextView finishedWorkouts, caloriesConsumed;
     private ImageView trainingPlanImage, menuImage;
     private BottomNavigationView bottomNavigationView;
     private LocalDate currentSelectedDate;
@@ -50,7 +50,6 @@ public class HomeActivity extends AppCompatActivity {
         selectedDateTextView = findViewById(R.id.dateTextView);
         finishedWorkouts = findViewById(R.id.finishedWorkouts);
         caloriesConsumed = findViewById(R.id.caloriesConsumed);
-        minutesSpent = findViewById(R.id.minutesSpent);
         trainingPlanImage = findViewById(R.id.trainingPlanImage);
         menuImage = findViewById(R.id.menuImage);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -95,14 +94,11 @@ public class HomeActivity extends AppCompatActivity {
                     prefs.edit().putString("name", name).apply();
                 }
 
-                // Update stats
                 Long workouts = snapshot.getLong("finishedWorkouts");
                 Long calories = snapshot.getLong("caloriesBurnt");
-                Long minutes = snapshot.getLong("minutesSpent");
 
                 if (workouts != null) finishedWorkouts.setText(String.valueOf(workouts));
                 if (calories != null) caloriesConsumed.setText(String.format(Locale.getDefault(), "%,d", calories));
-                if (minutes != null) minutesSpent.setText(String.valueOf(minutes));
             });
         }
 

@@ -128,7 +128,7 @@
                                 app:tint="#000000" />
 
                             <TextView
-                                android:text="Finished"
+                                android:text="Workouts"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/open_sans_semibold"
@@ -166,7 +166,6 @@
                     android:layout_marginStart="8dp"
                     android:gravity="center_vertical">
 
-                    <!-- Calories -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -185,94 +184,49 @@
                             android:gravity="center_vertical">
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:gravity="center_vertical">
+                                android:gravity="center">
 
                                 <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
                                     android:src="@drawable/ic_calories"
-                                    app:tint="@color/colorPrimary" />
+                                    app:tint="#000000" />
 
                                 <TextView
-                                    android:id="@+id/caloriesConsumed"
-                                    android:text="2,354"
+                                    android:text="Calories"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
-                                    android:fontFamily="@font/open_sans_bold"
+                                    android:fontFamily="@font/open_sans_semibold"
                                     android:textSize="20sp"
-                                    android:layout_marginStart="6dp"
-                                    android:layout_marginBottom="1dp"/>
-                            </LinearLayout>
-
-                            <TextView
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Calories consumed"
-                                android:textSize="14sp"
-                                android:fontFamily="@font/open_sans_regular"
-                                android:textColor="#888888" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <!-- Minutes -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="0dp"
-                        app:cardPreventCornerOverlap="true"
-                        app:cardUseCompatPadding="true">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:background="@drawable/home_page_activity_cards"
-                            android:padding="12dp"
-                            android:gravity="center_vertical">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical">
-
-                                <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
-                                    android:src="@drawable/ic_clock"
-                                    app:tint="@color/colorPrimary" />
-
-                                <TextView
-                                    android:id="@+id/minutesSpent"
-                                    android:text="134"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimary"
-                                    android:fontFamily="@font/open_sans_bold"
-                                    android:textSize="20sp"
-                                    android:layout_marginBottom="1dp"
                                     android:layout_marginStart="6dp" />
                             </LinearLayout>
 
                             <TextView
-                                android:text="Minutes spent"
+                                android:id="@+id/caloriesConsumed"
+                                android:text="2,354"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorPrimary"
+                                android:fontFamily="@font/open_sans_bold"
+                                android:textSize="40sp"
+                                android:layout_gravity="center_horizontal" />
+
+                            <TextView
+                                android:text="Calories consumed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/open_sans_regular"
-                                android:textColor="#888888" />
+                                android:textColor="#888888"
+                                android:layout_gravity="center_horizontal" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
-            </LinearLayout>
 
+            </LinearLayout>
 
             <!-- Today's Training Plan -->
             <TextView
