@@ -6,16 +6,20 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.ChangeBounds;
+import android.transition.TransitionSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.*;
-
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +31,7 @@ public class Workouts extends AppCompatActivity {
     private List<Exercise> allExercises = new ArrayList<>();
     private List<String> favorites = new ArrayList<>();
 
-    private Button btnAll, btnStrength, btnCardio, btnCalisthenics, btnYoga, btnRunning;
+    private MaterialButton btnAll, btnStrength, btnCardio, btnCalisthenics, btnYoga, btnRunning;
     private String currentCategory = "All";
 
     @Override
@@ -49,6 +53,14 @@ public class Workouts extends AppCompatActivity {
         btnYoga = findViewById(R.id.btn_yoga);
         btnRunning = findViewById(R.id.btn_running);
 
+        Button[] allButtons = {
+                btnAll, btnStrength, btnCardio, btnCalisthenics, btnYoga, btnRunning
+        };
+
+        selectedCategoryButton = btnAll;
+        btnAll.setChecked(true);
+        renderExercises("All");
+
         allExercises.add(new Exercise("Push-up", "Upper", "Strength"));
         allExercises.add(new Exercise("Plank", "Core", "Strength"));
         allExercises.add(new Exercise("Bodyweight Squat", "Lower", "Calisthenics"));
@@ -64,6 +76,29 @@ public class Workouts extends AppCompatActivity {
         allExercises.add(new Exercise("Hill Sprints", "Power", "Running"));
 
         renderExercises("All");
+
+        ImageView dropdownIcon = findViewById(R.id.favorite_toggle_arrow);
+        RelativeLayout favoriteToggle = findViewById(R.id.favorites_toggle);
+        favoriteContainer.setVisibility(View.GONE);
+        dropdownIcon.setRotation(0f); // default state
+
+        favoriteToggle.setOnClickListener(v -> {
+            TransitionSet transitionSet = new TransitionSet()
+                    .addTransition(new ChangeBounds())
+                    .setDuration(180) // fast & smooth
+                    .setInterpolator(new AccelerateDecelerateInterpolator());
+
+            TransitionManager.beginDelayedTransition((ViewGroup) favoriteContainer.getParent(), transitionSet);
+
+            if (favoriteContainer.getVisibility() == View.GONE) {
+                favoriteContainer.setVisibility(View.VISIBLE);
+                dropdownIcon.animate().rotation(180f).setDuration(180).start();
+            } else {
+                favoriteContainer.setVisibility(View.GONE);
+                dropdownIcon.animate().rotation(0f).setDuration(180).start();
+            }
+        });
+
 
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -89,12 +124,12 @@ public class Workouts extends AppCompatActivity {
             }
         });
 
-        btnAll.setOnClickListener(v -> renderExercises("All"));
-        btnStrength.setOnClickListener(v -> renderExercises("Strength"));
-        btnCardio.setOnClickListener(v -> renderExercises("Cardio"));
-        btnCalisthenics.setOnClickListener(v -> renderExercises("Calisthenics"));
-        btnYoga.setOnClickListener(v -> renderExercises("Yoga"));
-        btnRunning.setOnClickListener(v -> renderExercises("Running"));
+        btnAll.setOnClickListener(v -> updateSelectedCategory(btnAll, "All"));
+        btnStrength.setOnClickListener(v -> updateSelectedCategory(btnStrength, "Strength"));
+        btnCardio.setOnClickListener(v -> updateSelectedCategory(btnCardio, "Cardio"));
+        btnCalisthenics.setOnClickListener(v -> updateSelectedCategory(btnCalisthenics, "Calisthenics"));
+        btnYoga.setOnClickListener(v -> updateSelectedCategory(btnYoga, "Yoga"));
+        btnRunning.setOnClickListener(v -> updateSelectedCategory(btnRunning, "Running"));
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_workout);
@@ -187,7 +222,7 @@ public class Workouts extends AppCompatActivity {
         cardLayout.setOrientation(LinearLayout.HORIZONTAL);
         cardLayout.setPadding(24, 24, 24, 24);
         cardLayout.setBackgroundResource(R.drawable.exercise_card_bg);
-        cardLayout.setElevation(4f);
+        cardLayout.setElevation(3f);
 
         if (!isFavoriteSection) {
             ImageView leftIcon = new ImageView(this);
@@ -273,7 +308,7 @@ public class Workouts extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        wrapperParams.setMargins(0, 0, 0, 24);
+        wrapperParams.setMargins(0, 0, 0, 30);
         wrapper.setLayoutParams(wrapperParams);
         wrapper.addView(cardLayout);
 
@@ -302,6 +337,31 @@ public class Workouts extends AppCompatActivity {
 
         return R.drawable.ic_biceps;
     }
+
+    private MaterialButton selectedCategoryButton = null;
+
+    private void updateSelectedCategory(MaterialButton clickedButton, String category) {
+        if (selectedCategoryButton == clickedButton) {
+            // Same button tapped again → unselect
+            clickedButton.setChecked(false);
+            selectedCategoryButton = null;
+            currentCategory = "All";
+            renderExercises("All");
+        } else {
+            // Deselect previous
+            if (selectedCategoryButton != null) {
+                selectedCategoryButton.setChecked(false);
+            }
+
+            // Select new
+            clickedButton.setChecked(true);
+            selectedCategoryButton = clickedButton;
+            currentCategory = category;
+            renderExercises(category);
+        }
+    }
+
+
 
     public static class Exercise {
         public String title;
