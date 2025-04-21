@@ -54,8 +54,7 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.google.firebase:firebase-auth:22.1.1")
     implementation("com.google.firebase:firebase-firestore:24.11.1")
-    implementation ("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
     implementation("com.google.code.gson:gson:2.10.1")
-
 }

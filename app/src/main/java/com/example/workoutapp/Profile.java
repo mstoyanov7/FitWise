@@ -1,24 +1,20 @@
 package com.example.workoutapp;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +31,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 
 public class Profile extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -103,9 +100,9 @@ public class Profile extends AppCompatActivity {
                 case 1: // backSide
                     showEditGoalsDialog();
                     break;
-//              case 2: // nutritionSide
-//                  showEditNutritionDialog();
-//                  break;
+              case 2: // nutritionSide
+                  showEditNutritionDialog();
+                  break;
             }
         });
 
@@ -231,7 +228,7 @@ public class Profile extends AppCompatActivity {
         textViewGoalBack.setText("Goal: " + goalWeight + " kg");
         textViewWeeklyChangeBack.setText("Weekly: " + weeklyGoal);
         textViewCaloriesBack.setText("Target calories: " + calories);
-        textViewMacros.setText("Macros: P: " + (int) protein + "g, C: " + (int) carbs + "g, F: " + (int) fats + "g");
+        textViewMacros.setText("Protein: " + protein + "g • Carbs: " + carbs + "g • Fats: " + fats + "g");
 
         // Save to Firestore
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -390,6 +387,130 @@ public class Profile extends AppCompatActivity {
         editDialog.show();
     }
 
+    private void showEditNutritionDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_macros, null);
+        Dialog editDialog = new Dialog(this);
+        editDialog.setContentView(dialogView);
+        editDialog.setCancelable(true);
+        if (editDialog.getWindow() != null) {
+            editDialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            editDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        // UI refs
+        TextView tvTotal      = dialogView.findViewById(R.id.tvMacroCalories);
+        SeekBar seekP         = dialogView.findViewById(R.id.sliderProtein);
+        SeekBar seekC         = dialogView.findViewById(R.id.sliderCarbs);
+        SeekBar seekF         = dialogView.findViewById(R.id.sliderFats);
+        TextView tvProteinPct = dialogView.findViewById(R.id.tvProteinPercent);
+        TextView tvCarbsPct   = dialogView.findViewById(R.id.tvCarbsPercent);
+        TextView tvFatsPct    = dialogView.findViewById(R.id.tvFatsPercent);
+        TextView tvWarning    = dialogView.findViewById(R.id.tvMacroWarning);
+        Button  btnSave       = dialogView.findViewById(R.id.buttonSave);
+        Button  btnCancel     = dialogView.findViewById(R.id.buttonCancel);
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int totalCals = prefs.getInt("calories", 0);
+        float p = getFloatSafe(prefs, "protein%", 30f);
+        float c = getFloatSafe(prefs, "carbs%",   40f);
+        float f = getFloatSafe(prefs, "fats%",    30f);
+        if (Math.abs(p + c + f - 100f) > 0.5f) {
+            p = 30; c = 40; f = 30;
+        }
+
+        // init
+        tvTotal.setText("Total: " + totalCals + " kcal");
+        seekP.setMax(100); seekC.setMax(100); seekF.setMax(100);
+        seekP.setProgress((int)p);
+        seekC.setProgress((int)c);
+        seekF.setProgress((int)f);
+        tvProteinPct.setText((int)p + "%");
+        tvCarbsPct.setText((int)c + "%");
+        tvFatsPct.setText((int)f + "%");
+
+        boolean ok0 = (seekP.getProgress() + seekC.getProgress() + seekF.getProgress() == 100);
+        tvWarning.setVisibility(ok0 ? View.GONE : View.VISIBLE);
+        btnSave.setEnabled(ok0);
+
+        final int STEP = 5;
+        SeekBar.OnSeekBarChangeListener snapAndCheck = new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar sb, int raw, boolean fromUser) {
+                if (!fromUser) return;
+                int snapped = Math.round(raw/(float)STEP)*STEP;
+                snapped = Math.max(0, Math.min(100, snapped));
+                sb.setProgress(snapped);
+
+                int np = seekP.getProgress();
+                int nc = seekC.getProgress();
+                int nf = seekF.getProgress();
+                tvProteinPct.setText(np + "%");
+                tvCarbsPct.setText(nc + "%");
+                tvFatsPct.setText(nf + "%");
+
+                boolean ok = (np + nc + nf == 100);
+                tvWarning.setVisibility(ok ? View.GONE : View.VISIBLE);
+                btnSave.setEnabled(ok);
+            }
+            @Override public void onStartTrackingTouch(SeekBar sb) {}
+            @Override public void onStopTrackingTouch(SeekBar sb) {}
+        };
+
+        seekP.setOnSeekBarChangeListener(snapAndCheck);
+        seekC.setOnSeekBarChangeListener(snapAndCheck);
+        seekF.setOnSeekBarChangeListener(snapAndCheck);
+
+        btnCancel.setOnClickListener(v -> editDialog.dismiss());
+
+        btnSave.setOnClickListener(v -> {
+            int newP = seekP.getProgress();
+            int newC = seekC.getProgress();
+            int newF = seekF.getProgress();
+
+            // Calculate actual grams
+            // protein & carbs = 4 kcal/g, fats = 9 kcal/g
+            int gramsP = Math.round(totalCals * (newP/100f) / 4f);
+            int gramsC = Math.round(totalCals * (newC/100f) / 4f);
+            int gramsF = Math.round(totalCals * (newF/100f) / 9f);
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                FirebaseFirestore.getInstance()
+                        .collection("users")
+                        .document(user.getUid())
+                        .update(
+                                "protein%", newP,
+                                "carbs%",   newC,
+                                "fats%",    newF,
+                                "protein",  gramsP,
+                                "carbs",    gramsC,
+                                "fats",     gramsF
+                        )
+                        .addOnSuccessListener(aVoid ->
+                                Toast.makeText(this, "Nutrition updated", Toast.LENGTH_SHORT).show()
+                        );
+            }
+
+            // Save locally
+            prefs.edit()
+                    .putFloat("protein%", newP)
+                    .putFloat("carbs%",   newC)
+                    .putFloat("fats%",    newF)
+                    .putInt("protein",   gramsP)
+                    .putInt("carbs",     gramsC)
+                    .putInt("fats",      gramsF)
+                    .apply();
+
+            textViewMacros.setText("Protein: " + (int) gramsP + "g • Carbs: " + (int) gramsC + "g • Fats: " + (int) gramsF + "g");
+
+            editDialog.dismiss();
+        });
+
+        editDialog.show();
+    }
     private void fetchAndDisplayUserData() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String cachedName = prefs.getString("name", null);
@@ -418,7 +539,7 @@ public class Profile extends AppCompatActivity {
         if (cachedCalories != -1) textViewCaloriesBack.setText("Target calories: " + cachedCalories);
 
         if (cachedProtein != -1f || cachedCarbs != -1f || cachedFats != -1f) {
-            textViewMacros.setText("Macros: P: " + cachedProtein + "g, C: " + cachedCarbs + "g, F: " + cachedFats + "g");
+            textViewMacros.setText("Protein: " + cachedProtein + "g • Carbs: " + cachedCarbs + "g • Fats: " + cachedFats + "g");
         }
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -454,7 +575,7 @@ public class Profile extends AppCompatActivity {
                             if (freshWeeklyChange != null) textViewWeeklyChangeBack.setText("Weekly: " + freshWeeklyChange);
                             if (freshCalories != null) textViewCaloriesBack.setText("Target calories: " + freshCalories.intValue());
                             if (freshProtein != null && freshCarbs != null && freshFats != null) {
-                                textViewMacros.setText("Protein: " + freshProtein.intValue() + "g Carbs: " + freshCarbs.intValue() + "g Fats: " + freshFats.intValue() + "g");
+                                textViewMacros.setText("Protein: " + freshProtein.intValue() + "g • Carbs: " + freshCarbs.intValue() + "g • Fats: " + freshFats.intValue() + "g");
                             }
 
                             prefs.edit()
