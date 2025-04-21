@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import com.google.firebase.firestore.QuerySnapshot;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.GridLabelRenderer;
+
+import org.threeten.bp.LocalDate;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class Profile extends AppCompatActivity {
@@ -41,8 +56,6 @@ public class Profile extends AppCompatActivity {
 
     private static final String PREFS_NAME = "UserPrefs";
     private static final String PREF_IMAGE_LOADED = "avatarLoaded";
-
-    private boolean isFlipped = false;
     private View frontSide;
     private View backSide;
 
@@ -52,6 +65,8 @@ public class Profile extends AppCompatActivity {
     private TextView textViewHeightBack;
     private TextView textViewActivityBack, textViewGoalBack, textViewWeeklyChangeBack;
     private TextView textViewCaloriesBack;
+
+    private TextView textViewCaloriesConsumed, textViewForecastResult;
     private int currentSide = 0; // 0 = front, 1 = back, 2 = nutrition
 
     private Dialog editDialog;
@@ -88,6 +103,8 @@ public class Profile extends AppCompatActivity {
         textViewWeeklyChangeBack = findViewById(R.id.textViewWeeklyGoal);
         textViewCaloriesBack = findViewById(R.id.textViewCalories);
         textViewMacros = findViewById(R.id.textViewMacros);
+        textViewCaloriesConsumed = findViewById(R.id.textViewCaloriesConsumed);
+        textViewForecastResult = findViewById(R.id.textViewForecastResult);
 
         buttonFlip.setOnClickListener(v -> toggleCard());
 
@@ -209,6 +226,177 @@ public class Profile extends AppCompatActivity {
             e.printStackTrace();
         }
         return defaultValue;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadAndDrawLast7DaysCalories();
+    }
+
+    private void calculateForecast(int averageCals, int sufficientCals)
+    {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        int targetCals = prefs.getInt("calories", -1);
+        String activity = prefs.getString("weeklyChange", "Maintain my current");
+
+        // Step 1: Map weeklyChange to expected weight change per week
+        double expectedKgPerWeek = 0.0;
+        switch (activity) {
+            case "Lose 1 kg per week":
+                expectedKgPerWeek = -1.0;
+                break;
+            case "Lose 0.75 kg per week":
+                expectedKgPerWeek = -0.75;
+                break;
+            case "Lose 0.5 kg per week":
+                expectedKgPerWeek = -0.5;
+                break;
+            case "Lose 0.25 kg per week":
+                expectedKgPerWeek = -0.25;
+                break;
+            case "Gain 0.25 kg per week":
+                expectedKgPerWeek = 0.25;
+                break;
+            case "Gain 0.5 kg per week":
+                expectedKgPerWeek = 0.5;
+                break;
+            default:
+                expectedKgPerWeek = 0.0; // Maintain
+        }
+
+        double kcalPerKg = 7700.0;
+        double forecast = ((averageCals - targetCals) * sufficientCals / kcalPerKg) + expectedKgPerWeek;
+
+        String formattedForecast = String.format("%.2f", Math.abs(forecast));
+
+        if (forecast < -0.01) {
+            textViewForecastResult.setText("Expected loss of " + formattedForecast + " kg");
+        }
+        else if (forecast > 0.01){
+            textViewForecastResult.setText("Expected gain of " + formattedForecast + " kg");
+        }
+        else{
+            textViewForecastResult.setText("Expected maintenance");
+        }
+    }
+
+    private int calculateAverageCal(List<Integer> dayTotals) {
+        int total = 0;
+        int nonZeroDays = 0;
+
+        for (int cals : dayTotals) {
+            if (cals > 0) {
+                total += cals;
+                nonZeroDays++;
+            }
+        }
+
+        int average = 0;
+        if (nonZeroDays > 0) {
+            average = total / nonZeroDays;
+        }
+
+        if (average > 0) {
+            textViewCaloriesConsumed.setText(average + " kcal");
+        } else {
+            textViewCaloriesConsumed.setText("No data");
+        }
+
+        return average;
+    }
+
+    private void loadAndDrawLast7DaysCalories() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        // Build the last-7-days list oldest→newest
+        LocalDate today = LocalDate.now();
+        List<String> last7 = new ArrayList<>();
+        for (int i = 6; i >= 0; i--) {
+            last7.add(today.minusDays(i).toString());
+        }
+        // Initialize sums to zero
+        Map<String,Integer> sums = new LinkedHashMap<>();
+        for (String d : last7) sums.put(d, 0);
+
+        FirebaseFirestore.getInstance()
+                .collection("foodDiary")
+                .document(user.getUid())
+                .collection("entries")
+                .whereIn("date", last7)
+                .get()
+                .addOnSuccessListener((QuerySnapshot qs) -> {
+                    for (DocumentSnapshot doc : qs.getDocuments()) {
+                        String date = doc.getString("date");
+                        Number ncal = doc.getDouble("calories") != null
+                                ? doc.getDouble("calories")
+                                : doc.getLong("calories");
+                        if (date != null && ncal != null && sums.containsKey(date)) {
+                            sums.put(date, sums.get(date) + ncal.intValue());
+                        }
+                    }
+                    // Turn into chronologically ordered List<Integer>
+                    List<Integer> dayTotals = new ArrayList<>();
+                    for (String d : last7) dayTotals.add(sums.get(d));
+
+                    int averageCals = calculateAverageCal(dayTotals);
+
+                    int sufficientCals = 0;
+                    for (int val : dayTotals) {
+                        if (val > 0) sufficientCals++;
+                    }
+
+                    if (sufficientCals > 0){
+                        calculateForecast(averageCals, sufficientCals);
+                    }
+
+                    drawWeeklyCaloriesChart(dayTotals);
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this,
+                                "Couldn't load last week’s calories: " + e.getMessage(),
+                                Toast.LENGTH_SHORT
+                        ).show()
+                );
+    }
+
+    private void drawWeeklyCaloriesChart(List<Integer> last7DaysCals) {
+        GraphView graph = findViewById(R.id.weeklyCaloriesGraph);
+
+        DataPoint[] calPoints = new DataPoint[7];
+        for (int i = 0; i < 7; i++) {
+            calPoints[i] = new DataPoint(i, last7DaysCals.get(i));
+        }
+        LineGraphSeries<DataPoint> calSeries = new LineGraphSeries<>(calPoints);
+        calSeries.setColor(Color.parseColor("#0BA284"));
+        calSeries.setDrawDataPoints(true);
+        calSeries.setDataPointsRadius(8);
+        calSeries.setThickness(6);
+
+        graph.removeAllSeries();
+        graph.addSeries(calSeries);
+
+        GridLabelRenderer grid = graph.getGridLabelRenderer();
+        grid.setGridStyle(GridLabelRenderer.GridStyle.BOTH);
+
+        grid.setGridColor(Color.parseColor("#E0E0E0"));
+        grid.setHorizontalLabelsColor(Color.parseColor("#4C494F"));
+        grid.setVerticalLabelsColor(Color.parseColor("#4C494F"));
+
+        grid.setNumHorizontalLabels(5);
+        grid.setNumVerticalLabels(5);
+
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+
+        grid.setGridStyle(GridLabelRenderer.GridStyle.HORIZONTAL);
+
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(6);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setScalable(true);
+        graph.getViewport().setScalableY(true);
     }
 
     private void saveEditedValues(String activity, String goalWeight, String weeklyGoal) {

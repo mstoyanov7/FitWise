@@ -44,7 +44,6 @@
         <activity android:name=".GoalsPage"/>
         <activity android:name=".FoodDiaryActivity"/>
 
-
         <activity
             android:name=".MyCaptureActivity"
             android:screenOrientation="portrait"

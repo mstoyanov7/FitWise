@@ -71,15 +71,20 @@
             <EditText
                 android:id="@+id/search_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
                 android:hint="Search workouts..."
-                android:visibility="gone"
-                android:layout_marginTop="8dp"
-                android:padding="12dp"
-                android:background="@drawable/search_field_bg"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:textColor="#000000"
-                android:textColorHint="#999999"
-                android:inputType="text" />
+                android:textColorHint="#888888"
+                android:backgroundTint="#DDDDDD"
+                android:background="@android:drawable/edit_text"
+                android:elevation="2dp"
+                android:inputType="text"
+                android:visibility="gone" />
+
 
             <!-- Workout card example -->
             <LinearLayout
