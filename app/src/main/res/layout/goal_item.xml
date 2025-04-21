@@ -23,7 +23,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginRight="8dp">
 
             <TextView
                 android:id="@+id/tvGoalTitle"
@@ -44,19 +45,39 @@
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Right side: dynamic “Undo” or “Complete” button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGoalAction"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        <LinearLayout
+            android:id="@+id/goalActionsLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Undo"
-            android:textAllCaps="false"
-            android:layout_marginStart="16dp"
-            android:textColor="#6B7280"
-            android:backgroundTint="@color/light_gray"
-            app:cornerRadius="8dp"
-            app:strokeColor="#D1D5DB"
-            app:strokeWidth="1dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btnRemove"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Remove item"
+                android:padding="4dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_delete"
+                app:tint="#898989" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoalAction"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Undo"
+                android:textAllCaps="false"
+                android:layout_marginStart="8dp"
+                android:textColor="#6B7280"
+                android:backgroundTint="@color/light_gray"
+                app:cornerRadius="8dp"
+                app:strokeColor="#D1D5DB"
+                app:strokeWidth="1dp" />
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

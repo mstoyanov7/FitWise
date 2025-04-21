@@ -148,6 +148,10 @@ public class FoodDiaryActivity extends AppCompatActivity {
             if (id == R.id.nav_meals) {
                 return true;
             }
+            else if (id == R.id.nav_home) {
+                intent = new Intent(this, HomeActivity.class);
+            }
+
             else if (id == R.id.nav_workout) {
                 intent = new Intent(this, Workouts.class);
             }
