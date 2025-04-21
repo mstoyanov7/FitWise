@@ -12,6 +12,9 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,8 @@ public class Workouts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FullscreenUtil.hideSystemUI(this);
         setContentView(R.layout.workouts_page);
+
+        loadFavoritesFromFirebase();
 
         searchInput = findViewById(R.id.search_input);
         favoriteContainer = findViewById(R.id.favorite_container);
@@ -117,6 +122,25 @@ public class Workouts extends AppCompatActivity {
             return false;
         });
     }
+
+    private void loadFavoritesFromFirebase() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        FirebaseFirestore.getInstance()
+                .collection("favorites")
+                .document(user.getUid())
+                .collection("entries")
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    favorites.clear();
+                    for (var doc : querySnapshot.getDocuments()) {
+                        favorites.add(doc.getId());
+                    }
+                    renderExercises(currentCategory);
+                });
+    }
+
 
     private void renderExercises(String category) {
         currentCategory = category;
@@ -204,12 +228,33 @@ public class Workouts extends AppCompatActivity {
             rightIcon.setImageResource(favorites.contains(ex.title) ? R.drawable.ic_heart_filled : R.drawable.ic_heart_outline);
 
             rightIcon.setOnClickListener(v -> {
-                if (favorites.contains(ex.title)) {
-                    favorites.remove(ex.title);
-                } else {
-                    favorites.add(ex.title);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user == null) {
+                    Toast.makeText(this, "You must be signed in to favorite", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                renderExercises(currentCategory);
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                String uid = user.getUid();
+                String exerciseName = ex.title;
+
+                if (favorites.contains(exerciseName)) {
+                    db.collection("favorites").document(uid)
+                            .collection("entries").document(exerciseName)
+                            .delete()
+                            .addOnSuccessListener(unused -> {
+                                favorites.remove(exerciseName);
+                                renderExercises(currentCategory);
+                            });
+                } else {
+                    db.collection("favorites").document(uid)
+                            .collection("entries").document(exerciseName)
+                            .set(new Exercise(ex.title, ex.type, ex.category))
+                            .addOnSuccessListener(unused -> {
+                                favorites.add(exerciseName);
+                                renderExercises(currentCategory);
+                            });
+                }
             });
         }
 
@@ -258,10 +303,14 @@ public class Workouts extends AppCompatActivity {
         return R.drawable.ic_biceps;
     }
 
-    static class Exercise {
-        String title, type, category;
+    public static class Exercise {
+        public String title;
+        public String type;
+        public String category;
 
-        Exercise(String title, String type, String category) {
+        public Exercise() {}
+
+        public Exercise(String title, String type, String category) {
             this.title = title;
             this.type = type;
             this.category = category;

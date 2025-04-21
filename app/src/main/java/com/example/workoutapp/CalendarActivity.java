@@ -218,27 +218,50 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void showFavoritesDialog(CalendarAddWorkoutsAdapter adapter) {
-        String[] allExercises = {"Push-ups", "Deadlifts", "Pull-ups", "Burpees", "Lunges",
-                "Shoulder Press", "Plank", "Mountain Climbers", "Russian Twists",
-                "Bicep Curls", "Tricep Dips", "Squats", "Jumping Jacks"};
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "You must be signed in", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        boolean[] checkedItems = new boolean[allExercises.length];
-        List<String> selected = new ArrayList<>();
+        FirebaseFirestore.getInstance()
+                .collection("favorites")
+                .document(user.getUid())
+                .collection("entries")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    List<String> favList = new ArrayList<>();
+                    for (var doc : snapshot.getDocuments()) {
+                        favList.add(doc.getId());
+                    }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick Favorite Exercises");
-        builder.setMultiChoiceItems(allExercises, checkedItems, (dialog, which, isChecked) -> {
-            if (isChecked) selected.add(allExercises[which]);
-            else selected.remove(allExercises[which]);
-        });
+                    if (favList.isEmpty()) {
+                        Toast.makeText(this, "No favorite exercises found.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-        builder.setPositiveButton("Add", (dialog, which) -> {
-            adapter.getExercises().addAll(selected);
-            adapter.notifyDataSetChanged();
-        });
+                    String[] favArray = favList.toArray(new String[0]);
+                    boolean[] checkedItems = new boolean[favArray.length];
+                    List<String> selected = new ArrayList<>();
 
-        builder.setNegativeButton("Cancel", null);
-        builder.show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Pick Favorite Exercises");
+                    builder.setMultiChoiceItems(favArray, checkedItems, (dialog, which, isChecked) -> {
+                        if (isChecked) selected.add(favArray[which]);
+                        else selected.remove(favArray[which]);
+                    });
+
+                    builder.setPositiveButton("Add", (dialog, which) -> {
+                        adapter.getExercises().addAll(selected);
+                        adapter.notifyDataSetChanged();
+                    });
+
+                    builder.setNegativeButton("Cancel", null);
+                    builder.show();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Failed to load favorites: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
     }
 
     private void showDatePicker(MaterialButton btnDate) {
