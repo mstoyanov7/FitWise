@@ -1,146 +1,155 @@
-<HorizontalScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fillViewport="true"
-    android:scrollbars="none">
+    android:background="@color/white">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="24dp"
-        android:gravity="center_horizontal"
-        android:clipChildren="false"
-        android:clipToPadding="false">
+        android:gravity="center_horizontal">
 
-        <!-- BMI Result Box -->
+        <!-- BMI Card and Scale (not scrollable horizontally) -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="16dp"
-            android:elevation="2dp"
-            android:background="@drawable/bmi_result_box_background">
-
-            <TextView
-                android:id="@+id/bmiValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="24.8"
-                android:textSize="50sp"
-                android:textStyle="bold"
-                android:textColor="#000000" />
-
-            <TextView
-                android:id="@+id/bmiCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Normal"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp"
-                android:textColor="#00C37A" />
-
-            <TextView
-                android:id="@+id/bmiFeedback"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Great job maintaining a healthy weight!"
-                android:textSize="14sp"
-                android:textColor="#666666"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:paddingHorizontal="24dp"
-                android:textAlignment="center" />
-        </LinearLayout>
-
-        <!-- BMI Scale and Labels -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
             android:orientation="horizontal"
-            android:layout_marginStart="16dp"
             android:gravity="center"
             android:clipChildren="false"
             android:clipToPadding="false">
 
-            <!-- Scale and Marker -->
-            <FrameLayout
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:clipChildren="false"
-                android:clipToPadding="false">
-
-                <!-- Gradient scale (match label height) -->
-                <View
-                    android:id="@+id/bmiScale"
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/bmi_gradient_vertical" />
-
-                <!-- Marker -->
-                <ImageView
-                    android:id="@+id/bmiMarker"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="start"
-                    android:translationX="-20dp"
-                    android:src="@drawable/ic_bmi_pointer" />
-            </FrameLayout>
-
-            <!-- BMI Category Labels -->
+            <!-- Result Box -->
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:baselineAligned="false">
+                android:gravity="center"
+                android:background="@drawable/bmi_result_box_background"
+                android:padding="16dp"
+                android:elevation="2dp">
 
                 <TextView
+                    android:id="@+id/bmiValue"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="&gt; 40\nMorbidly Obese"
-                    android:textSize="10sp"
-                    android:textColor="#D32F2F" />
+                    android:layout_height="wrap_content"
+                    android:text="24.8"
+                    android:textSize="50sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000" />
 
                 <TextView
+                    android:id="@+id/bmiCategory"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="30 – 39.9\nObese"
-                    android:textSize="10sp"
-                    android:textColor="#FF5722" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="25 – 29.9\nOverweight"
-                    android:textSize="10sp"
-                    android:textColor="#FFC107" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="18.5 – 24.9\nNormal"
-                    android:textSize="10sp"
+                    android:layout_height="wrap_content"
+                    android:text="Normal"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="4dp"
                     android:textColor="#00C37A" />
 
                 <TextView
+                    android:id="@+id/bmiFeedback"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="&lt; 18.5\nUnderweight"
-                    android:textSize="10sp"
-                    android:textColor="#03A9F4" />
+                    android:layout_height="wrap_content"
+                    android:text="Great job maintaining a healthy weight!"
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="24dp"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <!-- BMI Scale and Labels -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:gravity="center"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+                <!-- Scale and Marker -->
+                <FrameLayout
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
+
+                    <!-- Gradient scale -->
+                    <View
+                        android:id="@+id/bmiScale"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/bmi_gradient_vertical" />
+
+                    <!-- Marker -->
+                    <View
+                        android:id="@+id/bmiMarkerLine"
+                        android:layout_width="32dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="14dp"
+                        android:translationY="0dp"
+                        android:translationX="-15dp"
+                        android:background="#000000" />
+                </FrameLayout>
+
+                <!-- BMI Category Labels -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:baselineAligned="false">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="> 40\nMorbidly Obese"
+                        android:textSize="10sp"
+                        android:textColor="#D32F2F" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="30 – 39.9\nObese"
+                        android:textSize="10sp"
+                        android:textColor="#FF5722" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="25 – 29.9\nOverweight"
+                        android:textSize="10sp"
+                        android:textColor="#FFC107" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="18.5 – 24.9\nNormal"
+                        android:textSize="10sp"
+                        android:textColor="#00C37A" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="&lt; 18.5\nUnderweight"
+                        android:textSize="10sp"
+                        android:textColor="#03A9F4" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</HorizontalScrollView>
+</ScrollView>
