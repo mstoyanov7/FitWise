@@ -44,7 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Current Weight (kg)"
+                    android:text="@string/current_weight"
                     android:textSize="13sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"
@@ -68,7 +68,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Current Height (cm)"
+                    android:text="@string/current_height"
                     android:textSize="13sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"
@@ -91,7 +91,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Age"
+                    android:text="@string/age"
                     android:textSize="13sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"
@@ -114,7 +114,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sex"
+                    android:text="@string/sex"
                     android:textSize="13sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"
@@ -132,7 +132,7 @@
                         android:id="@+id/maleRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Male"
+                        android:text="@string/male"
                         android:textColor="#444"
                         android:textSize="12sp"
                         android:fontFamily="@font/open_sans_medium" />
@@ -141,7 +141,7 @@
                         android:id="@+id/femaleRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Female"
+                        android:text="@string/female"
                         android:textColor="#444"
                         android:layout_marginStart="16dp"
                         android:textSize="12sp"
@@ -152,7 +152,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Activity Level"
+                    android:text="@string/activity_level"
                     android:textSize="13sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"
@@ -168,7 +168,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Goal Weight (kg)"
+                    android:text="@string/goal_weight"
                     android:textSize="13sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"
@@ -191,7 +191,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Weekly Goal"
+                    android:text="@string/weekly_goal"
                     android:textSize="13sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"
@@ -209,7 +209,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Continue"
+                    android:text="@string/continue_button"
                     android:textAllCaps="false"
                     android:fontFamily="@font/open_sans_bold"
                     android:textSize="15sp"

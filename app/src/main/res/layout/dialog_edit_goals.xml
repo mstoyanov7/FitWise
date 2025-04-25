@@ -16,7 +16,7 @@
             android:id="@+id/textViewEditTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile Goals"
+            android:text="@string/edit_profile_goals"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Activity Level"
+            android:text="@string/activity_level"
             android:textStyle="bold"
             android:paddingTop="4dp"/>
 
@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Goal Weight (kg)"
+            android:text="@string/goal_weight"
             android:textStyle="bold"
             android:paddingTop="12dp"/>
 
@@ -47,14 +47,14 @@
             android:id="@+id/editTextGoalWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter goal weight"
+            android:hint="@string/goal_weight_hint"
             android:inputType="numberDecimal" />
 
         <!-- Weekly Goal -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Weekly Goal"
+            android:text="@string/weekly_goal"
             android:textStyle="bold"
             android:paddingTop="12dp"/>
 
@@ -75,7 +75,7 @@
                 android:id="@+id/buttonCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:textColor="@android:color/white"
                 android:backgroundTint="@color/colorPrimary" />
 
@@ -83,7 +83,7 @@
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="@android:color/white"
                 android:backgroundTint="@color/colorPrimary"
                 android:layout_marginStart="12dp" />

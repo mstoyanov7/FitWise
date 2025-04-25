@@ -29,7 +29,7 @@
                 android:id="@+id/tvWorkoutTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Strength Training"
+                android:text="@string/strength_training"
                 android:fontFamily="@font/open_sans_bold"
                 android:textSize="14sp"/>
 
@@ -37,7 +37,7 @@
                 android:id="@+id/chipStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Upcoming"
+                android:text="@string/upcoming"
                 android:textColor="#898989"
                 android:backgroundTint="#F4F4F5"
                 android:layout_marginLeft="4dp"
@@ -57,7 +57,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/ic_expand_more"
-                android:contentDescription="Expand toggle"/>
+                android:contentDescription="@string/expand_toggle"/>
         </LinearLayout>
 
         <LinearLayout
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="05:30PM · 50 min"
+                android:text="@string/workout_time_duration"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 android:textColor="@color/dark_gray"/>
         </LinearLayout>
@@ -105,7 +105,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Exercises"
+                android:text="@string/exercises"
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp"/>
@@ -128,7 +128,7 @@
                     android:layout_height="36dp"
                     android:src="@drawable/ic_edit"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Edit"/>
+                    android:contentDescription="@string/edit"/>
 
                 <ImageButton
                     android:id="@+id/btnDelete"
@@ -137,14 +137,14 @@
                     android:src="@drawable/ic_delete"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:layout_marginStart="8dp"
-                    android:contentDescription="Delete"/>
+                    android:contentDescription="@string/delete"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnComplete"
                     style="@style/Widget.MaterialComponents.Button"
                     android:layout_marginStart="8dp"
                     android:layout_height="36dp"
-                    android:text="Complete"/>
+                    android:text="@string/complete"/>
             </LinearLayout>
         </LinearLayout>
 

@@ -32,7 +32,7 @@
             android:id="@+id/foodDiaryTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Food Diary"
+            android:text="@string/food_diary"
             android:textSize="26sp"
             android:fontFamily="@font/open_sans_bold"
             android:textColor="#000000" />
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_regular"
-            android:text="Track your food and be healthy"
+            android:text="@string/food_diary_subtitle"
             android:textSize="14sp"
             android:textColor="#898989"
             android:layout_marginBottom="12dp" />
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/open_sans_bold"
-                    android:text="Your Food Diary For:"
+                    android:text="@string/food_diary_for"
                     android:textSize="18sp"
                     android:textColor="@color/black" />
 
@@ -98,7 +98,7 @@
                     android:id="@+id/selectedDateText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tuesday, April 18"
+                    android:text="@string/food_diary_date"
                     android:fontFamily="@font/open_sans_regular"
                     android:textColor="#898989"
                     android:textSize="14sp"
@@ -121,7 +121,7 @@
                         <TextView android:text="" android:padding="6dp"/>
 
                         <TextView
-                            android:text="Calories\n(kcal)"
+                            android:text="@string/calories_label"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:padding="6dp"
@@ -129,7 +129,7 @@
                             android:textColor="#333333"/>
 
                         <TextView
-                            android:text="Carbs\n(g)"
+                            android:text="@string/carbs_label"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:padding="6dp"
@@ -137,7 +137,7 @@
                             android:textColor="#333333"/>
 
                         <TextView
-                            android:text="Fat\n(g)"
+                            android:text="@string/fat_label"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:padding="6dp"
@@ -145,7 +145,7 @@
                             android:textColor="#333333"/>
 
                         <TextView
-                            android:text="Protein\n(g)"
+                            android:text="@string/protein_label"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:padding="6dp"
@@ -160,7 +160,7 @@
 
                     <TableRow android:gravity="center">
                         <TextView
-                            android:text="Daily Goal"
+                            android:text="@string/daily_goal"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:padding="6dp"
@@ -171,7 +171,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="0"
+                            android:text="@string/goal_zero_value"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:textColor="#000000"
@@ -185,7 +185,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="0"
+                            android:text="@string/goal_zero_value"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:textColor="#000000"
@@ -199,7 +199,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="0"
+                            android:text="@string/goal_zero_value"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:textColor="#000000"
@@ -213,7 +213,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="0"
+                            android:text="@string/goal_zero_value"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:textColor="#000000"
@@ -230,7 +230,7 @@
 
                     <TableRow android:gravity="center">
                         <TextView
-                            android:text="Remaining"
+                            android:text="@string/remaining"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:padding="6dp"
@@ -238,7 +238,7 @@
 
                         <TextView
                             android:id="@+id/remainCalories"
-                            android:text="0"
+                            android:text="@string/goal_zero_value"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:textColor="#000000"
@@ -248,7 +248,7 @@
 
                         <TextView
                             android:id="@+id/remainCarbs"
-                            android:text="0"
+                            android:text="@string/goal_zero_value"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:textColor="#000000"
@@ -258,7 +258,7 @@
 
                         <TextView
                             android:id="@+id/remainFat"
-                            android:text="0"
+                            android:text="@string/goal_zero_value"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:textColor="#000000"
@@ -268,7 +268,7 @@
 
                         <TextView
                             android:id="@+id/remainProtein"
-                            android:text="0"
+                            android:text="@string/goal_zero_value"
                             android:gravity="center"
                             android:textAlignment="center"
                             android:textColor="#000000"

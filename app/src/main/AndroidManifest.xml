@@ -40,7 +40,6 @@
         <activity android:name=".HomeActivity"/>
         <activity android:name=".Workouts"/>
         <activity android:name=".CalendarActivity"/>
-        <activity android:name=".PullUpsActivity" />
         <activity android:name=".GoalsPage"/>
         <activity android:name=".FoodDiaryActivity"/>
 

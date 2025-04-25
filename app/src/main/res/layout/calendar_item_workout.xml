@@ -45,7 +45,7 @@
                         android:id="@+id/tvWorkoutTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Strength Training"
+                        android:text="@string/strength_training_calendar_item"
                         android:textStyle="bold"
                         android:textColor="#111827"
                         android:textSize="16sp"
@@ -55,7 +55,7 @@
                         android:id="@+id/tvWorkoutStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" • Upcoming"
+                        android:text="@string/upcoming_prefix"
                         android:textColor="#6B7280"
                         android:textSize="14sp"
                         android:layout_marginStart="8dp"
@@ -76,13 +76,13 @@
                         android:src="@drawable/ic_timer"
                         app:tint="#6B7280"
                         android:layout_marginEnd="4dp"
-                        android:contentDescription="Time" />
+                        android:contentDescription="@string/time" />
 
                     <TextView
                         android:id="@+id/tvWorkoutTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="05:30PM - 50 min"
+                        android:text="@string/workout_time"
                         android:textColor="#6B7280"
                         android:textSize="14sp"
                         android:fontFamily="@font/open_sans_medium" />
@@ -95,7 +95,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_expand_more"
-                android:contentDescription="More"
+                android:contentDescription="@string/more_options"
                 app:tint="#9CA3AF"
                 android:layout_marginStart="8dp"
                 android:clickable="true"
@@ -146,7 +146,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_delete"
-                    android:contentDescription="Delete Workout"
+                    android:contentDescription="@string/delete_workout"
                     app:tint="#898989"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="4dp" />
@@ -157,7 +157,7 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Complete"
+                    android:text="@string/complete"
                     android:textAllCaps="false"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/open_sans_medium"

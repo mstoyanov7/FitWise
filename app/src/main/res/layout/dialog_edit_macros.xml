@@ -11,7 +11,7 @@
         android:id="@+id/tvMacroCalories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Target calories: 0"
+        android:text="@string/target_calories"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
@@ -29,7 +29,7 @@
             android:id="@+id/tvEditMacrosTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Adjust Macros"
+            android:text="@string/adjust_macros"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -37,7 +37,7 @@
             android:id="@+id/tvMacroWarning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚠️"
+            android:text="@string/warning_icon"
             android:textSize="18sp"
             android:visibility="gone"
             android:paddingStart="8dp"/>
@@ -53,13 +53,13 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Protein"
+            android:text="@string/protein_cap"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/tvProteinPercent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="30%"
+            android:text="@string/protein_percent"
             android:textStyle="bold"
             android:paddingStart="8dp"/>
     </LinearLayout>
@@ -83,13 +83,13 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Carbs"
+            android:text="@string/carbs"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/tvCarbsPercent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="40%"
+            android:text="@string/carbs_percent"
             android:textStyle="bold"
             android:paddingStart="8dp"/>
     </LinearLayout>
@@ -113,13 +113,13 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Fats"
+            android:text="@string/fats"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/tvFatsPercent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="30%"
+            android:text="@string/fats_percent"
             android:textStyle="bold"
             android:paddingStart="8dp"/>
     </LinearLayout>
@@ -144,7 +144,7 @@
             android:id="@+id/buttonCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="@android:color/white"
             android:backgroundTint="@color/colorPrimary" />
 
@@ -152,7 +152,7 @@
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
+            android:text="@string/save"
             android:textColor="@android:color/white"
             android:backgroundTint="@color/colorPrimary"
             android:layout_marginStart="12dp" />

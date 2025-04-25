@@ -16,7 +16,7 @@
             android:id="@+id/textViewEditTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile"
+            android:text="@string/edit_profile"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
@@ -26,21 +26,21 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Height (cm)"
+            android:text="@string/height_label_edit_profile"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editTextHeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter height"
+            android:hint="@string/height_hint"
             android:inputType="numberDecimal" />
 
         <!-- Weight -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Weight (kg)"
+            android:text="@string/weight_label_edit_profile"
             android:textStyle="bold"
             android:paddingTop="12dp" />
 
@@ -48,14 +48,14 @@
             android:id="@+id/editTextWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter weight"
+            android:hint="@string/weight_hint"
             android:inputType="numberDecimal" />
 
         <!-- Sex -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sex"
+            android:text="@string/sex"
             android:textStyle="bold"
             android:paddingTop="12dp" />
 
@@ -71,14 +71,14 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Male" />
+                android:text="@string/male" />
 
             <RadioButton
                 android:id="@+id/radioFemale"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Female" />
+                android:text="@string/female" />
         </RadioGroup>
 
         <!-- Buttons -->
@@ -93,7 +93,7 @@
                 android:id="@+id/buttonCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:textColor="@android:color/white"
                 android:backgroundTint="@color/colorPrimary" />
 
@@ -101,7 +101,7 @@
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="@android:color/white"
                 android:backgroundTint="@color/colorPrimary"
                 android:layout_marginStart="12dp" />

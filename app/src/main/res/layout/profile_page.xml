@@ -58,7 +58,7 @@
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_edit"
                             app:tint="#898989"
-                            android:contentDescription="Edit" />
+                            android:contentDescription="@string/edit" />
 
                         <ImageButton
                             android:id="@+id/buttonFlip"
@@ -69,7 +69,7 @@
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_flip"
                             app:tint="#898989"
-                            android:contentDescription="Flip" />
+                            android:contentDescription="@string/flip" />
 
                         <ImageButton
                             android:id="@+id/buttonLogout"
@@ -82,7 +82,7 @@
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_logout"
                             app:tint="#898989"
-                            android:contentDescription="Export" />
+                            android:contentDescription="@string/export" />
                     </LinearLayout>
 
                     <View
@@ -124,7 +124,7 @@
                                     android:id="@+id/textViewName"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Marin Stoyanov"
+                                    android:text="@string/full_name"
                                     android:textSize="22sp"
                                     android:textStyle="bold"
                                     android:layout_marginLeft="6dp"
@@ -148,7 +148,7 @@
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="Height:"
+                                                android:text="@string/height_label"
                                                 android:textStyle="bold"
                                                 android:textSize="14sp" />
 
@@ -156,7 +156,7 @@
                                                 android:id="@+id/textViewHeight"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="184 cm"
+                                                android:text="@string/height_value"
                                                 android:textSize="14sp" />
                                         </LinearLayout>
 
@@ -170,7 +170,7 @@
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="Weight:"
+                                                android:text="@string/weight_label"
                                                 android:textStyle="bold"
                                                 android:textSize="14sp" />
 
@@ -178,7 +178,7 @@
                                                 android:id="@+id/textViewWeight"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="72 kg"
+                                                android:text="@string/weight_value"
                                                 android:textSize="14sp" />
                                         </LinearLayout>
 
@@ -192,7 +192,7 @@
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="Sex:"
+                                                android:text="@string/sex_label"
                                                 android:textStyle="bold"
                                                 android:textSize="14sp" />
 
@@ -200,7 +200,7 @@
                                                 android:id="@+id/textViewSex"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="Male"
+                                                android:text="@string/male"
                                                 android:textSize="14sp" />
                                         </LinearLayout>
 
@@ -227,7 +227,7 @@
                                     android:id="@+id/textViewActivityLevel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Activity: Moderate"
+                                    android:text="@string/activity_level_moderate"
                                     android:fontFamily="@font/open_sans_regular"
                                     android:textSize="14sp" />
 
@@ -235,7 +235,7 @@
                                     android:id="@+id/textViewGoalWeight"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Goal: 140 kg"
+                                    android:text="@string/goal_weight_140"
                                     android:fontFamily="@font/open_sans_regular"
                                     android:textSize="14sp" />
 
@@ -243,7 +243,7 @@
                                     android:id="@+id/textViewWeeklyGoal"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Weekly goal: -1.2 kg"
+                                    android:text="@string/weekly_goal_profile"
                                     android:fontFamily="@font/open_sans_regular"
                                     android:textSize="14sp" />
                             </LinearLayout>
@@ -259,7 +259,7 @@
                                     android:id="@+id/textViewCalories"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Target calories: 0"
+                                    android:text="@string/target_calories"
                                     android:fontFamily="@font/open_sans_regular"
                                     android:textSize="14sp" />
 
@@ -267,7 +267,7 @@
                                     android:id="@+id/textViewMacros"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Macros: P: 0g, C: 0g, F: 0g"
+                                    android:text="@string/macros"
                                     android:fontFamily="@font/open_sans_regular"
                                     android:textSize="14sp"
                                     android:paddingTop="4dp" />
@@ -301,7 +301,7 @@
                         android:id="@+id/textViewWeekProgressTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Last 7 days Progress"
+                        android:text="@string/progress_last_7_days"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/open_sans_semibold" />
@@ -324,7 +324,7 @@
                                 android:id="@+id/textViewCaloriesConsumedLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Avg Calories Consumed"
+                                android:text="@string/avg_calories_consumed"
                                 android:textSize="12sp"
                                 android:textColor="#898989"
                                 android:fontFamily="@font/open_sans_regular" />
@@ -333,7 +333,7 @@
                                 android:id="@+id/textViewCaloriesConsumed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0 kcal"
+                                android:text="@string/zero_kcal"
                                 android:textSize="20sp"
                                 android:fontFamily="@font/open_sans_bold" />
                         </LinearLayout>
@@ -349,7 +349,7 @@
                                 android:id="@+id/textViewForecastLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Forecast"
+                                android:text="@string/forecast"
                                 android:textSize="12sp"
                                 android:textColor="#898989"
                                 android:fontFamily="@font/open_sans_regular" />
@@ -358,7 +358,7 @@
                                 android:id="@+id/textViewForecastResult"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="No forecast"
+                                android:text="@string/no_forecast"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/open_sans_bold" />
                         </LinearLayout>
@@ -418,7 +418,7 @@
                             android:fontFamily="@font/open_sans_semibold"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:text="BMI"
+                            android:text="@string/bmi"
                             android:textColor="@color/tab_text_color_selector"
                             android:textSize="12sp" />
 
@@ -434,7 +434,7 @@
                             android:fontFamily="@font/open_sans_semibold"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:text="Goals"
+                            android:text="@string/goals"
                             android:textColor="@color/tab_text_color_selector"
                             android:textSize="12sp" />
 
@@ -462,7 +462,7 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/open_sans_semibold"
-                    android:text="Recent Workouts"
+                    android:text="@string/recent_workouts"
                     android:textSize="14sp" />
 
                 <Button
@@ -472,7 +472,7 @@
                     android:id="@+id/buttonViewAll"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="View All"
+                    android:text="@string/view_all"
                     android:textAllCaps="false"
                     android:textSize="12sp"
                     android:backgroundTint="@android:color/transparent"

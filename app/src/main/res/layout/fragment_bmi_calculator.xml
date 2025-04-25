@@ -35,7 +35,7 @@
                     android:id="@+id/bmiValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="24.8"
+                    android:text="@string/bmi_value"
                     android:textSize="50sp"
                     android:textStyle="bold"
                     android:textColor="#000000" />
@@ -44,7 +44,7 @@
                     android:id="@+id/bmiCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Normal"
+                    android:text="@string/bmi_status_normal"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:layout_marginTop="4dp"
@@ -54,7 +54,7 @@
                     android:id="@+id/bmiFeedback"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Great job maintaining a healthy weight!"
+                    android:text="@string/bmi_feedback"
                     android:textSize="14sp"
                     android:textColor="#666666"
                     android:layout_marginTop="12dp"
@@ -113,7 +113,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="> 40\nMorbidly Obese"
+                        android:text="@string/bmi_morbidly_obese"
                         android:textSize="10sp"
                         android:textColor="#D32F2F" />
 
@@ -121,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="30 – 39.9\nObese"
+                        android:text="@string/bmi_obese"
                         android:textSize="10sp"
                         android:textColor="#FF5722" />
 
@@ -129,7 +129,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="25 – 29.9\nOverweight"
+                        android:text="@string/bmi_overweight"
                         android:textSize="10sp"
                         android:textColor="#FFC107" />
 
@@ -137,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="18.5 – 24.9\nNormal"
+                        android:text="@string/bmi_normal"
                         android:textSize="10sp"
                         android:textColor="#00C37A" />
 
@@ -145,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="&lt; 18.5\nUnderweight"
+                        android:text="@string/bmi_underweight"
                         android:textSize="10sp"
                         android:textColor="#03A9F4" />
                 </LinearLayout>

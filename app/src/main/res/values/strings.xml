@@ -2,132 +2,299 @@
     <string name="app_name">FitWise</string>
 
     <!--MAIN ACTIVITY PAGE STRINGS -->
-    <string name="quote">Your personal fitness journey starts here.
-        Get ready to transform your body and mind.</string>
-    <string name="sign_in">Sign in</string>
-    <string name="sign_up_main_activity_page"><u>Sign up</u></string>
-    <string name="new_user">New user?\u00A0</string>
+    <string name="quote">Вашето лично фитнес пътешествие започва тук. Подгответе се да трансформирате тялото и ума си.</string>
+    <string name="sign_in">Вход</string>
+    <string name="sign_up_main_activity_page"><u>Регистрация</u></string>
+    <string name="new_user">Нов потребител?\u00A0</string>
     <!--MAIN ACTIVITY PAGE STRINGS -->
 
     <!--REGISTER PAGE STRINGS -->
-    <string name="sign_up">Sign up</string>
-    <string name="background_description">Background image</string>
-    <string name="register_page_quote">A Healthier You Starts Here!</string>
-    <string name="create_account">Create an account</string>
-    <string name="enter_name">Enter your name</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="sign_up_register_page">Sign Up</string>
-    <string name="have_account">Already have an account?<u> Sign in</u>
-    </string>
-    <string name="google_sign_up">Sign up with Google</string>
-    <string name="google_description">Sign up with Google</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="background_description">Фоново изображение</string>
+    <string name="register_page_quote">Твоят здравословен старт!</string>
+    <string name="create_account">Създайте акаунт</string>
+    <string name="enter_name">Въведете вашето име</string>
+    <string name="email">Имейл</string>
+    <string name="password">Парола</string>
+    <string name="sign_up_register_page">Регистрация</string>
+    <string name="have_account">Вече имате акаунт?<u> Вход</u></string>
+    <string name="google_sign_up">Регистрация с Google</string>
+    <string name="google_description">Регистрация с Google</string>
+    <string name="nickname">Псевдоним</string>
+    <string name="sign_up_background_description">Фоново изображение на екрана за регистрация</string>
     <!--REGISTER PAGE STRINGS -->
 
     <!--SIGN IN (LOGIN) PAGE STRINGS -->
-    <string name="welcome_back">Welcome back!</string>
-    <string name="log_into_account">Login into account</string>
-    <string name="do_not_have_account">Don\'t have an account? <u>Sign Up</u></string>
-    <string name="google_sign_in">Sign in with Google</string>
-    <string name="remember_me">Remember me?</string>
-    <string name="forgot_pass"><u>Forgot password?</u></string>
-    <string name="sign_in_button">Sign In</string>
+    <string name="sign_in_background_image">Фоново изображение на екрана за вход</string>
+    <string name="welcome_back">Добре дошли отново!</string>
+    <string name="log_into_account">Влезте в акаунта си</string>
+    <string name="do_not_have_account">Нямате акаунт? <u>Регистрация</u></string>
+    <string name="google_sign_in">Вход с Google</string>
+    <string name="remember_me">Запомни ме?</string>
+    <string name="forgot_pass"><u>Забравена парола?</u></string>
+    <string name="sign_in_button">Вход</string>
     <!--SIGN IN (LOGIN) PAGE STRINGS -->
 
     <!--FORGOTTEN PASSWORD PAGE STRINGS -->
-    <string name="forgotten_pass">Forgot Your Password?</string>
-    <string name="enter_email">We will send you an email to reset</string>
-    <string name="submit_button">Submit</string>
-    <string name="back_to_login">Back to<u> Login</u></string>
+    <string name="forgotten_pass">Забравихте паролата си?</string>
+    <string name="enter_email">Ще ви изпратим имейл за нулиране</string>
+    <string name="submit_button">Изпрати</string>
+    <string name="back_to_login">Обратно към<u> Вход</u></string>
+    <string name="forgot_pass_background_description">Фоново изображение на екрана за забравена парола</string>
     <!--FORGOTTEN PASSWORD PAGE STRINGS -->
 
-
-
-
-    <string name="logo_desc">Logo</string>
-    <string name="login_button">Login</string>
-    <string name="workout_image_desc">Workout Image</string>
+    <!--WELCOME PAGE STRINGS-->
+    <string name="current_weight">Текущо тегло (кг)</string>
+    <string name="current_height">Текущ ръст (см)</string>
+    <string name="age">Възраст</string>
+    <string name="sex">Пол</string>
+    <string name="male">Мъж</string>
+    <string name="female">Жена</string>
+    <string name="activity_level">Ниво на активност</string>
+    <string name="goal_weight">Целево тегло (кг)</string>
+    <string name="weekly_goal">Седмична цел</string>
+    <string name="continue_button">Продължи</string>
+    <!--WELCOME PAGE STRINGS-->
 
     <!--WORKOUTS PAGE STRINGS-->
-    <string name="placeholder_date">Placeholder date</string>
-    <string name="workouts">Workouts</string>
-    <string name="search_bar_text">Search categories…</string>
-    <string name="calisthenics_btn_menu">Calisthenics</string>
-    <string name="fitness_btn_menu">Fitness</string>
-    <string name="running_btn_menu">Running</string>
-    <string name="yoga_btn_menu">Yoga</string>
-    <string name="pull_ups_box_title">Pull-Ups</string>
-    <string name="pull_ups_box_quote">Pull-ups build strength using bodyweight.</string>
-    <string name="dips_box_title">Dips</string>
-    <string name="dips_box_quote">Dips strengthen triceps using body weight.</string>
-    <string name="muscle_ups_box_title">Muscle-Ups</string>
-    <string name="muscle_ups_box_quote">Muscle-ups build upper body power.</string>
-    <string name="pistol_squats_box_title">Pistol Squats</string>
-    <string name="pistol_squats_box_quote">Pistol squats improve balance and strength.</string>
-    <string name="background_image">Background image</string>
-    <string name="search_button">Search categories</string>
-    <string name="pull_ups_background_box">Pull ups background</string>
-    <string name="dips_background_box">Dips background</string>
-    <string name="muscle_ups_background_box">Muscle-Ups background</string>
-    <string name="pistol_squats_background_box">Pistol Squats background</string>
+    <string name="exercises">Упражнения</string>
+    <string name="all">Всички</string>
+    <string name="strength">Сила</string>
+    <string name="cardio">Кардио</string>
+    <string name="calisthenics">Калистеника</string>
+    <string name="running">Бягане</string>
+    <string name="yoga">Йога</string>
+    <string name="favorite_exercises">Любими упражнения</string>
+    <string name="search_exercises_hint">Търси упражнения</string>
     <!--WORKOUTS PAGE STRINGS-->
 
-    <string name="calendar">CALENDAR</string>
-    <string name="schedule_workouts">Schedule your workouts</string>
-    <string name="monday">MON</string>
-    <string name="tuesday">TUE</string>
-    <string name="wednesday">WED</string>
-    <string name="thursday">THU</string>
-    <string name="friday">FRI</string>
-    <string name="saturday">SAT</string>
-    <string name="sunday">SUN </string>
-    <string name="current_month_text">March 2025</string>
-    <string name="scan_barcode">Scan Barcode</string>
+    <!--PROFILE PAGE STRINGS-->
+    <string name="edit">Редактирай</string>
+    <string name="flip">Завърти</string>
+    <string name="export">Експортиране</string>
+    <string name="weight_value">72 кг</string>
+    <string name="weight_label">Тегло:</string>
+    <string name="height_value">184 см</string>
+    <string name="height_label">Ръст:</string>
+    <string name="full_name">Марин Стоянов</string>
+    <string name="sex_label">Пол:</string>
+    <string name="activity_level_moderate">Активност: Умерена</string>
+    <string name="goal_weight_140">Цел: 140 кг</string>
+    <string name="weekly_goal_profile">Седмична цел: -1.2 кг</string>
+    <string name="target_calories">Целеви калории: 0</string>
+    <string name="macros">Макроси: Б: 0г, В: 0г, М: 0г</string>
+    <string name="progress_last_7_days">Прогрес за последните 7 дни</string>
+    <string name="avg_calories_consumed">Средно консумирани</string>
+    <string name="zero_kcal">0 ккал</string>
+    <string name="forecast">Прогноза</string>
+    <string name="no_forecast">Няма прогноза</string>
+    <string name="bmi">ИТМ</string>
+    <string name="goals">Цели</string>
+    <string name="recent_workouts">Последни тренировки</string>
+    <string name="view_all">Виж всички</string>
+    <!--PROFILE PAGE STRINGS-->
+
+    <!--ITEM WEEK DAY XML STRINGS-->
+    <string name="mon_short">Пон</string>
+    <!--ITEM WEEK DAY XML STRINGS-->
+
+    <!--ITEM MEAL SECTION XML STRINGS-->
+    <string name="meal_title">Име на хранa</string>
+    <string name="add_food">Добави храна</string>
+    <string name="scan_food">Сканирай храна</string>
+    <!--ITEM MEAL SECTION XML STRINGS-->
+
+    <!--ITEM FOOD CHIP XML STRINGS-->
+    <string name="food_name_chip">Име на храната</string>
+    <string name="food_nutrition_summary">140 ккал  •  0г В  •  3г М  •  27г Б</string>
+    <string name="remove_item">Премахни елемент</string>
+    <!--ITEM FOOD CHIP XML STRINGS-->
+
+    <!--ITEM EXERCISE CALENDAR XML STRINGS-->
+    <string name="strength_training">Силова тренировка</string>
+    <string name="upcoming">Предстоящо</string>
+    <string name="expand_toggle">Разгъване/Сгъване</string>
+    <string name="workout_time_duration">17:30 · 50 мин</string> <!-- 24-hour format is common in BG -->
+    <string name="delete">Изтрий</string>
+    <string name="complete">Завърши</string>
+    <!--ITEM EXERCISE CALENDAR XML STRINGS-->
+
+    <!--HOME PAGE XML STRINGS-->
+    <string name="home_background_image">Фоново изображение на началната страница</string>
+    <string name="placeholder_date">Изберете дата</string>
+    <string name="todays_activity">Активност за днес</string>
+    <string name="finished">Завършени</string>
+    <string name="calories_count">2 354</string>
+    <string name="completed_workouts">Тренировки</string>
+    <string name="completed_workouts_count">3</string>
+    <string name="minutes_spent">Минути активност</string>
+    <string name="minutes_spent_value">134</string>
+    <string name="calories_consumed">Калориен прием</string>
+    <string name="todays_training_plan">Тренировка за днес</string>
+    <string name="training_plan_title">ПРОГРАМА ЗА ЦЯЛО ТЯЛО</string>
+    <string name="training_plan_description">Тренирай цялото тяло редовно, за да останеш силен и във форма</string>
+    <string name="todays_menu">Днешно меню</string>
+    <string name="menu_title">ЗДРАВОСЛОВНА ХРАНА</string>
+    <string name="menu_description">Консумирай полезна храна, за да бъдеш здрав и издръжлив</string>
+    <!--HOME PAGE XML STRINGS-->
+
+    <!--GOALS PAGE XML STRINGS-->
+    <string name="back">Назад</string>
+    <string name="goal_timeline">График на целите</string>
+    <string name="add_goal">Добави цел</string>
+    <string name="search_goal_hint">Търсене на цел</string>
+    <!--GOALS PAGE XML STRINGS-->
+
+    <!--GOAL ITEM XML STRINGS-->
+    <string name="undo">Отмени</string>
+    <string name="date_sample">04.05.2025</string>
+    <string name="drink_water_goal">Изпий 100л вода</string>
+    <!--GOAL ITEM XML STRINGS-->
+
+    <!--FRAGMENT SCANNED FOOD XML STRINGS-->
+    <string name="scanned_food">Сканирана храна</string>
+    <string name="healthy_food">Здравословна храна</string>
+    <string name="kcal">ккал</string>
+    <string name="calories_value">83</string>
+    <string name="food_summary">83 ккал | 300г | 12г протеин</string>
+    <string name="quantity_value">100</string>
+    <string name="grams">грама</string>
+    <string name="protein_value">12г</string>
+    <string name="protein">протеин</string>
+    <string name="scan_again">Сканирай отново</string>
+    <!--FRAGMENT SCANNED FOOD XML STRINGS-->
+
+    <!--FRAGMENT PROGRESS XML STRINGS-->
+    <string name="total_workouts">Общо тренировки</string>
+    <string name="total_workouts_value">36</string>
+    <string name="total_hours_active">Общо активни часове</string>
+    <string name="total_hours_active_value">12ч 45м</string>
+    <string name="total_calories_burned">Общо изгорени калории</string>
+    <string name="total_calories_burned_value">8 320 ккал</string>
+    <!--FRAGMENT PROGRESS XML STRINGS-->
+
+    <!--FRAGMENT CALENDAR WORKOUT XML STRINGS-->
+    <string name="no_workouts">Няма тренировки</string>
+    <!--FRAGMENT CALENDAR WORKOUT XML STRINGS-->
+
+    <!--FRAGMENT BMI CALCULATOR XML STRINGS-->
+    <string name="bmi_value">24.8</string>
+    <string name="bmi_status_normal">Нормално</string>
+    <string name="bmi_feedback">Браво! Поддържаш здравословно тегло!</string>
+    <string name="bmi_morbidly_obese">&gt; 40\nТежко затлъстяване</string>
+    <string name="bmi_obese">30 – 39.9\nЗатлъстяване</string>
+    <string name="bmi_overweight">25 – 29.9\nНаднормено тегло</string>
+    <string name="bmi_normal">18.5 – 24.9\nНормално тегло</string>
+    <string name="bmi_underweight">&lt; 18.5\nПоднормено тегло</string>
+    <!--FRAGMENT BMI CALCULATOR XML STRINGS-->
+
+    <!--FOOD DIARY ACTIVITY XML STRINGS-->
+    <string name="food_diary">Дневник на храненията</string>
+    <string name="food_diary_subtitle">Следи храната си и бъди здрав</string>
+    <string name="food_diary_for">Твоят хранителен дневник за:</string>
+    <string name="food_diary_date">Вторник, 18 април</string>
+    <string name="calories_label">Кал.\n(ккал)</string>
+    <string name="carbs_label">Въгл.\n(г)</string>
+    <string name="fat_label">Мазнини\n(г)</string>
+    <string name="protein_label">Протеин\n(г)</string>
+    <string name="daily_goal">Дневна цел</string>
+    <string name="goal_zero_value">0</string>
+    <string name="remaining">Остава</string>
+    <!--FOOD DIARY ACTIVITY XML STRINGS-->
+
+    <!--DIALOG LOGOUT CONFIRMATION XML STRINGS-->
+    <string name="logout">Изход</string>
+    <string name="cancel">Отказ</string>
+    <string name="logout_confirmation_message">Сигурен ли си, че искаш да излезеш от акаунта си?</string>
+    <string name="confirm_logout">Потвърди изход</string>
+    <!--DIALOG LOGOUT CONFIRMATION XML STRINGS-->
+
+    <!--DIALOG LOADING XML STRINGS-->
+    <string name="setting_up_profile">Настройване на профил...</string>
+    <!--DIALOG LOADING XML STRINGS-->
+
+    <!--DIALOG EDIT PROFILE XML STRINGS-->
+    <string name="edit_profile">Редактирай профил</string>
+    <string name="height_hint">Въведи ръст</string>
+    <string name="weight_hint">Въведи тегло</string>
+    <string name="save">Запази</string>
+    <string name="weight_label_edit_profile">Тегло (кг)</string>
+    <string name="height_label_edit_profile">Ръст (см)</string>
+    <!--DIALOG EDIT PROFILE XML STRINGS-->
+
+    <!--DIALOG EDIT MACROS XML STRINGS-->
+    <string name="target_calories_macros">Целеви калории: 0</string>
+    <string name="adjust_macros">Настрой макроси</string>
+    <string name="warning_icon">⚠️</string>
+    <string name="protein_cap">Протеини</string>
+    <string name="protein_percent">30%</string>
+    <string name="carbs">Въглехидрати</string>
+    <string name="carbs_percent">40%</string>
+    <string name="fats">Мазнини</string>
+    <string name="fats_percent">30%</string>
+    <!--DIALOG EDIT MACROS XML STRINGS-->
+
+    <!--DIALOG EDIT GOALS XML STRINGS-->
+    <string name="edit_profile_goals">Промени своите цели</string>
+    <string name="goal_weight_hint">Въведи целево тегло</string>
+    <!--DIALOG EDIT GOALS XML STRINGS-->
+
+    <!--DIALOG ADD WORKOUT CALENDAR XML STRINGS-->
+    <string name="add_new_workout">Добави тренировка</string>
+    <string name="workout_name">Име на тренировка</string>
+    <string name="workout_name_hint">напр. гърди – експлозивно</string>
+    <string name="date">Дата</string>
+    <string name="pick_date">Избери дата</string>
+    <string name="time">Час</string>
+    <string name="pick_time">Избери час</string>
+    <string name="add_from_favorites">+ Добави от любими</string>
+    <string name="add_workout">Добави</string>
+    <!--DIALOG ADD WORKOUT CALENDAR XML STRINGS-->
+
+    <!--DIALOG ADD GOAL XML STRINGS-->
+    <string name="due_date">Крайна дата</string>
+    <string name="start_date">Начална дата</string>
+    <string name="goal_hint">напр. Направи 500 лицеви опори</string>
+    <string name="goal_name">Име на цел</string>
+    <string name="add_new_goal">Добави нова цел</string>
+    <!--DIALOG ADD GOAL XML STRINGS-->
+
+    <!--DIALOG ADD FOOD XML STRINGS-->
+    <string name="add_food_item">Добави хранителен елемент</string>
+    <string name="food_name">Име на храната</string>
+    <string name="food_name_hint">напр. Пилешко филе</string>
+    <string name="weight_hint_add_food">Тегло</string>
+    <string name="carbs_label_add_food">Въглехидрат (г)</string>
+    <string name="fat_label_add_food">Мазнини (г)</string>
+    <string name="protein_label_add_food">Протеин (г)</string>
+    <string name="calories_label_add_food">Калории (ккал)</string>
+    <string name="calories_hint">Калории</string>
+    <string name="add">Добави</string>
+    <!--DIALOG ADD FOOD XML STRINGS-->
+
+    <!--COUNTDOWN_TIMER XML STRINGS-->
+    <string name="stage">Етап</string>
+    <string name="timer_default">00:00</string>
+    <string name="encouragement_message">Браво, справи се успешно! 💪</string>
+    <string name="pause">Пауза</string>
+    <string name="next_stage">Следващо</string>
+    <!--COUNTDOWN_TIMER XML STRINGS-->
+
+    <!--CALENDAR PAGE XML STRINGS-->
+    <string name="calendar">Календар</string>
+    <string name="track_fitness_journey">Следи своя фитнес път</string>
+    <!--CALENDAR PAGE XML STRINGS-->
+
+    <!--CALENDAR ITEM WORKOUT XML STRINGS-->
+    <string name="strength_training_calendar_item">Силова тренировка</string>
+    <string name="upcoming_prefix">• Предстоящо</string>
+    <string name="workout_time">17:30 - 50 мин</string> <!-- 24-часов формат за BG -->
+    <string name="more_options">Още</string>
+    <string name="delete_workout">Изтрий тренировка</string>
+    <!--CALENDAR ITEM WORKOUT XML STRINGS-->
+
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
-
-    <!--PULL-UPS EXERCISES PAGE STRINGS-->
-    <string name="pull_ups_title">Pull-Ups</string>
-    <string name="info_button_description">More info</string>
+    <string name="first_fragment_label">Първи фрагмент</string>
+    <string name="second_fragment_label">Втори фрагмент</string>
 
 </resources>

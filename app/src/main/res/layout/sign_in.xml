@@ -28,7 +28,7 @@
                     android:layout_height="240dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/login_banner"
-                    android:contentDescription="@string/background_image" />
+                    android:contentDescription="@string/sign_in_background_image" />
             </androidx.cardview.widget.CardView>
 
         <LinearLayout
@@ -69,7 +69,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    android:text="@string/email"
                     android:textSize="16sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"
@@ -95,7 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Password"
+                    android:text="@string/password"
                     android:textSize="16sp"
                     android:textColor="#333"
                     android:fontFamily="@font/open_sans_semibold"

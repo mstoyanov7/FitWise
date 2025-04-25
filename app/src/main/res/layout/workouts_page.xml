@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="50dp"
-                android:text="Exercises"
+                android:text="@string/exercises"
                 android:textColor="#000000"
                 android:textSize="28sp"
                 android:textStyle="bold" />
@@ -46,7 +46,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:backgroundTint="#EEEEEE"
-                        android:text="All"
+                        android:text="@string/all"
                         android:textColor="#000000" />
 
                     <Button
@@ -55,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:backgroundTint="#EEEEEE"
-                        android:text="Strength"
+                        android:text="@string/strength"
                         android:textColor="#000000" />
 
                     <Button
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:backgroundTint="#EEEEEE"
-                        android:text="Cardio"
+                        android:text="@string/cardio"
                         android:textColor="#000000" />
 
                     <Button
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:backgroundTint="#EEEEEE"
-                        android:text="Calisthenics"
+                        android:text="@string/calisthenics"
                         android:textColor="#000000" />
 
                     <Button
@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:backgroundTint="#EEEEEE"
-                        android:text="Running"
+                        android:text="@string/running"
                         android:textColor="#000000" />
 
                     <Button
@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:backgroundTint="#EEEEEE"
-                        android:text="Yoga"
+                        android:text="@string/yoga"
                         android:textColor="#000000" />
                 </LinearLayout>
             </HorizontalScrollView>
@@ -123,7 +123,7 @@
                     android:layout_toEndOf="@id/search_icon"
                     android:background="@android:color/transparent"
                     android:gravity="center_vertical"
-                    android:hint="Search exercises"
+                    android:hint="@string/search_exercises_hint"
                     android:inputType="text"
                     android:textColor="#000000"
                     android:textColorHint="#888888" />
@@ -134,7 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Favorite Exercises"
+                android:text="@string/favorite_exercises"
                 android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="Exercises"
+                android:text="@string/exercises"
                 android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold" />

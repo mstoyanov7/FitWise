@@ -23,7 +23,7 @@
             android:id="@+id/exerciseCountLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No Workouts"
+            android:text="@string/no_workouts"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginBottom="8dp" />

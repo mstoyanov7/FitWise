@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Workouts"
+                android:text="@string/total_workouts"
                 android:textSize="12sp"
                 android:textColor="#888888" />
 
@@ -34,7 +34,7 @@
                 android:id="@+id/textTotalWorkouts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="36"
+                android:text="@string/total_workouts_value"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -58,7 +58,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Hours Active"
+                android:text="@string/total_hours_active"
                 android:textSize="12sp"
                 android:textColor="#888888" />
 
@@ -66,7 +66,7 @@
                 android:id="@+id/textTotalHours"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12h 45m"
+                android:text="@string/total_hours_active_value"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -89,7 +89,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Calories Burned"
+                android:text="@string/total_calories_burned"
                 android:textSize="12sp"
                 android:textColor="#888888" />
 
@@ -97,7 +97,7 @@
                 android:id="@+id/textTotalCalories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="8,320 kcal"
+                android:text="@string/total_calories_burned_value"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>

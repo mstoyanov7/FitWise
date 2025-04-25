@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <!-- Image now inside scrollable content -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,10 +28,9 @@
                 android:layout_height="240dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/happy"
-                android:contentDescription="@string/background_image" />
+                android:contentDescription="@string/sign_up_background_description" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Form container -->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -67,9 +65,8 @@
                 android:padding="20dp"
                 android:layout_marginBottom="20dp">
 
-                <!-- Name -->
                 <TextView
-                    android:text="Nickname"
+                    android:text="@string/nickname"
                     android:textColor="#333"
                     android:textSize="16sp"
                     android:fontFamily="@font/open_sans_semibold"
@@ -91,9 +88,8 @@
                     android:drawableTint="#898989"
                     android:drawablePadding="8dp" />
 
-                <!-- Email -->
                 <TextView
-                    android:text="Email"
+                    android:text="@string/email"
                     android:textColor="#333"
                     android:textSize="16sp"
                     android:fontFamily="@font/open_sans_semibold"
@@ -117,9 +113,8 @@
                     android:drawableTint="#898989"
                     android:drawablePadding="8dp" />
 
-                <!-- Password -->
                 <TextView
-                    android:text="Password"
+                    android:text="@string/password"
                     android:textColor="#333"
                     android:textSize="16sp"
                     android:fontFamily="@font/open_sans_semibold"
@@ -144,7 +139,6 @@
                     android:drawableTint="#898989"
                     android:drawablePadding="8dp" />
 
-                <!-- Sign Up Button -->
                 <Button
                     android:id="@+id/sign_up_button"
                     android:text="@string/sign_up_register_page"
@@ -157,7 +151,6 @@
                     android:layout_height="53dp"
                     android:backgroundTint="#076653" />
 
-                <!-- Already have account -->
                 <TextView
                     android:id="@+id/haveAccountText"
                     android:text="@string/have_account"
@@ -170,7 +163,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-                <!-- Divider + Google Sign Up Label -->
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -201,7 +193,6 @@
                         android:background="#AAAAAA" />
                 </LinearLayout>
 
-                <!-- Google Button -->
                 <ImageButton
                     android:id="@+id/google_button"
                     android:layout_width="150dp"

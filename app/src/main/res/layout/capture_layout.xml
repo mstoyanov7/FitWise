@@ -20,7 +20,7 @@
         android:background="@drawable/rounded_button"
         android:backgroundTint="#888888"
         android:src="@drawable/arrow"
-        android:contentDescription="Back"
+        android:contentDescription="@string/back"
         android:padding="10dp"
         android:scaleType="centerInside"
         app:tint="@android:color/white" />
